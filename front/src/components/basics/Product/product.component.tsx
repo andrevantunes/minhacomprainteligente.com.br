@@ -19,7 +19,15 @@ import {Title} from "@/components";
   }
 `
 
-const Product = ({ title, children, price, className, src, elevation = "hg", ...props }: ProductProps) => {
+const Product = ({
+  title,
+  children,
+  price,
+  className,
+  src,
+  elevation = "hg",
+  ...props
+}: ProductProps) => {
   const cn = classNames("flex align-items-center flex-column", className);
   return (
     <Card elevation={elevation} className={cn} {...props}>
