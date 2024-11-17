@@ -30,6 +30,7 @@ const Page = ({
   ...props
 }: SSWPagesProps) => {
   const [{ guest }] = useStore(StoreType.User);
+  const [{ products }] = useStore(StoreType.Cart);
   const isBlockedPage = authenticated && guest;
   const seo = { title, description, image, canonical, robots, url };
 
@@ -38,6 +39,7 @@ const Page = ({
       <Seo {...seo} />
       <AppTemplate {...props}>
         {isBlockedPage ? <BlockedMessage /> : children && <RiboAdapter>{children}</RiboAdapter>}
+        {JSON.stringify(products)}
       </AppTemplate>
     </>
   );

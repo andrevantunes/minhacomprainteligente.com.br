@@ -1,4 +1,5 @@
 export * from "./accesses.types";
+export * from "./cart.types";
 export * from "./auth.types";
 export * from "./component.types";
 export * from "./events.types";

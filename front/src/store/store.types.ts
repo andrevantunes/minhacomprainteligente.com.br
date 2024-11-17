@@ -1,6 +1,7 @@
 export enum StoreType {
   Accesses = "accesses",
   User = "user",
+  Cart = "cart",
 }
 
 export interface FetchState {

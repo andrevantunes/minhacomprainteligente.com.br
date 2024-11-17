@@ -3,6 +3,7 @@ import type { ProductProps } from "./product.types";
 import classNames from "classnames";
 import {Button, Card, Display} from "@andrevantunes/andrevds";
 import {Title} from "@/components";
+import {StoreType, useStore} from "@/store";
 
 `
     "className": "flex",
@@ -25,10 +26,17 @@ const Product = ({
   price,
   className,
   src,
+  id,
   elevation = "hg",
   ...props
 }: ProductProps) => {
   const cn = classNames("flex align-items-center flex-column", className);
+
+  const [{ products }, setCart] = useStore(StoreType.Cart);
+  const handleOnClick = (event) => {
+    event.preventDefault();
+    setCart({ products: [...products, id] });
+  }
   return (
     <Card elevation={elevation} className={cn} {...props}>
       <Display size="sm">{title}</Display>
@@ -36,7 +44,7 @@ const Product = ({
         <img src={src} />
       </div>
       <Title>{price}</Title>
-      <Button>Adicionar ao carrinho</Button>
+      <Button onClick={handleOnClick}>Adicionar ao carrinho</Button>
     </Card>
   );
 };
