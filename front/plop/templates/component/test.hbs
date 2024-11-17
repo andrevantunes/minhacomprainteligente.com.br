@@ -1,0 +1,14 @@
+import type { {{ pascalCase name }}Props } from "./{{kebabCase name}}.types";
+
+import { render } from "@testing-library/react";
+
+import {{ pascalCase name }} from "./{{kebabCase name}}.component";
+
+const makeSut = (props?: {{ pascalCase name }}Props) => render(<{{ pascalCase name }} {...props} />);
+
+describe("{{ pascalCase name }}", () => {
+  it("should render component", () => {
+    const wrapper = makeSut();
+    expect(wrapper).toBeTruthy();
+  });
+});

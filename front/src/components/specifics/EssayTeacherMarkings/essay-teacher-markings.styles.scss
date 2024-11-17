@@ -1,0 +1,61 @@
+.essay-teacher-markings {
+  padding: $spacing-xl;
+  &__header{
+    display: flex;
+    margin-bottom: $spacing-xl;
+    align-items: center;
+    justify-content: space-between;
+    &__controls{
+      display: flex;
+      align-items: center;
+      &__button{
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
+        min-width: unset;
+        min-height: unset;
+        border: none;
+      }
+      &__counter{
+        margin-left: $spacing-xs;
+        margin-right: $spacing-xs;
+
+        @media (min-width: 350px) {
+          margin-left: $spacing-md;
+          margin-right: $spacing-md;
+        }
+      }
+    }
+  }
+  &__body{
+    &__title{
+      margin-bottom: $spacing-xl;
+
+      &__mark{
+        font-weight: 900;
+        color: $color-white;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        opacity: 1;
+        font-size: 14px;
+        user-select: none;
+        margin-right: $spacing-md;
+      }
+
+      &__mark-type{
+        display: inline-flex;
+      }
+    }
+
+    &__text{
+      white-space: pre;
+      white-space: pre-line;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+    }
+  }
+}

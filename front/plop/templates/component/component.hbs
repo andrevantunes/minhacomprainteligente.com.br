@@ -1,0 +1,14 @@
+import type { {{ pascalCase name }}Props } from "./{{ kebabCase name }}.types";
+
+import classNames from "classnames";
+
+const {{ pascalCase name }} = ({ children, className, ...props }: {{ pascalCase name }}Props) => {
+  const cn = classNames("{{ kebabCase name }}", className);
+  return (
+    <div className={cn} {...props}>
+      {children}
+    </div>
+  );
+};
+
+export default {{ pascalCase name }};

@@ -1,0 +1,20 @@
+.essay-grade-accordion {
+  & .accordion__header {
+    padding: $spacing-xl;
+  }
+  &__header {
+    display: flex;
+    align-items: center;
+    &__info {
+      flex-grow: 1;
+      &__criterium {
+        color: $color-text-secondary;
+        margin-bottom: $spacing-xs;
+      }
+    }
+    &__grade {
+      margin-left: $spacing-lg;
+      margin-right: $spacing-lg;
+    }
+  }
+}

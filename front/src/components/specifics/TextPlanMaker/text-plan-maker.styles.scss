@@ -1,0 +1,101 @@
+.text-plan-maker {
+  &__stepper {
+    padding-top: 0;
+    display: none;
+
+    @media (min-width: $breakpoint-md) {
+      display: flex;
+    }
+  }
+
+  &__circle-stepper {
+    display: flex;
+
+    padding-right: $spacing-md;
+    padding-left: $spacing-md;
+
+    @media (min-width: $breakpoint-sm) {
+      padding-right: $spacing-xl;
+      padding-left: $spacing-xl;
+    }
+
+    @media (min-width: $breakpoint-md) {
+      display: none;
+    }
+  }
+
+  &__divider {
+    margin-top: 0;
+    margin-bottom: $spacing-xl;
+  }
+
+  &__card {
+    margin-left: $spacing-md;
+    margin-right: $spacing-md;
+
+    @media (min-width: $breakpoint-md) {
+      margin-left: $spacing-xl;
+      margin-right: $spacing-xl;
+    }
+  }
+
+  &__title-wrapper {
+    display: flex;
+    align-items: center;
+    margin-bottom: $spacing-lg;
+
+    &__button-info {
+      @media (min-width: $breakpoint-md) {
+        display: none;
+      }
+    }
+  }
+
+  &__actions-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column-reverse;
+    margin-top: $spacing-xl;
+
+    @media (min-width: $breakpoint-sm) {
+      flex-direction: row;
+    }
+
+    &__button-back,
+    &__button-next {
+      @media (min-width: $breakpoint-sm) {
+        max-width: 280px;
+        width: 100%;
+      }
+    }
+
+    &__button-back {
+      margin-top: $spacing-sm;
+
+      @media (min-width: $breakpoint-sm) {
+        margin-top: unset;
+        margin-right: $spacing-md;
+      }
+    }
+
+    &__button-next {
+    }
+  }
+
+  .area-field {
+    &__textarea {
+      &::placeholder {
+        color: $color-neutral-900;
+      }
+    }
+
+    &__legend {
+      display: inline-block;
+    }
+
+    &__label {
+      transform: translate(-1px, -170%) scale(0.75);
+    }
+  }
+}

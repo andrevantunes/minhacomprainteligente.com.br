@@ -1,0 +1,15 @@
+.essay-send-form {
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xl;
+    &-list {
+      margin-bottom: 0;
+      margin-left: $spacing-md;
+    }
+  }
+  &--is-disabled {
+    color: $color-action-disabled;
+    pointer-events: none;
+  }
+}

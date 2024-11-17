@@ -1,0 +1,33 @@
+.accordion {
+  border-bottom: 1px solid $color-divider;
+  &__content {
+    padding-top: $spacing-xs;
+    padding-left: $spacing-xl;
+    padding-right: $spacing-xl;
+    &-container {
+      padding-bottom: $spacing-lg;
+    }
+  }
+  &__header {
+    padding: $spacing-lg $spacing-xl;
+  }
+  &--active {
+    .accordion__header-container__title {
+      color: $color-primary-500;
+    }
+  }
+  &--disabled {
+    pointer-events: none;
+    .accordion__header-container__title {
+      color: $color-action-disabled;
+    }
+    .accordion__header-container__icon-toggle {
+      display: none;
+    }
+  }
+  &__header-container__title {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+}

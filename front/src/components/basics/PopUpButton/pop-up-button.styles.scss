@@ -1,0 +1,8 @@
+.pop-up-button {
+  &__modal-buttons {
+    margin-top: $spacing-xl;
+    > * {
+      flex: 1 1 0;
+    }
+  }
+}

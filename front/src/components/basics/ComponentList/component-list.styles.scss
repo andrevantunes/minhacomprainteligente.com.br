@@ -1,0 +1,17 @@
+.component-list {
+  &__list {
+    margin: 0;
+    padding: 0;
+  }
+  &__list-item {
+    padding: $spacing-md $spacing-xl;
+  }
+  .skeleton--is-circle {
+    min-width: 48px;
+    min-height: 48px;
+  }
+  .label-list{
+    display: flex;
+    gap: 8px;
+  }
+}

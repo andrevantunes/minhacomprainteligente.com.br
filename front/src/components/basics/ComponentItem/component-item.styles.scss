@@ -1,0 +1,72 @@
+.component-item {
+  list-style: none;
+  display: flex;
+  &:hover {
+    background-color: $color-neutral-ghost;
+    transition: 0.2s ease;
+    cursor: pointer;
+    .component-item__link {
+      text-decoration: none;
+    }
+  }
+
+  &__link {
+    flex-grow: 1;
+    display: flex;
+    gap: $gap-sm-4;
+    color: $color-text-primary;
+    text-decoration: none;
+    text-decoration: none;
+    color: inherit;
+
+    &:active {
+      background-color: $color-action-selected;
+    }
+
+    &:visited {
+      color: $color-text-primary;
+    }
+
+    &--is-actions-open {
+      background-color: $color-neutral-ghost;
+      text-decoration: none;
+    }
+    &--is-checked {
+      .component-item__title {
+        text-decoration: line-through;
+      }
+    }
+
+    &--is-cursor-disabled {
+      cursor: auto;
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    gap: $gap-sm-1;
+    align-items: flex-start;
+    justify-content: flex-start;
+
+    .caption {
+      color: $color-text-secondary;
+    }
+
+    &__labels {
+      display: flex;
+      gap: $gap-sm-2;
+      align-items: center;
+      justify-content: flex-start;
+      margin-top: $spacing-xs;
+    }
+  }
+  &__actions {
+    display: flex;
+    align-items: center;
+    // big size protected click area
+    margin: calc($spacing-md * -1) calc($spacing-xl * -1);
+    padding: $spacing-md $spacing-xl;
+  }
+}

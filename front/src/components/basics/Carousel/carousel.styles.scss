@@ -1,0 +1,34 @@
+.carousel {
+  overflow: hidden;
+  position: relative;
+  display: grid;
+  &__container {
+    display: flex;
+    > * {
+      position: relative;
+      flex: 0 0 100%;
+    }
+  }
+  &__dots {
+    position: absolute;
+    bottom: $spacing-lg;
+    right: $spacing-lg;
+    display: flex;
+    gap: $spacing-xs;
+    button {
+      appearance: none;
+      border: none;
+      background: $color-white;
+      padding: 0;
+      min-width: $spacing-sm;
+      min-height: $spacing-sm;
+      border-radius: 50%;
+      > * {
+        display: none;
+      }
+      &:not(.dots__button--is-current) {
+        opacity: 0.5;
+      }
+    }
+  }
+}

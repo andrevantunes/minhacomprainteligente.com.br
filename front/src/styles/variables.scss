@@ -1,0 +1,31 @@
+:root{
+  --color-primary-500: hsl(154, 55%, 31%);
+  --color-primary-700: hsl(154, 55%, 21%);
+  --color-primary-ghost: hsl(153, 26%, 93%);
+}
+$breakpoints: (
+  "sm": (
+    min-width: $breakpoint-sm,
+  ),
+  "md": (
+    min-width: $breakpoint-md,
+  ),
+  "lg": (
+    min-width: $breakpoint-lg,
+  ),
+) !default;
+
+.content-item{
+  .content-item__link{
+    flex-grow: 1;
+  }
+}
+.content-item__labels {
+  align-items: center;
+}
+
+  @media (min-width: 900px) {
+  .content-item__content {
+    width: 100%;
+  }
+}

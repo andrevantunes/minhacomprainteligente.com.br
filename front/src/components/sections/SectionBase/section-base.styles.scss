@@ -1,0 +1,28 @@
+.section-base {
+  padding: $spacing-xl;
+  &__container {
+    margin: 0 auto;
+    width: 100%;
+    &--sm {
+      max-width: 720px;
+    }
+    &--md {
+      max-width: 1024px;
+    }
+    &--lg {
+      max-width: $breakpoint-lg;
+    }
+  }
+
+  @media (min-width: $breakpoint-sm) {
+    padding: calc($spacing-lg * 2) $spacing-lg;
+  }
+
+  @media (min-width: $breakpoint-md) {
+    padding: calc($spacing-lg * 3) $spacing-lg;
+  }
+
+  @media (min-width: $breakpoint-lg) {
+    padding: calc($spacing-lg * 4) $spacing-lg;
+  }
+}

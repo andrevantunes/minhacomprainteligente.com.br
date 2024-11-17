@@ -1,0 +1,26 @@
+.step {
+  &-caption {
+    color: $color-text-disabled;
+  }
+
+  &-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: $gap-sm-2;
+    align-items: center;
+    width: 100%;
+    margin-top: $spacing-md;
+
+    & > * {
+      width: 100%;
+    }
+
+    @media screen and (min-width: $breakpoint-sm) {
+      flex-direction: row;
+
+      & > * {
+        width: unset;
+      }
+    }
+  }
+}

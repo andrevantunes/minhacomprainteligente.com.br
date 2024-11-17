@@ -1,0 +1,90 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+node_modules/
+
+# dissalow commiting lockfiles from other package managers
+package-lock.json
+pnpm-lock.yaml
+
+# next.js
+.next/
+# next-pwa
+public/service-worker.js*
+public/workbox-*.js*
+
+# playwright test results and report
+test-results/
+playwright-report/
+
+# misc
+.DS_Store
+*.pem
+
+# eslint cache
+.eslintcache
+
+# debug
+yarn-debug.log*
+yarn-error.log*
+
+# local env files
+.env*
+!.env.development.example
+.npmrc
+.yarnrc
+
+# vscode user-specifig files
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/settings.json
+!.vscode/tasks.json
+*.code-workspace
+
+# Jetbrains Intellij
+.idea
+
+# Generated files
+.idea/**/contentModel.xml
+
+# File-based project format
+*.iws
+
+# Cache file creation bug
+# See https://youtrack.jetbrains.com/issue/JBR-2257
+.idea/$CACHE_FILE$
+
+# tests files
+coverage
+
+
+# compiled output
+/dist
+/node_modules
+
+# Logs
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Tests
+/api/coverage
+/front/coverage
+/.nyc_output
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+.data
+/files
+.env
+/ormconfig.json

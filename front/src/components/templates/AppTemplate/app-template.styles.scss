@@ -1,0 +1,28 @@
+.app-template {
+  --secure-intercom-area: 100px;
+  &--lg {
+    .app-template {
+      &__content {
+        display: flex;
+        flex-direction: column;
+        gap: $spacing-lg 0;
+        width: 100%;
+        max-width: $breakpoint-lg;
+        padding: $spacing-xl $spacing-lg;
+        margin: 0 auto;
+        height: 100%;
+
+        @media (min-width: $breakpoint-lg) {
+          padding: $spacing-xl;
+        }
+    }
+  }
+
+  }
+  &__protected-area {
+    padding-bottom: var(--secure-intercom-area);
+  }
+  &__full {
+    padding: 0 !important;
+  }
+}

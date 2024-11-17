@@ -1,0 +1,11 @@
+.text-plan-maker-step1 {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin-top: $spacing-sm;
+
+  &__video {
+    max-width: 720px;
+    aspect-ratio: 16 / 9;
+  }
+}

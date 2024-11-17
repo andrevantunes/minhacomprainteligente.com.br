@@ -1,0 +1,29 @@
+.profile-form {
+  max-width: $breakpoint-sm;
+  width: 100%;
+  margin: 0 auto;
+  &__group {
+    gap: $spacing-md;
+    > * {
+      margin-bottom: $spacing-sm;
+    }
+  }
+  &__title {
+    margin-bottom: $spacing-xs;
+  }
+  .study-profile {
+    gap: $spacing-xs;
+  }
+}
+
+@media (min-width: $breakpoint-md) {
+  .profile-form {
+    &__title {
+      grid-column: span 2;
+    }
+  }
+
+  .study-profile {
+    grid-column: span 2;
+  }
+}

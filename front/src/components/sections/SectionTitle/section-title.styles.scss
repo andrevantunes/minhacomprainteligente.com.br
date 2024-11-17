@@ -1,0 +1,14 @@
+.section-title {
+  &__breadcrumb {
+    margin-top: calc($spacing-md * -1);
+    &__go-back-button.btn--neutral {
+      padding: $spacing-sm $spacing-md;
+      border: none;
+    }
+  }
+  &__content {
+    display: flex;
+    gap: $gap-sm-2;
+    align-items: center;
+  }
+}

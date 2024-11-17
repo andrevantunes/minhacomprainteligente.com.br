@@ -1,0 +1,22 @@
+[
+  {
+    "Namespace": "aws:elasticbeanstalk:application:environment",
+    "OptionName": "CREDENTIALS_COOKIE_NAME",
+    "Value": "user-credentials"
+  },
+  {
+    "Namespace": "aws:elasticbeanstalk:application:environment",
+    "OptionName": "NEXT_PUBLIC_API_HOST",
+    "Value": "{{resolve:ssm:API_HOST}}"
+  },
+  {
+    "Namespace": "aws:elasticbeanstalk:application:environment",
+    "OptionName": "NEXT_PUBLIC_API_KEY",
+    "Value": "{{resolve:ssm:API_KEY}}"
+  },
+  {
+    "Namespace": "aws:elasticbeanstalk:application:environment",
+    "OptionName": "NODE_ENV",
+    "Value": "production"
+  }
+]

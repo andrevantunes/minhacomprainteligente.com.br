@@ -1,0 +1,16 @@
+.dismissed-wrapper {
+  &--dismissing {
+    animation: card-notification-dismissing 0.3s ease-out forwards;
+  }
+}
+
+@keyframes card-notification-dismissing {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+}

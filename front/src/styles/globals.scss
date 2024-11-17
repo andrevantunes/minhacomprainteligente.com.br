@@ -1,0 +1,17 @@
+body {
+  background-color: $color-background-secondary;
+}
+
+input:-webkit-autofill {
+  box-shadow: 0 0 0 30px $color-background-secondary inset;
+}
+
+html,
+body,
+div#__next {
+  min-height: 100vh;
+}
+
+html {
+	scroll-behavior: smooth;
+}

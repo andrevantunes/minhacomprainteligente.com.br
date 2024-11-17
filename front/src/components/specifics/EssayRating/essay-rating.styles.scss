@@ -1,0 +1,33 @@
+.essay-rating {
+  padding: 0;
+  &__title{
+    padding: $spacing-xl;
+  }
+  &__footer{
+    background-color: $color-primary-500;
+    border-radius: $spacing-lg;
+    padding: $spacing-xl;
+    padding-top: $spacing-sm;
+    display: flex;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    &__button-thumb-up, &__button-thumb-down{
+      flex: 1;
+    }
+    &__button-thumb-up{
+      margin-right: $spacing-sm;
+    }
+    &__button-thumb-down{
+      margin-left: $spacing-sm;
+    }
+  }
+  &__loader-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 120px;
+  }
+  &__acknowledgment-text{
+    padding: 0 $spacing-xl $spacing-xl $spacing-xl;
+  }
+}

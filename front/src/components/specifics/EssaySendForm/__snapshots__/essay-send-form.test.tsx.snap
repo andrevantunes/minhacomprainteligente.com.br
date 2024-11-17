@@ -1,0 +1,270 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EssaySendForm should render component 1`] = `
+<div>
+  <section
+    class="card card--elevation-lw essay-send-form section-card"
+  >
+    <form
+      class="essay-send-form__form"
+      data-testid="essay-send-form"
+    >
+      <input
+        name="battery_token"
+        type="hidden"
+        value=""
+      />
+      <div>
+        <div
+          class="skeleton skeleton--is-default"
+          data-testid="skeleton"
+          style="width: 200px;"
+        >
+          <div
+            class="skeleton-container"
+          >
+            <h3
+              class="heading heading--size-xs title mb-sm"
+            >
+              Tema
+            </h3>
+          </div>
+        </div>
+        <div
+          class="skeleton skeleton--is-default"
+          data-testid="skeleton"
+        >
+          <div
+            class="skeleton-container"
+          >
+            <div
+              class="select-field select-field--has-filter"
+            >
+              <div>
+                <div
+                  class="field field--has-right-icon"
+                >
+                  <fieldset
+                    class="field__fieldset"
+                  >
+                    <div
+                      class="field__content"
+                    >
+                      <input
+                        autocomplete="off"
+                        class="field__input"
+                        id="essay-proposal-name"
+                        name="essay-proposal-name"
+                        required=""
+                        value=""
+                      />
+                      <span
+                        class="icon select-field__toggle-icon field__icon--has-action"
+                        data-name="chevron-down"
+                        data-testid="chevron-down"
+                        tabindex="0"
+                      >
+                        <svg
+                          fill="none"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          width="24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M15.4676 9.76651L11.9955 13.3018L8.52349 9.76651C8.1745 9.41116 7.61074 9.41116 7.26174 9.76651C6.91275 10.1219 6.91275 10.6959 7.26174 11.0513L11.3691 15.2335C11.7181 15.5888 12.2819 15.5888 12.6309 15.2335L16.7383 11.0513C17.0872 10.6959 17.0872 10.1219 16.7383 9.76651C16.3893 9.42027 15.8166 9.41116 15.4676 9.76651Z"
+                            fill="currentColor"
+                          />
+                        </svg>
+                      </span>
+                    </div>
+                    <label
+                      class="field__label"
+                      for="essay-proposal-name"
+                    >
+                      Digite o tema aqui
+                    </label>
+                    <legend
+                      class="field__legend"
+                    >
+                      Digite o tema aqui
+                    </legend>
+                  </fieldset>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div
+          class="skeleton skeleton--is-default"
+          data-testid="skeleton"
+          style="width: 200px;"
+        >
+          <div
+            class="skeleton-container"
+          >
+            <h3
+              class="heading heading--size-xs title mb-sm"
+            >
+              Arquivo
+            </h3>
+          </div>
+        </div>
+        <div
+          class="skeleton skeleton--is-default"
+          data-testid="skeleton"
+        >
+          <div
+            class="skeleton-container"
+          >
+            <div
+              class="file-field"
+            >
+              <div
+                class="file-field__content text-center"
+              >
+                <img
+                  class="file-field__content__image file-field__content__image--is-default"
+                  height="164"
+                  src="https://cdn.mesalva.com/uploads/image/MjAyMi0wNS0xNiAxOTozNDozMiArMDAwMDQ5NTY5MQ%3D%3D%0A.png"
+                />
+                <h5
+                  class="heading heading--size-xs"
+                >
+                  Toque para escolher um arquivo
+                </h5>
+              </div>
+              <input
+                class="file-input"
+                data-testid="essay-proposal-file"
+                name="essay-proposal-file"
+                type="file"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        data-testid="skeleton"
+      >
+        <div
+          class="skeleton skeleton--is-paragraph"
+          data-testid="skeleton-paragraph"
+          style="width: 100%;"
+        />
+        <div
+          class="skeleton skeleton--is-paragraph"
+          data-testid="skeleton-paragraph"
+          style="width: 100%;"
+        />
+        <div
+          class="skeleton skeleton--is-paragraph"
+          data-testid="skeleton-paragraph"
+          style="width: 90%;"
+        />
+        <div
+          class="skeleton skeleton--is-paragraph"
+          data-testid="skeleton-paragraph"
+          style="width: 30%;"
+        />
+      </div>
+      <div>
+        <div
+          class="skeleton skeleton--is-default"
+          data-testid="skeleton"
+        >
+          <div
+            class="skeleton-container"
+          >
+            <div
+              class="checkbox"
+              data-testid="checkbox"
+              name="essay-proposal-confirmation"
+            >
+              <label
+                class="checkbox__container"
+                data-testid="checkbox-label"
+              >
+                <div
+                  class="checkbox__icon"
+                >
+                  <span
+                    class="icon"
+                    data-name="square"
+                    data-testid="square"
+                  >
+                    <svg
+                      fill="none"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      width="24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        clip-rule="evenodd"
+                        d="M6 21H18C19.6569 21 21 19.6569 21 18V6C21 4.34315 19.6569 3 18 3H6C4.34315 3 3 4.34315 3 6V18C3 19.6569 4.34315 21 6 21ZM5 6C5 5.44772 5.44772 5 6 5H18C18.5523 5 19 5.44772 19 6V18C19 18.5523 18.5523 19 18 19H6C5.44772 19 5 18.5523 5 18V6Z"
+                        fill="currentColor"
+                        fill-rule="evenodd"
+                      />
+                    </svg>
+                  </span>
+                </div>
+                <input
+                  class="checkbox__input"
+                  data-testid="checkbox-input"
+                  id="essay-proposal-confirmation"
+                  type="checkbox"
+                />
+                <span
+                  class="text text--size-sm checkbox__label"
+                >
+                  Certifico que essa redação é de minha autoria e respeita os demais termos de uso do Me Salva!
+                </span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="skeleton skeleton--is-default"
+        data-testid="skeleton"
+      >
+        <div
+          class="skeleton-container"
+        >
+          <button
+            class="btn btn--primary btn--size-md btn--is-disabled submit-button"
+            disabled=""
+            type="submit"
+          >
+            <span
+              class="icon btn__icon"
+              data-name="send"
+              data-testid="send"
+            >
+              <svg
+                height="24"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M3.4 20.4L20.85 12.92C21.66 12.57 21.66 11.43 20.85 11.08L3.4 3.60002C2.74 3.31002 2.01 3.80002 2.01 4.51002L2 9.12002C2 9.62002 2.37 10.05 2.87 10.11L17 12L2.87 13.88C2.37 13.95 2 14.38 2 14.88L2.01 19.49C2.01 20.2 2.74 20.69 3.4 20.4Z"
+                  fill="currentColor"
+                />
+              </svg>
+            </span>
+            <span
+              class="btn__content"
+            >
+              Enviar
+            </span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </section>
+</div>
+`;

@@ -1,0 +1,57 @@
+.snack-bar {
+  position: fixed;
+  background-color: $color-background-primary;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  box-shadow: $shadow-elevation-300;
+  &:not(.snack-bar--show) {
+    display: none;
+  }
+  &--show {
+    z-index: 5;
+    transform: translateY(100%);
+    animation: show-up-banner-animation 250ms 1s ease-in-out 1 forwards;
+  }
+  &__content {
+    min-height: 180px;
+    padding: $spacing-xl;
+    width: 100%;
+    position: relative;
+  }
+  &__close-button {
+    position: absolute;
+    top: $spacing-xl;
+    right: $spacing-xl;
+  }
+  @media (min-width: $breakpoint-lg) {
+    position: sticky;
+    top: 0;
+    bottom: unset;
+    &__content {
+      min-height: 100px;
+    }
+    &--show {
+      transform: translateY(-100%);
+      animation: show-down-banner-animation 250ms 250ms ease-in-out 1 forwards;
+    }
+  }
+}
+
+@keyframes show-up-banner-animation {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes show-down-banner-animation {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}

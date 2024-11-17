@@ -1,0 +1,5 @@
+.progress-indicator {
+  &--is-fetching {
+    border-bottom: 1px solid $color-background-secondary;
+  }
+}

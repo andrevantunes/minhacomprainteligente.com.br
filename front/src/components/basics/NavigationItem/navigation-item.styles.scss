@@ -1,0 +1,38 @@
+.navigation-item {
+  flex: 0 0 0;
+  width: 48px;
+  aspect-ratio: 1;
+  &.btn {
+    border: none;
+  }
+
+
+  &--is-active {
+    > * {
+      color: $color-primary-500;
+    }
+  }
+
+  &--is-checked {
+    > * {
+      color: $color-success-500;
+    }
+  }
+
+  &--is-disabled {
+    pointer-events: none;
+    > * {
+      color: $color-action-disabled;
+    }
+  }
+
+  .subtitle {
+    display: flex;
+    justify-content: center;
+  }
+
+  .heading,
+  .subtitle {
+    line-height: 100%;
+  }
+}

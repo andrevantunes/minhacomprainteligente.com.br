@@ -1,0 +1,39 @@
+.header {
+  $height: 64px;
+  height: $height;
+  &__container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: $height;
+    border-bottom: 2px solid $color-primary-500;
+    width: 100%;
+    background-color: $color-background-secondary;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    position: fixed;
+    transition: transform ease 200ms;
+    transform: translateY(-100%);
+  }
+
+  &__menu-btn {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: $gap-lg-2;
+    margin: $spacing-sm;
+  }
+
+  &--is-going-up {
+    .header__container {
+      transform: translateY(0);
+    }
+  }
+
+
+  @media screen and (min-width: $breakpoint-lg) {
+    display: none;
+  }
+}
+

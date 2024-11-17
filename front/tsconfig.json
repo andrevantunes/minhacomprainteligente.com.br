@@ -1,0 +1,46 @@
+{
+  "compilerOptions": {
+    /* Visit https://aka.ms/tsconfig.json to read more about this file */
+
+    /* Type Checking */
+    "noFallthroughCasesInSwitch": true,                      /* Enable error reporting for fallthrough cases in switch statements. */
+    "noImplicitReturns": true,                               /* Enable error reporting for codepaths that do not explicitly return in a function. */
+    "noUncheckedIndexedAccess": true,                        /* Include 'undefined' in index signature results */
+    "noUnusedLocals": true,                                  /* Enable error reporting when a local variables aren't read. */
+    "noUnusedParameters": true,                              /* Raise an error when a function parameter isn't read */
+    "strict": true,                                          /* Enable all strict type-checking options. */
+
+    /* Modules */
+    "baseUrl": "./src",                                      /* Specify the base directory to resolve non-relative module names. */
+    "module": "ESNext",                                      /* Specify what module code is generated. */
+    "moduleResolution": "Node",                              /* Specify how TypeScript looks up a file from a given module specifier. */
+    "paths": {                                               /* Specify a set of entries that re-map imports to additional lookup locations. */
+      "@/*": ["./*"],
+    },
+    "resolveJsonModule": true,                               /* Enable importing .json files */
+
+    /* Emit */
+    "noEmit": true,                                          /* Do not emit compiler output files like JavaScript source code, source-maps or declarations. */
+
+    /* JavaScript Support */
+    "allowJs": true,                                         /* Allow JavaScript files to be a part of your program. Use the `checkJS` option to get errors from these files. */
+
+    /* Interop Constraints */
+    "esModuleInterop": true,                                 /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables `allowSyntheticDefaultImports` for type compatibility. */
+    "forceConsistentCasingInFileNames": true,                /* Ensure that casing is correct in imports. */    /* Type Checking */
+    "isolatedModules": true,                                 /* Ensure that each file can be safely transpiled without relying on other imports. */
+
+    /* Language and Environment */
+    "jsx": "preserve",                                       /* Specify what JSX code is generated. */
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],                /* Specify a set of bundled library declaration files that describe the target runtime environment. */
+    "target": "ES5",                                         /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
+
+    /* Projects */
+    "incremental": true,                                     /* Tells TypeScript to save information about the project graph from the last compilation to files stored on disk. */
+
+    /* Completeness */
+    "skipLibCheck": true                                     /* Skip type checking all .d.ts files. */
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": ["**/*.spec.ts", "**/*.spec.tsx"],
+}

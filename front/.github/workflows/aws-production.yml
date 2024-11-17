@@ -1,0 +1,87 @@
+name: Deploy Elastic Beanstalk • Production
+
+on:
+  push:
+    branches: [main]
+
+env:
+  ENVIRONMENT: production
+  AWS_SECRET_KEY_ID: ${{ secrets.AWS_PRODUCTION_GITHUB_ACTIONS_KEY }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_PRODUCTION_GITHUB_ACTIONS_SECRET }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get runtime build variables
+        id: app
+        run: |
+          echo "NAME=$(echo $GITHUB_REPOSITORY | awk -F / '{print $2}')" >> $GITHUB_OUTPUT
+
+      - name: Get runtime build variables
+        id: localvars
+        run: |
+          echo "PULL_NUMBER=$(echo $GITHUB_REF | awk -F / '{print $3}')" >> $GITHUB_OUTPUT
+          echo "IMAGE_TAG=${{ steps.app.outputs.NAME }}-${{ github.run_number }}-${{ github.run_attempt }}" >> $GITHUB_OUTPUT
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ env.AWS_SECRET_KEY_ID }}
+          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        run: |
+          echo "registry=$(aws sts get-caller-identity --query "Account" | tr -d '"').dkr.ecr.us-east-1.amazonaws.com" >> $GITHUB_OUTPUT
+          aws ecr get-login-password | docker login --username AWS --password-stdin $(aws sts get-caller-identity --query "Account" | tr -d '"').dkr.ecr.us-east-1.amazonaws.com
+
+      - name: Get .env
+        run: |
+          cp .env.development.example .env
+
+      - name: Zipando e Enviando para o Bucket
+        run: |
+          zip -qq -r latest.zip .ebextensions
+          zip -qq latest.zip Dockerrun.aws.json
+          aws s3 cp latest.zip s3://mesalva-deploy-ebs-${{ env.ENVIRONMENT }}/${{ steps.app.outputs.NAME }}/${{ steps.localvars.outputs.IMAGE_TAG }}.zip
+
+      - name: Docker Build
+        id: build-image
+        env:
+          IMAGE_TAG: ${{ steps.localvars.outputs.IMAGE_TAG }}
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}/${{ steps.app.outputs.NAME }}
+        run: |
+          docker build -t $ECR_REGISTRY:$IMAGE_TAG -t $ECR_REGISTRY:latest .
+
+      - name: Push image to Amazon ECR
+        id: push-image
+        env:
+          IMAGE_TAG: ${{ steps.localvars.outputs.IMAGE_TAG }}
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}/${{ steps.app.outputs.NAME }}
+        run: |
+          docker push $ECR_REGISTRY:$IMAGE_TAG
+          docker push $ECR_REGISTRY:latest
+          echo "::set-output name=image::$ECR_REGISTRY:$IMAGE_TAG"
+
+      - name: AWS CLI Create EB Version
+        run: |
+          aws elasticbeanstalk create-application-version --application-name ${{ steps.app.outputs.NAME }} --version-label ${{ steps.localvars.outputs.IMAGE_TAG }} --source-bundle S3Bucket=mesalva-deploy-ebs-${{ env.ENVIRONMENT }},S3Key=${{ steps.app.outputs.NAME }}/${{ steps.localvars.outputs.IMAGE_TAG }}.zip
+
+      - name: AWS CLI Deploy EB Version
+        run: |
+          aws elasticbeanstalk update-environment --application-name ${{ steps.app.outputs.NAME }} --environment-name ${{ steps.app.outputs.NAME }} --version-label=${{ steps.localvars.outputs.IMAGE_TAG }} --option-settings file://options.json
+
+      - name: Wait EBS update
+        run: |
+          aws elasticbeanstalk wait environment-updated --application-name ${{ steps.app.outputs.NAME }} --environment-name ${{ steps.app.outputs.NAME }}
+
+      - name: Verify deployed version
+        run: |
+          deployed_version=$(aws elasticbeanstalk describe-environments --environment-name ${{ steps.app.outputs.NAME }} --query "Environments[0].VersionLabel")
+          [[ $deployed_version == "\"${{ steps.localvars.outputs.IMAGE_TAG }}\"" ]] && echo "Right version deployed" || exit 1

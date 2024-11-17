@@ -1,0 +1,10 @@
+@import "~@andrevantunes/andrevds/dist/tokens/scss/variables.scss";
+@import "~@andrevantunes/andrevds/dist/tokens/scss/breakpoints.scss";
+@import "~@andrevantunes/andrevds/dist/index.css";
+
+@import "./globals.scss";
+@import "./variables.scss";
+@import "../components/index.scss";
+
+@import "./utilities.scss";
+@import "./pages.scss";

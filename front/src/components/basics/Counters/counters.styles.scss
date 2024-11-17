@@ -1,0 +1,7 @@
+.counters {
+  &__list {
+    margin: 0;
+    display: flex;
+    gap: $gap-md-4;
+  }
+}

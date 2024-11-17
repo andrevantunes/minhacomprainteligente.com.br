@@ -1,0 +1,90 @@
+.essay-corrected-image {
+  position: relative;
+  &__actions {
+    position: absolute;
+    display: flex;
+    background-color: transparent;
+    bottom: $spacing-lg;
+    right: $spacing-lg;
+    z-index: 1;
+
+    &__button {
+      cursor: pointer;
+      transition: background-color 0.25s;
+      background-color: $color-background-overlay;
+      border-radius: 50%;
+      color: $color-white;
+      height: 32px;
+      width: 32px;
+      min-height: unset;
+      min-width: unset;
+      line-height: 0;
+      border: none;
+      font-size: 0;
+      margin-left: $spacing-md;
+
+      &:hover {
+        background-color: $color-black;
+      }
+
+      &__link:not(button) {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: $color-white;
+      }
+    }
+  }
+
+  &__container {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    user-select: none;
+    -webkit-user-drag: none;
+    -webkit-aspect-ratio: var(--aspect-ratio, 1);
+    aspect-ratio: var(--aspect-ratio, 1);
+    width: 100%;
+    overflow: hidden;
+    img {
+      transform-origin: 0 0;
+      width: 100%;
+    }
+
+    &--not-full {
+      @media (max-width: 959px) {
+        overflow: hidden;
+        max-height: 500px;
+        mask-image: linear-gradient(to top, transparent 32px, $color-black 96px);
+      }
+      @media (max-width: 450px) {
+        max-height: 200px;
+      }
+    }
+
+    &__mark {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      font-size: 10px;
+      font-weight: 900;
+      color: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all ease 150ms;
+      transform: translate(-50%, -50%);
+      &--hidden {
+        opacity: 0;
+      }
+      &--active:not(&--hidden) {
+        width: 30px;
+        height: 30px;
+        font-size: 14px;
+        color: $color-white;
+        box-shadow: $shadow-elevation-300;
+      }
+    }
+  }
+}
