@@ -1,25 +1,10 @@
 import type { ProductProps } from "./product.types";
 
 import classNames from "classnames";
-import {Button, Card, Display} from "@andrevantunes/andrevds";
-import {Title} from "@/components";
-import {StoreType, useStore} from "@/store";
-import {toBrCurrency, toCurrency} from "@/helpers/currency.helper";
-
-`
-    "className": "flex",
-    "component": "div"
-  },
-  {
-    "children": "R$6,00",
-    "component": "Title"
-  },
-  {
-    "href": "/desafio",
-    "children": "Adicionar ao carrinho",
-    "component": "Button"
-  }
-`
+import { Button, Card, Display } from "@andrevantunes/andrevds";
+import { Title } from "@/components";
+import { StoreType, useStore } from "@/store";
+import { toBrCurrency } from "@/helpers/currency.helper";
 
 const Product = ({
   title,
@@ -42,9 +27,9 @@ const Product = ({
     <Card elevation={elevation} className={cn} {...props}>
       <Display size="sm">{title}</Display>
       <div style={{ gap: 8, flexGrow: 1, alignItems: "center", marginBottom: 16 }}>
-        <img src={src} />
+        <img src={src} alt="Product Image" />
       </div>
-      <Title>{toBrCurrency(price)}</Title>
+      <Title>{toBrCurrency(Number(price))}</Title>
       <Button onClick={handleOnClick}>Adicionar ao carrinho</Button>
     </Card>
   );
