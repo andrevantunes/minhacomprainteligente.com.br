@@ -1,7 +1,7 @@
 import type { Page } from "@/types/page.types";
 import type { GetServerSideProps } from "next";
 
-import { AppTemplate, Seo } from "@/components";
+import { AppTemplate, CartCloser, Seo } from "@/components";
 import RiboAdapter from "@/libs/ribo-adapter";
 import { getPage } from "@/requests";
 import { StoreType, useStore } from "@/store";
@@ -30,7 +30,6 @@ const Page = ({
   ...props
 }: SSWPagesProps) => {
   const [{ guest }] = useStore(StoreType.User);
-  const [{ products }] = useStore(StoreType.Cart);
   const isBlockedPage = authenticated && guest;
   const seo = { title, description, image, canonical, robots, url };
 
@@ -39,7 +38,7 @@ const Page = ({
       <Seo {...seo} />
       <AppTemplate {...props}>
         {isBlockedPage ? <BlockedMessage /> : children && <RiboAdapter>{children}</RiboAdapter>}
-        {JSON.stringify(products)}
+        <CartCloser />
       </AppTemplate>
     </>
   );

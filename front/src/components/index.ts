@@ -19,6 +19,7 @@ export * from "./basics/Brand";
 export * from "./basics/CardYoutube";
 export * from "./basics/CardYoutubeNotification";
 export * from "./basics/Carousel";
+export * from "./basics/CartCloser";
 export * from "./basics/ComponentItem";
 export * from "./basics/ComponentList";
 export * from "./basics/Counters";
