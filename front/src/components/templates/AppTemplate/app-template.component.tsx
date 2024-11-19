@@ -1,5 +1,5 @@
 import type { AppTemplateProps } from "./app-template.types";
-import { AuthModal, PageTemplate, ProgressBar } from "@/components";
+import { AuthModal, PageTemplate, ProgressBar, CustomerTemplate } from "@/components";
 import { Templates } from "@/types";
 import classNames from "classnames";
 import { useContext, useEffect } from "react";
@@ -18,8 +18,10 @@ const AppTemplate = ({
   const router = useRouter();
   const templateList: Record<string, any> = {
     [Templates.Default]: PageTemplate,
+    [Templates.Customer]: CustomerTemplate,
   };
   const Component = templateList[component] || PageTemplate;
+  console.log({component, templateList, Component})
   const cn = classNames("app-template", {
     [`app-template--${container}`]: container,
   });

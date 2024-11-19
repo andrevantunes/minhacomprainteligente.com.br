@@ -4,3 +4,4 @@
  */
 export * from "./AppTemplate";
 export * from "./AuthTemplate";
+export * from "./CustomerTemplate";

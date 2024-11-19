@@ -1,16 +1,22 @@
-import type { PageTemplateProps } from "./page-template.types";
-import { Header, SidebarManager } from "@/components";
+import type { CustomerTemplateProps } from "./customer-template.types";
+import { CartCloser, Header, SidebarManager} from "@/components";
 import { mockSidebarList } from "@/components/specifics/SidebarManager/sidebar-manager.fixture";
 
 import classNames from "classnames";
 
-const PageTemplate = ({ children, className, hideSidebar, full, ...props }: PageTemplateProps) => {
+const CustomerTemplate = ({
+  children,
+  className,
+  hideSidebar,
+  full,
+  ...props
+}: CustomerTemplateProps) => {
   const cn = classNames("page-template", className, {
     "page-template--is-sidebar-hidden": hideSidebar,
   });
   return (
     <>
-    {!hideSidebar && <Header />}
+      {!hideSidebar && <Header />}
       <div className={cn} {...props}>
         {!hideSidebar && <SidebarManager sidebarItems={mockSidebarList} />}
         <div
@@ -22,8 +28,9 @@ const PageTemplate = ({ children, className, hideSidebar, full, ...props }: Page
           {children}
         </div>
       </div>
+      <CartCloser />
     </>
   );
 };
 
-export default PageTemplate;
+export default CustomerTemplate;

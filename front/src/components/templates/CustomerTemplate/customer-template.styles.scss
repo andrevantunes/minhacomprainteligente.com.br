@@ -1,0 +1,10 @@
+.customer-template {
+  @media (min-width: $breakpoint-lg) {
+    display: grid;
+    grid-template-columns: 338px 1fr;
+  }
+
+  &--is-sidebar-hidden {
+    grid-template-columns: 1fr;
+  }
+}

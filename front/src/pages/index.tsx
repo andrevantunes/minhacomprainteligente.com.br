@@ -1,7 +1,7 @@
 import type { Page } from "@/types/page.types";
 import type { GetServerSideProps } from "next";
 
-import { AppTemplate, CartCloser, Seo } from "@/components";
+import { AppTemplate, Seo } from "@/components";
 import RiboAdapter from "@/libs/ribo-adapter";
 import { getPage } from "@/requests";
 import { StoreType, useStore } from "@/store";
@@ -38,7 +38,6 @@ const Page = ({
       <Seo {...seo} />
       <AppTemplate {...props}>
         {isBlockedPage ? <BlockedMessage /> : children && <RiboAdapter>{children}</RiboAdapter>}
-        <CartCloser />
       </AppTemplate>
     </>
   );

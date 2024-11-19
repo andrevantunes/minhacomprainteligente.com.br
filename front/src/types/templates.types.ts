@@ -1,6 +1,7 @@
+
 export enum Templates {
   Default = "PageTemplate",
-  Console = "ConsoleTemplate",
+  Customer = "CustomerTemplate",
   Error = "ErrorTemplate",
   PrepTestEnemConsoleTemplate = "PrepTestEnemConsoleTemplate",
 }
