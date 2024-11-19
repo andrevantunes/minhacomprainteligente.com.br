@@ -1,6 +1,6 @@
 import type { SectionTitleProps } from "./section-title.types";
 
-import { Divider, Heading, Image, Skeleton } from "@andrevantunes/andrevds";
+import { Hr, Heading, Image, Skeleton } from "@andrevantunes/andrevds";
 import { Breadcrumb } from "@/components";
 import { ToggleButton } from "@/components/adapters/ToggleButton";
 import { useRouter } from "next/router";
@@ -54,7 +54,7 @@ const SectionTitleBreadcrumb = ({ list }: { list: SectionTitleProps["breadcrumb"
           />
         </div>
       </div>
-      <Divider className="mb-lg" />
+      <Hr className="mb-lg" />
     </div>
   );
 };
