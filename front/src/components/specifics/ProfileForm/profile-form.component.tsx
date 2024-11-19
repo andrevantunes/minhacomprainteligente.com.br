@@ -2,7 +2,7 @@ import { Grid } from "@/components/basics/Grid";
 import { getStore, StoreType, UserStore } from "@/store";
 import {
   AvatarField,
-  Divider,
+  Hr,
   FormWithSubmitButton,
   Notification,
   SelectField,
@@ -102,7 +102,7 @@ const ProfileForm = ({}: ProfileFormProps) => {
           {profileInDictionary.changeEmail}
         </Link>
       </Text>
-      <Divider className="mb-xl mt-sm" />
+      <Hr className="mb-xl mt-sm" />
       <FormWithSubmitButton
         id={profileInDictionary.id}
         onSubmit={handleSubmit}

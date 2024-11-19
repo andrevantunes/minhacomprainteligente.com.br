@@ -6,8 +6,7 @@ import { TextPlanMakerStep1 } from "../TextPlanMakerStep1";
 import {
   Button,
   ButtonProps,
-  CircleStepper,
-  Divider,
+  Hr,
   Heading,
   Stepper,
   Text,
@@ -144,12 +143,7 @@ const TextPlanMaker = ({
                   position={currentStep + 1}
                   className="text-plan-maker__stepper"
                 />
-                <CircleStepper
-                  steps={stepsForStepper}
-                  position={index + 1}
-                  className="mb-xl text-plan-maker__circle-stepper"
-                />
-                <Divider className="text-plan-maker__divider" />
+                <Hr className="text-plan-maker__divider" />
                 <Card elevation="hg" className="text-plan-maker__card">
                   {steps?.[index]?.title && index !== 6 && (
                     <div className="text-plan-maker__title-wrapper">

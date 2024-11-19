@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { AreaField, Button, Divider, Heading, Image, Modal, Text } from "@andrevantunes/andrevds";
+import { AreaField, Button, Hr, Heading, Image, Modal, Text } from "@andrevantunes/andrevds";
 import { ButtonBack, ButtonNext } from "../TextPlanMaker/text-plan-maker.component";
 import { TextPlanMakerStepProps } from "../TextPlanMaker/text-plan-maker.types";
 import { ReactNode, useState } from "react";
@@ -154,7 +154,7 @@ const Block = ({ title, children }: { title: string; children: ReactNode | strin
   <>
     <Title>{title}</Title>
     <Text as="div">{children}</Text>
-    <Divider className="mt-lg mb-lg" />
+    <Hr className="mt-lg mb-lg" />
   </>
 );
 
@@ -233,28 +233,28 @@ const EditTemplate = ({
         value={ideas}
         className={"text-plan-maker__area-field"}
       />
-      <Divider className="mt-lg mb-lg" />
+      <Hr className="mt-lg mb-lg" />
       <Title>{titles?.[2]}</Title>
       <AreaField
         onChange={handleChangeThesis}
         value={thesis}
         className={"text-plan-maker__area-field"}
       />
-      <Divider className="mt-lg mb-lg" />
+      <Hr className="mt-lg mb-lg" />
       <Title>{titles?.[3]}</Title>
       <AreaField
         onChange={handleChangeFirstArgument}
         value={firstArgument}
         className={"text-plan-maker__area-field"}
       />
-      <Divider className="mt-lg mb-lg" />
+      <Hr className="mt-lg mb-lg" />
       <Title>{titles?.[4]}</Title>
       <AreaField
         onChange={handleChangeSecondArgument}
         value={secondArgument}
         className={"text-plan-maker__area-field"}
       />
-      <Divider className="mt-lg mb-lg" />
+      <Hr className="mt-lg mb-lg" />
       <Title>{titles?.[5]}</Title>
       <Title>Agente</Title>
       <AreaField
