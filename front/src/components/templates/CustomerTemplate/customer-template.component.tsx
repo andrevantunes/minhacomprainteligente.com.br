@@ -1,5 +1,5 @@
 import type { CustomerTemplateProps } from "./customer-template.types";
-import { CartCloser, Header, SidebarManager} from "@/components";
+import { CartCloser, Header, SidebarManager } from "@/components";
 import { mockSidebarList } from "@/components/specifics/SidebarManager/sidebar-manager.fixture";
 
 import classNames from "classnames";

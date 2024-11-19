@@ -10,7 +10,7 @@ const PageTemplate = ({ children, className, hideSidebar, full, ...props }: Page
   });
   return (
     <>
-    {!hideSidebar && <Header />}
+      {!hideSidebar && <Header />}
       <div className={cn} {...props}>
         {!hideSidebar && <SidebarManager sidebarItems={mockSidebarList} />}
         <div

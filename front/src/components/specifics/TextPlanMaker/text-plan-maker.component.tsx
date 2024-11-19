@@ -3,14 +3,7 @@ import type { CreateUpdateProps, TextPlanMakerProps } from "./text-plan-maker.ty
 import classNames from "classnames";
 import { useEffect, useState } from "react";
 import { TextPlanMakerStep1 } from "../TextPlanMakerStep1";
-import {
-  Button,
-  ButtonProps,
-  Hr,
-  Heading,
-  Stepper,
-  Text,
-} from "@andrevantunes/andrevds";
+import { Button, ButtonProps, Hr, Heading, Stepper, Text } from "@andrevantunes/andrevds";
 import { Card } from "@andrevantunes/andrevds";
 import { TextPlanMakerStep2 } from "../TextPlanMakerStep2";
 import { TextPlanMakerStep3 } from "../TextPlanMakerStep3";

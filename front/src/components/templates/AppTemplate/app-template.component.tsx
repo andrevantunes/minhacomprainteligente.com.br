@@ -21,7 +21,7 @@ const AppTemplate = ({
     [Templates.Customer]: CustomerTemplate,
   };
   const Component = templateList[component] || PageTemplate;
-  console.log({component, templateList, Component})
+  console.log({ component, templateList, Component });
   const cn = classNames("app-template", {
     [`app-template--${container}`]: container,
   });
