@@ -27,9 +27,8 @@ const PlatformContextProvider = ({ children }: PlatformContextProviderProps) => 
     if (platformSlug !== newPlatformSlug) setPlatformSlug(newPlatformSlug);
   }, [guest, router.query.platformSlug]);
 
-  const fetchPlatform = async (slug?: string) => {
+  const fetchPlatform = async (_slug?: string) => {
     setFetched(true);
-    console.log(slug);
   };
 
   useEffect(() => {

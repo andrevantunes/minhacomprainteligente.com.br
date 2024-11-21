@@ -21,6 +21,7 @@ const Product = ({
   const [{ products }, setCart] = useStore(StoreType.Cart);
   const handleOnClick = (event: any) => {
     event.preventDefault();
+    // @ts-ignore
     setCart({ products: [...products, { id, price, quantity: 1 }] });
   };
   return (

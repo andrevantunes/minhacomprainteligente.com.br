@@ -1,7 +1,7 @@
-import type {PropertySelectionProps} from "./property-selection.types";
+import type { PropertySelectionProps } from "./property-selection.types";
 import classNames from "classnames";
-import {Button, Card, Checkbox, Display} from "@andrevantunes/andrevds";
-import {StoreType, useStore} from "@/store";
+import { Button, Card, Checkbox, Display } from "@andrevantunes/andrevds";
+import { StoreType, useStore } from "@/store";
 
 const PropertySelection = ({
   children,
@@ -16,12 +16,15 @@ const PropertySelection = ({
   ...props
 }: PropertySelectionProps) => {
   const [{ properties }, setProperty] = useStore(StoreType.Cart);
-  const handleOnClick = (event) => {
-      if(event.target.checked) setProperty({properties: [...properties, {id}]});
-      else{
-        setProperty({properties: properties.filter((property) => id != property.id)})
-      }
-  }
+  const handleOnClick = (event: any) => {
+    if (event.target.checked) {
+      // @ts-ignore
+      setProperty({ properties: [...properties, { id }] });
+    } else {
+      // @ts-ignore
+      setProperty({ properties: properties.filter((property) => id != property.id) });
+    }
+  };
   const cn = classNames("property-selection", className);
   return (
     <Card
