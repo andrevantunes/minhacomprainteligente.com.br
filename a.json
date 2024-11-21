@@ -1,0 +1,214 @@
+{
+  "children": [
+    {
+      "children": [
+        {
+          "style": {
+            "width": "100%",
+            "display": "flex",
+            "padding": 24,
+            "alignItems": "center",
+            "borderRadius": 8,
+            "flexDirection": "column",
+            "backgroundColor": "#1f7445"
+          },
+          "children": [
+            {
+              "src": "https://www.pedidoslink.com/cdn-cgi/image/width=200,height=200,fit=cover/https://firebasestorage.googleapis.com/v0/b/stores-44690.appspot.com/o/stores%2FT0sfoie7GCRXZZy99prI.jpg?alt=media&refresh=1724764692",
+              "component": "Image"
+            },
+            {
+              "children": "Separar produtos para reposição",
+              "component": "Title"
+            },
+            {
+              "children": "Nesta sessão você irá separar em seu estoque todos os mantimentos que irá abastecer para os imóveis que irá percorrer na próxima rota. Abaixo estão listados todos os mantimentos que estão faltando nos imóveis selecionados no momento.",
+              "component": "Text"
+            }
+          ],
+          "component": "div"
+        }
+      ],
+      "className": "flex justify-content-center",
+      "component": "div"
+    },
+    {
+      "style": {
+        "gap": 16,
+        "display": "flex",
+        "flexDirection": "column"
+      },
+      "children": [
+        {
+          "children": "Produtos faltando",
+          "component": "Display"
+        },
+        {
+          "style": {
+            "gap": 16,
+            "display": "flex"
+          },
+          "children": [
+            {
+              "src": "https://clubedomalte.fbitsstatic.net/img/b/1142913b-ce18-45ca-97b3-5a0d506a8200.jpg",
+              "width": 120,
+              "height": 120,
+              "component": "Image"
+            },
+            {
+              "style": {
+                "gap": 8,
+                "display": "flex",
+                "flexDirection": "column"
+              },
+              "children": [
+                {
+                  "children": [
+                    {
+                      "children": "Nome do produto: ",
+                      "component": "strong"
+                    },
+                    {
+                      "children": "Cerveja Heineken 330ml",
+                      "component": "span"
+                    }
+                  ],
+                  "component": "div"
+                },
+                {
+                  "children": [
+                    {
+                      "children": "Quantidade faltando nos imóveis: ",
+                      "component": "strong"
+                    },
+                    {
+                      "style": {
+                        "color": "red"
+                      },
+                      "children": "5",
+                      "component": "span"
+                    }
+                  ],
+                  "component": "div"
+                },
+                {
+                  "children": [
+                    {
+                      "children": "Categorias: ",
+                      "component": "strong"
+                    },
+                    {
+                      "children": "Bebidas",
+                      "component": "Label"
+                    }
+                  ],
+                  "component": "div"
+                },
+                {
+                  "component": "hr"
+                }
+              ],
+              "component": "div"
+            }
+          ],
+          "component": "Card"
+        },
+        {
+          "style": {
+            "gap": 16,
+            "display": "flex"
+          },
+          "children": [
+            {
+              "src": "https://zonasul.vtexassets.com/arquivos/ids/3076276/VF4qT-qqCUAAAAAAAAGTQQ.jpg?v=637877821121600000",
+              "width": 120,
+              "height": 120,
+              "component": "Image"
+            },
+            {
+              "style": {
+                "gap": 8,
+                "display": "flex",
+                "flexDirection": "column"
+              },
+              "children": [
+                {
+                  "children": [
+                    {
+                      "children": "Nome do produto: ",
+                      "component": "strong"
+                    },
+                    {
+                      "children": "Água mineral 1,5L",
+                      "component": "span"
+                    }
+                  ],
+                  "component": "div"
+                },
+                {
+                  "children": [
+                    {
+                      "children": "Valor cobrado neste imóvel: ",
+                      "component": "strong"
+                    },
+                    {
+                      "children": "R$6,00",
+                      "component": "span"
+                    }
+                  ],
+                  "component": "div"
+                },
+                {
+                  "children": [
+                    {
+                      "children": "Quantidade esperada no imóvel: ",
+                      "component": "strong"
+                    },
+                    {
+                      "children": "2",
+                      "component": "span"
+                    }
+                  ],
+                  "component": "div"
+                },
+                {
+                  "children": [
+                    {
+                      "children": "Quantidade atual no imóvel: ",
+                      "component": "strong"
+                    },
+                    {
+                      "style": {
+                        "color": "green"
+                      },
+                      "children": "2",
+                      "component": "span"
+                    }
+                  ],
+                  "component": "div"
+                },
+                {
+                  "children": [
+                    {
+                      "children": "Categorias: ",
+                      "component": "strong"
+                    },
+                    {
+                      "children": "Bebidas",
+                      "component": "Label"
+                    }
+                  ],
+                  "component": "div"
+                }
+              ],
+              "component": "div"
+            }
+          ],
+          "component": "Card"
+        }
+      ],
+      "component": "div"
+    }
+  ],
+  "hideSidebar": true
+}

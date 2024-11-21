@@ -8,5 +8,6 @@ export interface CartStore {
 export const defaultState: CartStore = {
   cart: {
     products: [],
+    properties: [],
   },
 };

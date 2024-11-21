@@ -18,6 +18,8 @@
 @import "./basics/NavigationItem/navigation-item.styles.scss";
 @import "./basics/PopUpButton/pop-up-button.styles.scss";
 @import "./basics/Product/product.styles.scss";
+@import "./basics/PropertySelection/property-selection.styles.scss";
+@import "./basics/RepositionFloatButton/reposition-float-button.styles.scss";
 @import "./basics/Step/step.styles.scss";
 @import "./sections/Common/SectionCardFooter/section-card-footer.styles.scss";
 @import "./sections/SectionBase/section-base.styles.scss";
@@ -42,4 +44,5 @@
 @import "./specifics/ThemeSwitch/theme-switch.styles.scss";
 @import "./templates/AppTemplate/app-template.styles.scss";
 @import "./templates/AuthTemplate/auth-template.styles.scss";
+@import "./templates/CustomerTemplate/customer-template.styles.scss";
 @import "./templates/PageTemplate/page-template.styles.scss";

@@ -5,12 +5,12 @@ import { StoreType, useStore } from "@/store";
 import { toBrCurrency } from "@/helpers/currency.helper";
 import { Button, Icon } from "@andrevantunes/andrevds";
 
-const CartCloser = ({ children, className, size, type, ref, ...props }: CartCloserProps) => {
+const CartCloser = ({ children, className, size, type, href, ref, ...props }: CartCloserProps) => {
   const cn = classNames("cart-closer", className);
   const [{ products }] = useStore(StoreType.Cart);
   if (!products || products.length <= 0) return null;
   return (
-    <Button className={cn} {...props}>
+    <Button href={href} className={cn} {...props}>
       <div>
         <Icon name="loja-livros" color="white" size="md" />
         <span className="cart-closer__quantity">{calculateCartTotalQuantity(products)}</span>

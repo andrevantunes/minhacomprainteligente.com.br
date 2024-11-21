@@ -1,3 +1,4 @@
 export interface CartState {
-  products: any[];
+  products?: any[];
+  properties?: any[];
 }
