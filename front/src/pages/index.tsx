@@ -7,7 +7,7 @@ import { getPage } from "@/requests";
 import { StoreType, useStore } from "@/store";
 
 export const getServerSideProps: GetServerSideProps = async ({ resolvedUrl }) => {
-  if (resolvedUrl.match(/.ico/)) return { props: { resolvedUrl } };
+  if (resolvedUrl.match(/\.ico$/)) return { props: { resolvedUrl } };
   if (resolvedUrl == "/") resolvedUrl = "/home";
   const page = await getPage(resolvedUrl);
   return { props: { ...page, resolvedUrl } };
