@@ -1,0 +1,34 @@
+.credit-card-section {
+  display: flex;
+  gap: 16px;
+  flex-direction: column;
+  &__form {
+    gap: 16px;
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    &__expire-cvv {
+      gap: 16px;
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      &__expire {
+        gap: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+    }
+  }
+
+  @media (min-width: 768px){
+    flex-direction: row;
+    &__form {
+      margin-left: 16px;
+
+      &__expire-cvv {
+        flex-direction: row;
+      }
+    }
+  }
+}

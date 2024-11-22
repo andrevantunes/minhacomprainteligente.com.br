@@ -1,0 +1,35 @@
+.checkout-product {
+  gap: 16px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  &__image-name-label {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+    &__name-label {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex-grow: 1;
+      align-items: center;
+    }
+  }
+  &__price-quantity-subtotal {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  @media (min-width: 768px){
+    flex-direction: row;
+    &__image-name-label {
+      align-items: center;
+      flex-direction: row;
+      &__name-label {
+        align-items: flex-start;
+      }
+    }
+  }
+}
