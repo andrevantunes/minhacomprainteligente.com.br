@@ -10,52 +10,265 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model roles {
-  id    Int     @id @default(autoincrement())
-  name  String
-  users users[]
-}
-
-model status {
-  id    Int     @id @default(autoincrement())
-  name  String
-  users users[]
-}
-
-model files {
-  id    Int     @id @default(autoincrement())
-  path  String
-  users users[]
-}
-
 model users {
-  id        Int        @id @default(autoincrement())
-  email     String?
-  password  String
-  provider  String
-  socialId  String?
-  name      String
-  role      roles      @relation(fields: [roleId], references: [id])
-  roleId    Int
-  status    status     @relation(fields: [statusId], references: [id])
-  statusId  Int
-  photo     files?     @relation(fields: [photoId], references: [id])
-  photoId   Int?
-  createdAt DateTime
-  updatedAt DateTime
-  deletedAt DateTime?
-  Session   sessions[]
+  id                  Int                   @id @default(autoincrement())
+  email               String?
+  phone               String?
+  password            String?
+  provider            String
+  social_id           String?
+  name                String?
+  role                String?
+  created_at          DateTime
+  updated_at          DateTime
+  deleted_at          DateTime?
+  properties_managers properties_managers[]
+  users_companies     users_companies[]
+  carts               carts[]
 }
 
 model pages {
-  path  String @id
-  value Json
+  path       String    @id @unique
+  value      Json
+  created_at DateTime
+  updated_at DateTime
+  deleted_at DateTime?
 }
 
-model sessions {
-  id        Int       @id
-  user      users     @relation(fields: [userId], references: [id])
-  userId    Int
-  createdAt DateTime
-  deletedAt DateTime?
+model companies {
+  id                  Int                   @id @default(autoincrement())
+  name                String
+  slug                String                @unique
+  logo                String?
+  hello_message       String?
+  cnpj                String?
+  created_at          DateTime
+  updated_at          DateTime
+  deleted_at          DateTime?
+  properties_managers properties_managers[]
+  companies_products  companies_products[]
+  users_companies     users_companies[]
+}
+
+model products {
+  id                            Int                             @id @default(autoincrement())
+  name                          String
+  image                         String?
+  created_at                    DateTime
+  updated_at                    DateTime
+  deleted_at                    DateTime?
+  companies_products            companies_products[]
+  properties_products           properties_products[]
+  cart_products                 cart_products[]
+  replacement_property_products replacement_property_products[]
+
+  @@index([name])
+}
+
+model addresses {
+  id            Int          @id @default(autoincrement())
+  country       String
+  state         String?
+  city          String
+  neighbourhood String?
+  street        String
+  street_number String
+  complement    String?
+  refference    String?
+  created_at    DateTime
+  updated_at    DateTime
+  deleted_at    DateTime?
+  properties    properties[]
+  orders        orders[]
+}
+
+model properties {
+  id                            Int                             @id @default(autoincrement())
+  hash                          String
+  name                          String?
+  image                         String?
+  address_id                    Int
+  address                       addresses                       @relation(fields: [address_id], references: [id])
+  created_at                    DateTime
+  updated_at                    DateTime
+  deleted_at                    DateTime?
+  properties_managers           properties_managers[]
+  properties_products           properties_products[]
+  carts                         carts[]
+  replacement_property_products replacement_property_products[]
+}
+
+model properties_managers {
+  id          Int                 @id @default(autoincrement())
+  company_id  Int
+  company     companies           @relation(fields: [company_id], references: [id])
+  property_id Int
+  property    properties          @relation(fields: [property_id], references: [id])
+  user_id     Int
+  user        users               @relation(fields: [user_id], references: [id])
+  type        PropertyManagerType
+  created_at  DateTime
+  updated_at  DateTime
+  deleted_at  DateTime?
+}
+
+enum PropertyManagerType {
+  owner // Indica que o usuário é o proprietário da propriedade.
+  administrator // Um administrador geral responsável por coordenar as operações na propriedade.
+  company_manager // Representa uma empresa contratada para gerenciar a propriedade, como uma administradora de aluguel por temporada.
+  cleaning_staff // Refere-se à equipe de limpeza que presta serviços regulares para a propriedade.
+  maintenance // Representa a equipe responsável pela manutenção física da propriedade.
+  temporary_agent // Representa um agente temporário ou freelancer contratado para executar uma tarefa específica, como check-ins.
+}
+
+model companies_products {
+  product_id Int
+  product    products  @relation(fields: [product_id], references: [id])
+  company_id Int
+  company    companies @relation(fields: [company_id], references: [id])
+  created_at DateTime
+  updated_at DateTime
+  deleted_at DateTime?
+
+  @@id([product_id, company_id])
+}
+
+model users_companies {
+  type       String
+  company_id Int
+  company    companies @relation(fields: [company_id], references: [id])
+  user_id    Int
+  user       users     @relation(fields: [user_id], references: [id])
+  created_at DateTime
+  updated_at DateTime
+  deleted_at DateTime?
+
+  @@id([user_id, company_id])
+}
+
+model properties_products {
+  expected_quantity Int
+  current_quantity  Int
+  price             Int
+  category          String
+  product_id        Int
+  product           products   @relation(fields: [product_id], references: [id])
+  property_id       Int
+  property          properties @relation(fields: [property_id], references: [id])
+  created_at        DateTime
+  updated_at        DateTime
+  deleted_at        DateTime?
+
+  @@id([product_id, property_id])
+}
+
+model carts {
+  id            Int             @id @default(autoincrement())
+  hash          String          @unique
+  fingerprint   String
+  total_price   Int
+  user_id       Int?
+  user          users?          @relation(fields: [user_id], references: [id])
+  property_id   Int
+  property      properties      @relation(fields: [property_id], references: [id])
+  cart_products cart_products[]
+  orders        orders[]
+  created_at    DateTime
+  updated_at    DateTime
+  deleted_at    DateTime?
+}
+
+model cart_products {
+  quantity       String
+  unity_price    Int
+  subtotal_price Int
+  product_id     Int
+  product        products  @relation(fields: [product_id], references: [id])
+  cart_id        Int
+  cart           carts     @relation(fields: [cart_id], references: [id])
+  created_at     DateTime
+  updated_at     DateTime
+  deleted_at     DateTime?
+
+  @@id([product_id, cart_id])
+}
+
+model orders {
+  id              Int        @id @default(autoincrement())
+  name            String
+  document_number String
+  discount        Int
+  price           Int
+  cart_id         Int
+  cart            carts      @relation(fields: [cart_id], references: [id])
+  address_id      Int
+  address         addresses  @relation(fields: [address_id], references: [id])
+  payments        payments[]
+  created_at      DateTime
+  updated_at      DateTime
+  deleted_at      DateTime?
+
+  @@index([document_number])
+  @@index([name])
+}
+
+model payments {
+  id                            Int           @id @default(autoincrement())
+  value                         Int
+  method                        String
+  status                        PaymentStatus
+  acquirer                      String
+  acquirer_transaction_id       String
+  acquirer_transaction_metadata Json
+  order_id                      Int
+  order                         orders        @relation(fields: [order_id], references: [id])
+  created_at                    DateTime
+  updated_at                    DateTime
+  deleted_at                    DateTime?
+
+  @@index([acquirer_transaction_id])
+}
+
+enum PaymentStatus {
+  pending
+  authorized
+  completed
+  failed
+  refunded
+  cancelled
+  chargeback
+}
+
+model replacements {
+  id                            Int                             @id @default(autoincrement())
+  status                        String
+  replacement_property_products replacement_property_products[]
+  created_at                    DateTime
+  updated_at                    DateTime
+  deleted_at                    DateTime?
+}
+
+enum ReplacementStatus {
+  separated_for_replacement
+  in_transit
+  delivered
+  cancelled
+  returned
+  processing
+}
+
+model replacement_property_products {
+  quantity         Int
+  unity_paid_price Int
+  property_id      Int
+  property         properties   @relation(fields: [property_id], references: [id])
+  product_id       Int
+  product          products     @relation(fields: [product_id], references: [id])
+  replacement_id   Int
+  replacement      replacements @relation(fields: [replacement_id], references: [id])
+  created_at       DateTime
+  updated_at       DateTime
+  deleted_at       DateTime?
+
+  @@id([property_id, product_id, replacement_id])
 }

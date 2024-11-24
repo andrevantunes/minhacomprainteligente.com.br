@@ -14,6 +14,7 @@ const Product = ({
   src,
   id,
   elevation = "hg",
+  displayAs = "h2",
   ...props
 }: ProductProps) => {
   const cn = classNames("flex align-items-center flex-column", className);
@@ -26,11 +27,13 @@ const Product = ({
   };
   return (
     <Card elevation={elevation} className={cn} {...props}>
-      <Display size="sm">{title}</Display>
-      <div style={{ gap: 8, flexGrow: 1, alignItems: "center", marginBottom: 16 }}>
+      <Title as={displayAs} size="sm">
+        {title}
+      </Title>
+      <div className="flex-fill flex align-items-center gap-1x mb-1x">
         <img src={src} alt="Product Image" />
       </div>
-      <Title>{toBrCurrency(Number(price))}</Title>
+      <Title className="mb-1x">{toBrCurrency(Number(price))}</Title>
       <Button onClick={handleOnClick}>Adicionar ao carrinho</Button>
     </Card>
   );
