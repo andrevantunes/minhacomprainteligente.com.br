@@ -29,9 +29,7 @@ const Page = ({
   url,
   ...props
 }: SSWPagesProps) => {
-  console.log(hash, children);
   const seo = { title, description, image, canonical, robots, url };
-
   return (
     <>
       <Seo {...seo} />

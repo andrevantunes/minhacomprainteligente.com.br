@@ -3,5 +3,5 @@ export function toCurrency(country: string, price: number) {
   return "";
 }
 export function toBrCurrency(price: number) {
-  return "R$" + price.toFixed(2).replace(".", ",")
+  return "R$" + (Number(price) / 100).toFixed(2).replace(".", ",")
 }

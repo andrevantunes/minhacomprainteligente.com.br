@@ -33,7 +33,7 @@ const Product = ({
       <div className="flex-fill flex align-items-center gap-1x mb-1x">
         <img src={src} alt="Product Image" />
       </div>
-      <Title className="mb-1x">{toBrCurrency(Number(price) / 100)}</Title>
+      <Title className="mb-1x">{toBrCurrency(price)}</Title>
       <Button onClick={handleOnClick}>Adicionar ao carrinho</Button>
     </Card>
   );
