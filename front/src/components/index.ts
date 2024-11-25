@@ -58,7 +58,7 @@ export * from "./specifics/Auth/EnemSubscriptionIdUpdateForm";
 export * from "./specifics/Auth/SignInForm";
 export * from "./specifics/Auth/SignUpForm";
 export * from "./specifics/Auth";
-export * from "./specifics/ContentByBffStatus";
+export * from "./specifics/DynamicContent";
 export * from "./specifics/DropdownActionAdapter";
 export * from "./specifics/EssayCorrectedImage";
 export * from "./specifics/EssayCorrection";

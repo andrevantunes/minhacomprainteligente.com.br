@@ -1,8 +1,8 @@
-import type { ContentByBffStatusProps } from "./content-by-bff-status.types";
+import type { ContentByBffStatusProps } from "./dynamic-content.types";
 
 import { render, waitFor } from "@testing-library/react";
 
-import ContentByBffStatus from "./content-by-bff-status.component";
+import ContentByBffStatus from "./dynamic-content.component";
 
 import * as BffRequest from "../../../requests/bff.request";
 import { getFakeApi } from "@/helpers/api.helpers";

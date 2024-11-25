@@ -11,14 +11,19 @@ import {getUser} from "@/helpers/user.helper";
 
 const BffApi = newModel("bff");
 
-export const getBffApi = async (endpoint?: string, body: any = null) =>
+export const getBffApi = async (endpoint?: string, params: any = undefined) => {
   // BffApi.get({ route: endpoint, data });
-  fetch(`${process.env.NEXT_PUBLIC_API_HOST}${endpoint}`, {body})
+  console.log(`${process.env.NEXT_PUBLIC_API_HOST}${endpoint}`, params);
+  return fetch(`${process.env.NEXT_PUBLIC_API_HOST}${endpoint}`)
     .then((r) => {
-      return r.json()
+      console.log(`getBffApi`, r);
+      return r.json();
     })
-    .then((x) => x.value);
-
+  .catch(e => {
+    console.log('getBffApi, catch', e)
+    return Promise.reject(e)
+  })
+}
 export const getPageApi = async (endpoint?: string) =>
   // BffApi.get({ route: endpoint, data });
   fetch(`${process.env.NEXT_PUBLIC_API_HOST}pages/${endpoint}`)

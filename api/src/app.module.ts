@@ -28,6 +28,7 @@ import { AllConfigType } from './config/config.type';
 import { SessionModule } from './session/session.module';
 import { MailerModule } from './mailer/mailer.module';
 import { PagesModule } from './app/pages/pages.module';
+import { PropertiesModule } from './app/properties/properties.module';
 
 @Module({
   imports: [
@@ -87,6 +88,7 @@ import { PagesModule } from './app/pages/pages.module';
     MailerModule,
     HomeModule,
     PagesModule,
+    PropertiesModule,
   ],
 })
 export class AppModule {}

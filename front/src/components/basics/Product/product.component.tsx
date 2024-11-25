@@ -25,6 +25,7 @@ const Product = ({
     // @ts-ignore
     setCart({ products: [...products, { id, price, quantity: 1 }] });
   };
+  console.log({price})
   return (
     <Card elevation={elevation} className={cn} {...props}>
       <Title as={displayAs} size="sm">
@@ -33,7 +34,7 @@ const Product = ({
       <div className="flex-fill flex align-items-center gap-1x mb-1x">
         <img src={src} alt="Product Image" />
       </div>
-      <Title className="mb-1x">{toBrCurrency(Number(price))}</Title>
+      <Title className="mb-1x">{toBrCurrency(Number(price) / 100)}</Title>
       <Button onClick={handleOnClick}>Adicionar ao carrinho</Button>
     </Card>
   );
