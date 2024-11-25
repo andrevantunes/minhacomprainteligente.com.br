@@ -1,14 +1,13 @@
 import type { Page } from "@/types/page.types";
 import type { GetServerSideProps } from "next";
 
-import {AppTemplate, DynamicContent, Seo} from "@/components";
+import { AppTemplate, Seo } from "@/components";
 import RiboAdapter from "@/libs/ribo-adapter";
 import { getPage } from "@/requests";
-import { StoreType, useStore } from "@/store";
 
 export const getServerSideProps: GetServerSideProps = async ({ resolvedUrl }) => {
   const page = await getPage("i/{hash}");
-  const hash = resolvedUrl.replace('/i/', '')
+  const hash = resolvedUrl.replace("/i/", "");
   return { props: { ...page, resolvedUrl, hash } };
 };
 
@@ -30,7 +29,7 @@ const Page = ({
   url,
   ...props
 }: SSWPagesProps) => {
-  console.log(hash, children)
+  console.log(hash, children);
   const seo = { title, description, image, canonical, robots, url };
 
   return (
@@ -38,13 +37,11 @@ const Page = ({
       <Seo {...seo} />
       <AppTemplate {...props}>
         <RiboAdapter>
-          {
-            {
-              component: "DynamicContent",
-              path: `properties/${hash}`,
-              status: { default: children }
-            }
-          }
+          {{
+            component: "DynamicContent",
+            path: `properties/${hash}`,
+            status: { default: children },
+          }}
         </RiboAdapter>
       </AppTemplate>
     </>

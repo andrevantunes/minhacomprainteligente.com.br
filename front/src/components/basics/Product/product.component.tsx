@@ -1,7 +1,7 @@
 import type { ProductProps } from "./product.types";
 
 import classNames from "classnames";
-import { Button, Card, Display } from "@andrevantunes/andrevds";
+import { Button, Card } from "@andrevantunes/andrevds";
 import { Title } from "@/components";
 import { StoreType, useStore } from "@/store";
 import { toBrCurrency } from "@/helpers/currency.helper";
@@ -25,7 +25,6 @@ const Product = ({
     // @ts-ignore
     setCart({ products: [...products, { id, price, quantity: 1 }] });
   };
-  console.log({price})
   return (
     <Card elevation={elevation} className={cn} {...props}>
       <Title as={displayAs} size="sm">

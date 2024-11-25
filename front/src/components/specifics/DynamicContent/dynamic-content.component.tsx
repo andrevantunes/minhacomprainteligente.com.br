@@ -13,21 +13,21 @@ const DynamicContent = ({ path, status }: ContentByBffStatusProps) => {
 
   useEffect(() => {
     let isMounted = true;
-    console.log('useEffect, path', path, params);
+    console.log("useEffect, path", path, params);
     getBffApi(path, params)
       .then((result) => {
-        console.log('useEffect, then', result, isMounted);
+        console.log("useEffect, then", result, isMounted);
         if (!isMounted) return;
         if (status?.[result?.status]) {
-          console.log('useEffect, with status');
+          console.log("useEffect, with status");
           setRiboContent(jsonSchemaTranspiler(result, status[result.status]));
         } else {
-          console.log('useEffect, withdout status');
+          console.log("useEffect, withdout status");
           setRiboContent(jsonSchemaTranspiler(result, status.default));
         }
       })
       .catch(() => {
-        console.log('useEffect, catch');
+        console.log("useEffect, catch");
         if (!isMounted) return;
         if (status?.error) return setRiboContent(status.error);
         setRiboContent(status.default);

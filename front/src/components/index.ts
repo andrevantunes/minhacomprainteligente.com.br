@@ -16,7 +16,6 @@ export * from "./adapters/Text";
 export * from "./adapters/Title";
 export * from "./adapters/ToggleButton";
 export * from "./basics/Brand";
-export * from "./basics/CardYoutube";
 export * from "./basics/CardYoutubeNotification";
 export * from "./basics/Carousel";
 export * from "./basics/CartCloser";
