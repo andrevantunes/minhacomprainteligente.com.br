@@ -53,18 +53,12 @@ export const postBffApi = async <T = any>(endpoint?: string, data?: T) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(serializedData),
-  })
-    .then((r) => {
-      return r.json();
-    })
-    .catch(e => {
-      return Promise.reject(e);
-    });
+  }).then((r) => r.json());
 };
 
 export const putBffApi = async <T = any>(endpoint?: string, data?: T, jsonApi = false) => {
   const serializedData = serializeCamelToSnakeCase(data);
-  return BffApi.put({route: endpoint, jsonApi, data: serializedData});
+  return BffApi.put({ route: endpoint, jsonApi, data: serializedData });
 };
 
 const baseUrl = process.env["NEXT_PUBLIC_BFF_URL"] || "https://bff.mesalva.com";
