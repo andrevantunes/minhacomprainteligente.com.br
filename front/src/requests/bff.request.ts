@@ -47,7 +47,19 @@ export const savePageApi = async (endpoint?: string, value: any = {}) =>
 
 export const postBffApi = async <T = any>(endpoint?: string, data?: T, jsonApi = false) => {
   const serializedData = serializeCamelToSnakeCase(data);
-  return BffApi.post({route: endpoint, jsonApi, data: serializedData});
+  return fetch(`${process.env.NEXT_PUBLIC_API_HOST}${endpoint}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(serializedData),
+  })
+    .then((r) => {
+      return r.json();
+    })
+    .catch(e => {
+      return Promise.reject(e);
+    });
 };
 
 export const putBffApi = async <T = any>(endpoint?: string, data?: T, jsonApi = false) => {

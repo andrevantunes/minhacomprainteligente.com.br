@@ -18,6 +18,7 @@
   ],
   "dependencies": {
     "@andrevantunes/andrevds": "1.0.0",
+    "@fingerprintjs/fingerprintjs": "^4.5.1",
     "@material-design-icons/svg": "^0.14.13",
     "@mesalva/api": "2.4.9",
     "@mesalva/constraints": "^1.4.0",

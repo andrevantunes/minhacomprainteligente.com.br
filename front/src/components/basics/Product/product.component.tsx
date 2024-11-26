@@ -6,13 +6,25 @@ import { Title } from "@/components";
 import { StoreType, useStore } from "@/store";
 import { toBrCurrency } from "@/helpers/currency.helper";
 
+const upsertProduct = (products: any = [], productId: string | number, price: number) => {
+  const product = products.find((p) => {
+    console.log(p);
+    return p.productId == Number(productId);
+  });
+  console.log(product, products);
+  if (product) {
+    product.quantity += 1;
+    return [...products];
+  }
+  return [...products, { productId: Number(productId), price, quantity: 1 }];
+};
 const Product = ({
   title,
   children,
   price,
   className,
   src,
-  id,
+  productId,
   elevation = "hg",
   displayAs = "h2",
   ...props
@@ -22,8 +34,9 @@ const Product = ({
   const [{ products }, setCart] = useStore(StoreType.Cart);
   const handleOnClick = (event: any) => {
     event.preventDefault();
+    //TODO gerenciar quantity
     // @ts-ignore
-    setCart({ products: [...products, { id, price, quantity: 1 }] });
+    setCart({ products: upsertProduct(products, productId, price) });
   };
   return (
     <Card elevation={elevation} className={cn} {...props}>

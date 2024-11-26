@@ -10,8 +10,11 @@ const CheckoutProduct = ({
   src,
   name,
   price,
+  productId,
   labels = [],
   quantity,
+  onIncrease = () => {},
+  onDecrease = () => {},
   ...props
 }: CheckoutProductProps) => {
   const cn = classNames("checkout-product", className);
@@ -58,6 +61,7 @@ const CheckoutProduct = ({
             style={{
               padding: 8,
             }}
+            onClick={() => onDecrease(productId)}
           >
             -
           </Button>
@@ -66,6 +70,7 @@ const CheckoutProduct = ({
             style={{
               padding: 8,
             }}
+            onClick={() => onIncrease(productId)}
           >
             +
           </Button>

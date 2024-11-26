@@ -4,6 +4,9 @@ interface CheckoutProductProps extends PropsWithChildren<HTMLProps<HTMLDivElemen
   price: number;
   labels: string[];
   quantity: number;
+  productId: number;
+  onIncrease?: (a: any) => any;
+  onDecrease?: (a: any) => any;
 }
 
 export type { CheckoutProductProps };

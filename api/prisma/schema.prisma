@@ -168,6 +168,7 @@ model carts {
   fingerprint   String
   total_price   Int
   user_id       Int?
+  status        CartStatus      @default(pending)
   user          users?          @relation(fields: [user_id], references: [id])
   property_id   Int
   property      properties      @relation(fields: [property_id], references: [id])
@@ -178,8 +179,14 @@ model carts {
   deleted_at    DateTime?
 }
 
+enum CartStatus {
+  pending
+  completed
+  cancelled
+}
+
 model cart_products {
-  quantity       String
+  quantity       Int
   unity_price    Int
   subtotal_price Int
   product_id     Int

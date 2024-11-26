@@ -5,6 +5,7 @@ interface ProductProps extends PropsWithChildren<HTMLProps<HTMLDivElement>> {
   price: string;
   src: string;
   displayAs: string;
+  productId: string | number;
 }
 
 export type { ProductProps };

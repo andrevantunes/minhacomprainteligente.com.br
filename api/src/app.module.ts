@@ -29,6 +29,7 @@ import { SessionModule } from './session/session.module';
 import { MailerModule } from './mailer/mailer.module';
 import { PagesModule } from './app/pages/pages.module';
 import { PropertiesModule } from './app/properties/properties.module';
+import { CartsModule } from './app/carts/carts.module';
 
 @Module({
   imports: [
@@ -89,6 +90,7 @@ import { PropertiesModule } from './app/properties/properties.module';
     HomeModule,
     PagesModule,
     PropertiesModule,
+    CartsModule,
   ],
 })
 export class AppModule {}
