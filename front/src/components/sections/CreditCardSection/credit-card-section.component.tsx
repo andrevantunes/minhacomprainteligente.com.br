@@ -10,17 +10,17 @@ const CreditCardSection = ({ children, className, ...props }: CreditCardSectionP
   const [cardNumber, setCardNumber] = useState("");
   const [iconName, setIconName] = useState("");
 
-  const handleChangeCardHolder = (event) => {
+  const handleChangeCardHolder = (event: any) => {
     const cardHolder = event.target.value;
     setCardHolder(cardHolder);
   };
-  const handleChangeCardNumber = (event) => {
+  const handleChangeCardNumber = (event: any) => {
     const cardNumber = event.target.value;
     if (cardNumber.length > 4) setIconName("mastercard"); //TODO coletar bandeira correta
     setCardNumber(cardNumber);
   };
-  const handleChangeExpireDate = (event) => {
-    const expireDate = event.target.value;
+  const handleChangeExpireDate = (_event: any) => {
+    // const _expireDate = event.target.value;
   };
 
   return (

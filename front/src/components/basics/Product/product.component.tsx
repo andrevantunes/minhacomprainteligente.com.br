@@ -7,11 +7,7 @@ import { StoreType, useStore } from "@/store";
 import { toBrCurrency } from "@/helpers/currency.helper";
 
 const upsertProduct = (products: any = [], productId: string | number, price: number) => {
-  const product = products.find((p) => {
-    console.log(p);
-    return p.productId == Number(productId);
-  });
-  console.log(product, products);
+  const product = products.find((p: any) => p.productId == Number(productId));
   if (product) {
     product.quantity += 1;
     return [...products];

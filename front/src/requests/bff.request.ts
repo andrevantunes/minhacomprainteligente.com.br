@@ -45,12 +45,12 @@ export const savePageApi = async (endpoint?: string, value: any = {}) =>
     .then((r) => r.json())
     .then((x) => x.value);
 
-export const postBffApi = async <T = any>(endpoint?: string, data?: T, jsonApi = false) => {
+export const postBffApi = async <T = any>(endpoint?: string, data?: T) => {
   const serializedData = serializeCamelToSnakeCase(data);
   return fetch(`${process.env.NEXT_PUBLIC_API_HOST}${endpoint}`, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
     body: JSON.stringify(serializedData),
   })

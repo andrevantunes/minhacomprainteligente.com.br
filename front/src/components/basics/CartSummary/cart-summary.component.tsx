@@ -22,10 +22,10 @@ const CartSummary = ({
   const [{ byHash }, setCartByHash] = useStore(StoreType.Cart);
   useEffect(() => {
     setCartByHash({ byHash: { [hash]: { products, totalPrice } } });
-    console.log({byHash})//TODO adicionar ao sessionStorage
+    console.log({ byHash }); //TODO adicionar ao sessionStorage
   }, []);
-  const handleIncreaseProduct = (productId) => {
-    const totalPrice = 0;
+  const handleIncreaseProduct = (productId: number | string) => {
+    let totalPrice = 0;
     const stateProducts2 = stateProducts.map((product) => {
       let quantity = product.quantity;
       if (product.product_id == Number(productId)) quantity += 1;
@@ -35,8 +35,8 @@ const CartSummary = ({
     setStateTotalPrice(totalPrice);
     setStateProducts(stateProducts2);
   };
-  const handleDecreaseProduct = (productId) => {
-    const totalPrice = 0;
+  const handleDecreaseProduct = (productId: number | string) => {
+    let totalPrice = 0;
     const stateProducts2 = stateProducts
       .map((product) => {
         let quantity = product.quantity;
