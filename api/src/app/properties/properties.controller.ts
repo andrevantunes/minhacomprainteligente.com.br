@@ -46,14 +46,18 @@ export class PropertiesController {
   @Get()
   @HttpCode(HttpStatus.OK)
   async findAll() {
-    const properties = await this.propertiesService.properties({ include: { address: true } });
+    const properties = await this.propertiesService.properties({
+      include: { address: true },
+    });
     return { properties, test: 'Abc123' };
   }
 
   @Get('/:hash(*)')
   async findOne(@Param('hash') hash: string) {
     //TODO deve verificar se a pessoa tem acesso a página antes de devolver
-    const property = await this.propertiesService.propertyWithProducts({ hash: hash });
+    const property = await this.propertiesService.propertyWithProducts({
+      hash: hash,
+    });
     return { property };
   }
   //

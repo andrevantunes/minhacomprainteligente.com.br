@@ -5,14 +5,17 @@ import { PrismaService } from '../../database/prisma.service';
 export class PropertiesService {
   constructor(private prisma: PrismaService) {}
 
-  async property(where: any, params: {
-    skip?: number;
-    take?: number;
-    cursor?: any;
-    where?: any;
-    include?: any;
-    orderBy?: any;
-  }): Promise<any> {
+  async property(
+    where: any,
+    params: {
+      skip?: number;
+      take?: number;
+      cursor?: any;
+      where?: any;
+      include?: any;
+      orderBy?: any;
+    },
+  ): Promise<any> {
     const { skip, take, cursor, orderBy, include } = params;
     return this.prisma.properties.findFirst({
       where,
@@ -24,9 +27,8 @@ export class PropertiesService {
     });
   }
 
-  async propertyWithProducts(where){
-    const property =
-      await this.prisma.properties.findFirst({
+  async propertyWithProducts(where) {
+    const property = await this.prisma.properties.findFirst({
       where,
       include: {
         address: true,
@@ -35,7 +37,7 @@ export class PropertiesService {
             product: true,
           },
         },
-      }
+      },
     });
     // @ts-ignore
     if (!property.name) {
@@ -68,7 +70,7 @@ export class PropertiesService {
         // @ts-ignore
         property.name = `${property.address.country}, ${property.address.state}, ${property.address.city}, ${property.address.neighbourhood}, ${property.address.street_number}, ${property.address.complement} (${property.address.refference})`;
       }
-    })
+    });
     return properties;
   }
 
