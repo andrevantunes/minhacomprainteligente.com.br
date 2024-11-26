@@ -40,7 +40,7 @@ export const savePageApi = async (endpoint?: string, value: any = {}) =>
   fetch(`${process.env.NEXT_PUBLIC_API_HOST}pages/${endpoint}`, {
     body: JSON.stringify({ value }),
     method: "PUT",
-    headers: {"Content-Type": 'application/json'}
+    headers: { "Content-Type": "application/json" },
   })
     .then((r) => r.json())
     .then((x) => x.value);
