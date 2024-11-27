@@ -14,7 +14,7 @@ const DynamicContent = ({ path, status }: ContentByBffStatusProps) => {
   useEffect(() => {
     let isMounted = true;
     console.log("useEffect, path", path, params);
-    getBffApi(path, params)
+    getBffApi(path)
       .then((result) => {
         console.log("useEffect, then", result, isMounted);
         if (!isMounted) return;
