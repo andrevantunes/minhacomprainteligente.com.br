@@ -49,12 +49,12 @@ export class CartsService {
       },
       orderBy,
     });
-    // @ts-ignore
+    // @ts-expect-error error
     const products = cart.cart_products.map(({ product, ...cart_product }) => ({
       ...product,
       ...cart_product,
     }));
-    // @ts-ignore
+    // @ts-expect-error error
     delete cart.cart_products;
     return { products, ...cart };
   }
@@ -79,7 +79,7 @@ export class CartsService {
 
     properties.forEach((property) => {
       if (!property.name) {
-        // @ts-ignore
+        // @ts-expect-error error
         property.name = `${property.address.country}, ${property.address.state}, ${property.address.city}, ${property.address.neighbourhood}, ${property.address.street_number}, ${property.address.complement} (${property.address.refference})`;
       }
     });
@@ -110,15 +110,37 @@ export class CartsService {
 
   async updateCart(params: { where: any; data: any }): Promise<any> {
     const { data, where } = params;
-    return await this.prisma.properties.update({
-      data,
-      where,
-    });
+    if (data.products) {
+      let total_price = 0;
+      const cart = await this.prisma.carts.findFirst({ where });
+      if (cart) {
+        const promises = data.products.map(
+          (product: { id: number; quantity: number; unity_price: number }) => {
+            // todo atualizar unity_price pelo product
+            const subtotal_price = product.quantity * product.unity_price;
+            total_price += subtotal_price;
+            return this.prisma.cart_products.update({
+              data: { subtotal_price, quantity: product.quantity },
+              where: {
+                product_id_cart_id: {
+                  product_id: product.id,
+                  cart_id: cart.id,
+                },
+              },
+            });
+          },
+        );
+        await Promise.all(promises);
+
+        return this.prisma.carts.update({ data: { total_price }, where });
+      }
+    }
+    return await true;
   }
 
-  async deleteCart(where: any): Promise<any> {
-    return this.prisma.properties.delete({
-      where,
-    });
-  }
+  // async deleteCart(where: any): Promise<any> {
+  //   return this.prisma.carts.delete({
+  //     where,
+  //   });
+  // }
 }

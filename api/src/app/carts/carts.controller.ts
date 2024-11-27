@@ -5,12 +5,12 @@ import {
   // Body,
   Put,
   Param,
-  Delete,
+  // Delete,
   // UseGuards,
   SerializeOptions,
-  HttpCode,
-  HttpStatus,
-  Logger,
+  // HttpCode,
+  // HttpStatus,
+  // Logger,
   Req,
 } from '@nestjs/common';
 import { CartsService } from './carts.service';
@@ -57,24 +57,20 @@ export class CartsController {
     });
     return { cart };
   }
-  //
-  // @SerializeOptions({
-  //   groups: ['admin'],
-  // })
-  // @Put('/:path(*)')
-  // update(@Param('path') path: string, @Req() request: any) {
-  //   const updatePageDto: any = request.body;
-  //   return this.propertiesService
-  //     .updatePage({
-  //       where: { path },
-  //       data: { value: updatePageDto.value },
-  //     })
-  //     .catch((e) => {
-  //       console.log('erro ao editar, criando', e);
-  //       return this.propertiesService.createPage({ ...updatePageDto, path });
-  //     });
-  // }
-  //
+
+  @SerializeOptions({
+    groups: ['admin'],
+  })
+  @Put('/:hash(*)')
+  update(@Param('hash') hash: string, @Req() request: any) {
+    const updatePageDto: any = request.body;
+    console.log('update', updatePageDto);
+    return this.cartsService.updateCart({
+      where: { hash },
+      data: updatePageDto,
+    });
+  }
+
   // @SerializeOptions({
   //   groups: ['admin'],
   // })

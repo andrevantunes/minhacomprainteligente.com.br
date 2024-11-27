@@ -6,6 +6,7 @@ import { StoreType, useStore } from "@/store";
 import { useEffect, useState } from "react";
 import { Button, Card, Display } from "@andrevantunes/andrevds";
 import { toBrCurrency } from "@/helpers/currency.helper";
+import { updateCartOnApi } from "@/requests";
 
 const CartSummary = ({
   children,
@@ -16,7 +17,9 @@ const CartSummary = ({
   ...props
 }: CartSummaryProps) => {
   const cn = classNames("cart-summary", className);
-  const [stateProducts, setStateProducts] = useState(products || []);
+  const [stateProducts, setStateProducts] = useState(
+    typeof products === "object" ? products || [] : []
+  );
   const [stateTotalPrice, setStateTotalPrice] = useState(totalPrice || 0);
 
   const [{ byHash }, setCartByHash] = useStore(StoreType.Cart);
@@ -34,6 +37,7 @@ const CartSummary = ({
     });
     setStateTotalPrice(totalPrice);
     setStateProducts(stateProducts2);
+    updateCartOnApi(hash, { products: stateProducts2 });
   };
   const handleDecreaseProduct = (productId: number | string) => {
     let totalPrice = 0;
@@ -47,6 +51,7 @@ const CartSummary = ({
       .filter((product) => product.quantity > 0);
     setStateProducts(stateProducts2);
     setStateTotalPrice(totalPrice);
+    updateCartOnApi(hash, { products: stateProducts2 });
   };
   return (
     <div className={cn} {...props}>
@@ -57,7 +62,7 @@ const CartSummary = ({
           flexDirection: "column",
         }}
       >
-        {stateProducts.map((product) => (
+        {stateProducts?.map((product) => (
           <CheckoutProduct
             key={`product-${product.product_id}`}
             productId={product.product_id}
@@ -91,9 +96,9 @@ const CartSummary = ({
               flexDirection: "column",
             }}
           >
-            <Button href="/carrinho/cartao">Pagar com cartão de crédito</Button>
-            <Button href="/carrinho/pix">Pagar com PIX</Button>
-            <Button href="/carrinho/paypal">Pagar com PayPal (internacional)</Button>
+            <Button href={`/pagamento/cartao/${hash}`}>Pagar com cartão de crédito</Button>
+            <Button href={`/pagamento/pix/${hash}`}>Pagar com PIX</Button>
+            <Button href={`/pagamento/paypal/${hash}`}>Pagar com PayPal (internacional)</Button>
           </div>
         </Card>
       </div>

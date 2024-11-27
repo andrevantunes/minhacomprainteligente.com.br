@@ -39,9 +39,9 @@ export class PropertiesService {
         },
       },
     });
-    // @ts-ignore
+    // @ts-expect-error error
     if (!property.name) {
-      // @ts-ignore
+      // @ts-expect-error error
       property.name = `${property.address.country}, ${property.address.state}, ${property.address.city}, ${property.address.neighbourhood}, ${property.address.street_number}, ${property.address.complement} (${property.address.refference})`;
     }
     return property;
@@ -67,7 +67,7 @@ export class PropertiesService {
 
     properties.forEach((property) => {
       if (!property.name) {
-        // @ts-ignore
+        // @ts-expect-error error
         property.name = `${property.address.country}, ${property.address.state}, ${property.address.city}, ${property.address.neighbourhood}, ${property.address.street_number}, ${property.address.complement} (${property.address.refference})`;
       }
     });

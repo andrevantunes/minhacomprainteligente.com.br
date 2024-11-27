@@ -9,27 +9,20 @@ import {newModel} from "./model.request";
 import {get as getCookies} from "@/helpers/cookie.helper";
 import {getUser} from "@/helpers/user.helper";
 
-const BffApi = newModel("bff");
-
 export const getBffApi = async (endpoint?: string, params: any = undefined) => {
   // BffApi.get({ route: endpoint, data });
-  console.log(`${process.env.NEXT_PUBLIC_API_HOST}${endpoint}`, params);
+  // console.log(`${process.env.NEXT_PUBLIC_API_HOST}${endpoint}`, params);
   return fetch(`${process.env.NEXT_PUBLIC_API_HOST}${endpoint}`)
     .then((r) => {
-      console.log(`getBffApi`, r);
       return r.json();
     })
-  .catch(e => {
-    console.log('getBffApi, catch', e)
-    return Promise.reject(e)
-  })
 }
 export const getPageApi = async (endpoint?: string) =>
   // BffApi.get({ route: endpoint, data });
   fetch(`${process.env.NEXT_PUBLIC_API_HOST}pages/${endpoint}`)
     .then((r) => {
-      if(r.status === 404 || r.headers.get('content-type') === null){
-        return {value: {}};
+      if (r.status === 404 || r.headers.get("content-type") === null) {
+        return { value: {} };
       }
       return r.json();
     })
@@ -49,16 +42,18 @@ export const postBffApi = async <T = any>(endpoint?: string, data?: T) => {
   const serializedData = serializeCamelToSnakeCase(data);
   return fetch(`${process.env.NEXT_PUBLIC_API_HOST}${endpoint}`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(serializedData),
   }).then((r) => r.json());
 };
 
-export const putBffApi = async <T = any>(endpoint?: string, data?: T, jsonApi = false) => {
+export const putBffApi = async <T = any>(endpoint?: string, data?: T) => {
   const serializedData = serializeCamelToSnakeCase(data);
-  return BffApi.put({ route: endpoint, jsonApi, data: serializedData });
+  return fetch(`${process.env.NEXT_PUBLIC_API_HOST}${endpoint}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(serializedData),
+  }).then((r) => r.json());
 };
 
 const baseUrl = process.env["NEXT_PUBLIC_BFF_URL"] || "https://bff.mesalva.com";
@@ -106,7 +101,7 @@ export const bff = async <T = any>(
     data: typeof options?.data === "object" ? JSON.stringify(options?.data) : undefined,
   };
 
-  return axios(url, payload).then(({data}) => data as T);
+  return axios(url, payload).then(({ data }) => data as T);
 };
 
 const initialSlash = (pathname = "") => (pathname.startsWith("/") ? pathname : `/${pathname}`);
