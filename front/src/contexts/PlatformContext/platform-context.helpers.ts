@@ -1,4 +1,3 @@
-import { getUser } from "@/helpers/user.helper";
 import { initialFetchState } from "@/store";
 import { PlatformContextProviderValue } from "./platform-context.types";
 
@@ -17,7 +16,7 @@ export const defaultPlatformContextValue: PlatformContextProviderValue = {
 export const getPlatformSlug = (platformSlug?: string | string[]) => {
   if (typeof platformSlug === "string") return platformSlug;
   try {
-    return getUser().platformSlug || DEFAULT_PLATFORM_SLUG;
+    return "";
   } catch (error) {
     return DEFAULT_PLATFORM_SLUG;
   }

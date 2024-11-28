@@ -61,29 +61,29 @@ export const updateProfile = async (user: Partial<UserProfile>) => {
 };
 
 export const loginByEmail = async (
-  email: string,
-  password: string,
-  platformSlug = ""
+  // email: string,
+  // password: string,
+  // platformSlug = ""
 ): Promise<void> => {
   const event = { loginBy: "email" };
-  return handleLogin({ ...signin, event }, () => null);
+  return handleLogin({ ...signin, event }, async () => null);
 };
 
 export const signUpByEmail = async (
-  name: string,
-  whatsapp: string,
-  email: string,
-  password: string,
-  crmAllowed: boolean,
-  platformSlug = ""
+  // name: string,
+  // whatsapp: string,
+  // email: string,
+  // password: string,
+  // crmAllowed: boolean,
+  // platformSlug = ""
 ): Promise<void> => {
   const event = { loginBy: "signup" };
-  return handleLogin({ ...signup, event }, () =>
+  return handleLogin({ ...signup, event }, async () =>
     null
   );
 };
 
-export const loginBySocial = async (name: SocialNames, platformSlug = ""): Promise<void> => {
+export const loginBySocial = async (name: SocialNames): Promise<void> => {
   const event = { loginBy: name.toLowerCase() };
   return handleLogin({ ...socialLogin, event }, async () => {
     if (name === SocialNames.Google) return null;

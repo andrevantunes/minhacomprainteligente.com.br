@@ -1,13 +1,12 @@
 import { FormWithSubmitButton, PasswordField, TextField } from "@andrevantunes/andrevds";
 import { useFormik } from "formik";
 import { signInDictionary, SignInDictionaryKeys } from "./sign-in-form.validation";
-import { UserStore } from "@/store";
 import { AuthState } from "../auth.types";
 
-const AuthSignIn = ({ isFetching, platformSlug }: AuthState) => {
+const AuthSignIn = ({ isFetching }: AuthState) => {
   const { errors, isValid, values, touched, handleChange, handleBlur, handleSubmit } = useFormik({
     initialValues: { email: "", password: "", platformSlug: null },
-    onSubmit: async ({ email, password }) => null,
+    onSubmit: async () => null,
   });
 
   return (

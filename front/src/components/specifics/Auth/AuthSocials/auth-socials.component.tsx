@@ -24,8 +24,8 @@ const AuthSocials = ({ isFetching, platformSlug }: AuthState) => {
   );
 };
 
-const SocialLoginButton = ({ iconName, name, isFetching, platformSlug }: AuthSocialProps) => {
-  const handleClick = async () => UserStore.loginBySocial(name, platformSlug);
+const SocialLoginButton = ({ iconName, name, isFetching }: AuthSocialProps) => {
+  const handleClick = async () => UserStore.loginBySocial(name);
   const id = `${name.toLowerCase()}-login-button`;
   return (
     <Button

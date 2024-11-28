@@ -67,6 +67,6 @@
     "plop": "4.0.0",
     "sass": "1.69.5",
     "ts-node": "10.7.0",
-    "typescript": "4.5.5"
+    "typescript": "^5.7.2"
   }
 }

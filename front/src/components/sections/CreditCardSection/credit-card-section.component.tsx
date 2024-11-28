@@ -3,10 +3,16 @@ import type { CreditCardSectionProps } from "./credit-card-section.types";
 import classNames from "classnames";
 import { Button, Card, CreditCard, TextField } from "@andrevantunes/andrevds";
 import { useState } from "react";
-import {toBrCurrency} from "@/helpers/currency.helper";
-import {postBffApi} from "@/requests";
+import { toBrCurrency } from "@/helpers/currency.helper";
+import { postBffApi } from "@/requests";
 
-const CreditCardSection = ({ children, className, totalPrice, hash, ...props }: CreditCardSectionProps) => {
+const CreditCardSection = ({
+  children,
+  className,
+  totalPrice,
+  hash,
+  ...props
+}: CreditCardSectionProps) => {
   const cn = classNames("credit-card-section", className);
   const [cardHolder, setCardHolder] = useState("");
   const [cardNumber, setCardNumber] = useState("");
@@ -43,7 +49,15 @@ const CreditCardSection = ({ children, className, totalPrice, hash, ...props }: 
     }
 
     try {
-      const response = await postBffApi("payments", {cardHolder, cardNumber, expireDate, cvv, totalPrice, hash, method: "credit-card"});
+      const response = await postBffApi("payments", {
+        cardHolder,
+        cardNumber,
+        expireDate,
+        cvv,
+        totalPrice,
+        hash,
+        method: "credit-card",
+      });
 
       const result = await response.json();
 
@@ -83,9 +97,9 @@ const CreditCardSection = ({ children, className, totalPrice, hash, ...props }: 
           <TextField label="Nome impresso no cartão *" onChange={handleChangeCardHolder} />
           <div className="credit-card-section__form__expire-cvv">
             <div className="credit-card-section__form__expire-cvv__expire">
-            <span>
-              Validade<sup>*</sup>
-            </span>
+              <span>
+                Validade<sup>*</sup>
+              </span>
               <TextField
                 mask="99/9999"
                 label="dd/aaaa"
@@ -102,9 +116,9 @@ const CreditCardSection = ({ children, className, totalPrice, hash, ...props }: 
                 justifyContent: "space-between",
               }}
             >
-            <span>
-              CVV<sup>*</sup>
-            </span>
+              <span>
+                CVV<sup>*</sup>
+              </span>
               <TextField label="XXX" style={{ width: 46 }} onChange={handleChangeCvv} />
             </div>
           </div>

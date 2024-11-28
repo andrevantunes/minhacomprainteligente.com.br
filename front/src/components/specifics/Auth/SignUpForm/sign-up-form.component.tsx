@@ -1,5 +1,4 @@
 import { DEFAULT_PLATFORM_SLUG, PlatformContext } from "@/contexts/PlatformContext";
-import { UserStore } from "@/store";
 import {
   Checkbox,
   FormWithSubmitButton,
@@ -21,7 +20,7 @@ function AuthSignUp({ isFetching }: AuthState) {
     onSubmit: async ({ name, email, whatsapp, password, crmAllowed }) => {
       if (!isPasswordValid) return;
       const platformSlug = slug === DEFAULT_PLATFORM_SLUG ? "" : slug;
-      return UserStore.signUpByEmail(name, whatsapp, email, password, crmAllowed, platformSlug);
+      return { name, whatsapp, email, password, crmAllowed, platformSlug };
     },
   });
 

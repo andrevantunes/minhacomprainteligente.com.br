@@ -1,14 +1,11 @@
 import type { UserProfile, UserState } from "@/types";
 
-import { getUser } from "@/helpers/user.helper";
 import { StoreType } from "@/store";
 import { initialFetchState } from "../store.helper";
 
 interface UserStore {
   [StoreType.User]: UserState;
 }
-
-const user = getUser();
 
 export const userInitialState: UserProfile = {
   birthDate: "",
@@ -34,7 +31,6 @@ export const userInitialState: UserProfile = {
 export const defaultState: UserStore = {
   user: {
     ...userInitialState,
-    ...user,
     ...initialFetchState,
   },
 };

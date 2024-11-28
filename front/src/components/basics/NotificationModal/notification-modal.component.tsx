@@ -1,6 +1,6 @@
 import type { NotificationModalProps, RcPortal } from "./notification-modal.types";
 
-import { useEffect, useRef } from "react";
+import { ReactNode, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import { Modal, ModalSizes } from "@andrevantunes/andrevds";
 import classNames from "classnames";
@@ -45,7 +45,7 @@ const NotificationModal = ({
       ...props,
     };
 
-    modalRef.current = Modal.open(() => <>{children}</>, modalProps);
+    modalRef.current = Modal.open(() => <>{children as ReactNode}</>, modalProps);
   };
 
   const handlePageOut = () => {
