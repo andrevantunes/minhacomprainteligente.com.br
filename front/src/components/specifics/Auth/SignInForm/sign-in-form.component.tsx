@@ -7,7 +7,7 @@ import { AuthState } from "../auth.types";
 const AuthSignIn = ({ isFetching, platformSlug }: AuthState) => {
   const { errors, isValid, values, touched, handleChange, handleBlur, handleSubmit } = useFormik({
     initialValues: { email: "", password: "", platformSlug: null },
-    onSubmit: async ({ email, password }) => UserStore.loginByEmail(email, password, platformSlug),
+    onSubmit: async ({ email, password }) => null,
   });
 
   return (

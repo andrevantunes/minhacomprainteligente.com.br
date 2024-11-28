@@ -1,4 +1,4 @@
-import { RiboProps } from "@mesalva/ribo";
+import { RiboProps } from "@andrevantunes/ribo";
 
 interface ContentByBffStatusProps {
   path: string;

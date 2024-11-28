@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-import { setUtms } from "@mesalva/utms";
 import type { AppProps } from "next/app";
 
 import "@/styles/index.scss";
@@ -12,7 +10,6 @@ import PlatformContextProvider from "@/contexts/PlatformContext";
 import AuthModalContextProvider from "@/contexts/AuthModalContext/auth-modal-context.component";
 
 const App = ({ Component, pageProps }: AppProps) => {
-  useEffect(setUtms, []);
   return (
     <>
       <HeadHTML />

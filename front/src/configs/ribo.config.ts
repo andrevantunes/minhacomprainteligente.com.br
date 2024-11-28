@@ -1,4 +1,4 @@
-import type { RiboSettings } from "@mesalva/ribo";
+import type { RiboSettings } from "@andrevantunes/ribo";
 
 import * as Mars from "@andrevantunes/andrevds";
 

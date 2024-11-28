@@ -1,4 +1,4 @@
-import { isClient } from "@mesalva/helpers/environment";
+import { isClient } from "@andrevantunes/andrevds-helpers/environment";
 import { useEffect, useState } from "react";
 
 export const useHash = (): [string, (newHash: string) => void] => {

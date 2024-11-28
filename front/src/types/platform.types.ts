@@ -1,5 +1,5 @@
 import type { ImageProps, SidebarList } from "@andrevantunes/andrevds";
-import { RiboConstraints } from "@mesalva/ribo";
+import { RiboConstraints } from "@andrevantunes/ribo";
 import { ReactNode } from "react";
 
 interface Ads {

@@ -1,8 +1,7 @@
 import type { FetchState } from "@/store";
-import type { User as UserEntity } from "@mesalva/react-login/dist/models/UserEntity";
 import { Accesses } from "./accesses.types";
 
-export type User = UserEntity;
+export type User = null;
 
 export interface UserState extends UserProfile, FetchState {}
 

@@ -30,6 +30,7 @@ import { MailerModule } from './mailer/mailer.module';
 import { PagesModule } from './app/pages/pages.module';
 import { PropertiesModule } from './app/properties/properties.module';
 import { CartsModule } from './app/carts/carts.module';
+import { PaymentsModule } from './app/payments/payments.module';
 
 @Module({
   imports: [
@@ -91,6 +92,7 @@ import { CartsModule } from './app/carts/carts.module';
     PagesModule,
     PropertiesModule,
     CartsModule,
+    PaymentsModule,
   ],
 })
 export class AppModule {}

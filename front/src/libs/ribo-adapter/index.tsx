@@ -2,7 +2,7 @@ import { AccessesStore, StoreType, UserStore, useStore } from "@/store";
 import { useEffect, useState } from "react";
 
 import { riboSettings } from "@/configs/ribo.config";
-import OriginalRibo, { RiboProps as OriginalRiboProps } from "@mesalva/ribo";
+import OriginalRibo, { RiboProps as OriginalRiboProps } from "@andrevantunes/ribo";
 import { useRouter } from "next/router";
 
 export type RiboProps = Pick<OriginalRiboProps, "children">;

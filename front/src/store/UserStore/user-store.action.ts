@@ -18,7 +18,6 @@ import { get as getCookies, set as setCookie } from "@/helpers/cookie.helper";
 
 import * as AccessStore from "@/store/AccessesStore/accesses-store.action";
 import { userInitialState } from "./user-store.state";
-import { getUtms } from "@mesalva/utms";
 
 const { common, socialLogin, signin, signup, signout } = Dictionary;
 
@@ -67,7 +66,7 @@ export const loginByEmail = async (
   platformSlug = ""
 ): Promise<void> => {
   const event = { loginBy: "email" };
-  return handleLogin({ ...signin, event }, () => Login.loginByEmail(email, password, platformSlug));
+  return handleLogin({ ...signin, event }, () => null);
 };
 
 export const signUpByEmail = async (
@@ -80,18 +79,15 @@ export const signUpByEmail = async (
 ): Promise<void> => {
   const event = { loginBy: "signup" };
   return handleLogin({ ...signup, event }, () =>
-    Login.signUpByEmail(name, whatsapp, email, password, platformSlug, {
-      crm_allowed: crmAllowed,
-      ...getUtms(),
-    })
+    null
   );
 };
 
 export const loginBySocial = async (name: SocialNames, platformSlug = ""): Promise<void> => {
   const event = { loginBy: name.toLowerCase() };
   return handleLogin({ ...socialLogin, event }, async () => {
-    if (name === SocialNames.Google) return Login.loginByGoogle(null, platformSlug);
-    if (name === SocialNames.Facebook) return Login.loginByFacebook(null, platformSlug);
+    if (name === SocialNames.Google) return null;
+    if (name === SocialNames.Facebook) return null;
     throw new Error("Not integrated social method to login");
   });
 };
