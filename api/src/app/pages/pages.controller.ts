@@ -53,7 +53,7 @@ export class PagesController {
   @Get('/:path(*)')
   findOne(@Param('path') path: string) {
     //TODO deve verificar se a pessoa tem acesso a página antes de devolver
-    return this.pagesService.page({ path: path });
+    return this.pagesService.page({ path: path.replace(/\?.*/, '') });
   }
 
   @SerializeOptions({

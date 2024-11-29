@@ -14,7 +14,7 @@ export class PaymentsService {
       where?: any;
       include?: any;
       orderBy?: any;
-    },
+    } = {},
   ): Promise<any> {
     const { skip, take, cursor, orderBy, include } = params;
     return this.prisma.properties.findFirst({

@@ -31,7 +31,6 @@ yarn-error.log*
 # local env files
 .env*
 !.env.development.example
-.npmrc
 .yarnrc
 
 # vscode user-specifig files

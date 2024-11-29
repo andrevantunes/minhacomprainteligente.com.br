@@ -5,6 +5,7 @@ import { Button, Card, CreditCard, TextField } from "@andrevantunes/andrevds";
 import { useState } from "react";
 import { toBrCurrency } from "@/helpers/currency.helper";
 import { postBffApi } from "@/requests";
+import Router from "next/router";
 
 const CreditCardSection = ({
   children,
@@ -49,23 +50,17 @@ const CreditCardSection = ({
     }
 
     try {
-      const response = await postBffApi("payments", {
+      await postBffApi("payments", {
         cardHolder,
         cardNumber,
         expireDate,
         cvv,
         totalPrice,
         hash,
-        method: "credit-card",
+        payment_method: "credit_card",
       });
+      location.href = "/pagamento/sucesso?hash=" + hash;
 
-      const result = await response.json();
-
-      if (result.success) {
-        alert("Pagamento concluído com sucesso!");
-      } else {
-        alert("Erro ao processar o pagamento: " + result.message);
-      }
     } catch (error) {
       console.error("Erro ao processar o pagamento:", error);
       alert("Ocorreu um erro ao processar o pagamento.");
@@ -80,7 +75,7 @@ const CreditCardSection = ({
         <span>Valor a ser pago:</span>
         <strong>{toBrCurrency(totalPrice)}</strong>
       </Card>
-      <Card className={cn} {...props}>
+      <Card elevation="md" className={cn} {...props}>
         <CreditCard
           style={{ maxWidth: 360 }}
           iconName={iconName}

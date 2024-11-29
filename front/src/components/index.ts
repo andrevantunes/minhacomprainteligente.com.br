@@ -35,6 +35,7 @@ export * from "./basics/LogoFleming";
 export * from "./basics/ModalContent";
 export * from "./basics/NavigationItem";
 export * from "./basics/NotificationModal";
+export * from "./basics/PixSection";
 export * from "./basics/PopUpButton";
 export * from "./basics/Product";
 export * from "./basics/PropertySelection";

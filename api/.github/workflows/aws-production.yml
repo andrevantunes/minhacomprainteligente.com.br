@@ -48,7 +48,6 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}/${{ steps.app.outputs.NAME }}
         run: |
           aws s3 cp s3://mesalva-deploy-ebs-${{ env.ENVIRONMENT }}/deploy-files/mesalva-ebs.js mesalva-ebs.js
-          aws s3 cp s3://mesalva-deploy-ebs-${{ env.ENVIRONMENT }}/deploy-files/.npmrc .npmrc
           aws s3 cp s3://mesalva-deploy-ebs-${{ env.ENVIRONMENT }}/deploy-files/.ebextensions ./.ebextensions --recursive
           echo "MONITORING_NAME=${{ steps.app.outputs.NAME }}/${{ env.ENVIRONMENT }}/aws" >> .env.deploy
           echo "{\"AWSEBDockerrunVersion\":\"1\",\"Image\": { \"Name\": \"$ECR_REGISTRY:$IMAGE_TAG\",\"Update\":\"true\"},\"Ports\": [{\"HostPort\": 80,\"ContainerPort\": 3000}]}" > Dockerrun.aws.json
