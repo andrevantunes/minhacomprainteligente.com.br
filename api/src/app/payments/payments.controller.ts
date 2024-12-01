@@ -67,7 +67,6 @@ export class PaymentsController {
         response.json(this.mockPixResponse());
         return undefined;
       }
-
     }
     const acquiredOrder = await transaction
       .executeTransaction()

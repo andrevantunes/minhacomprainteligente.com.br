@@ -33,9 +33,7 @@ import PagarmeTransaction from '../../utils/pagarme';
   version: '1',
 })
 export class OrdersController {
-  constructor(
-    private readonly ordersService: OrdersService
-  ) {}
+  constructor(private readonly ordersService: OrdersService) {}
 
   // @Post()
   // async create(@Req() request: any, @Res() response) {
