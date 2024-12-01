@@ -95,18 +95,24 @@ export class PaymentsController {
         },
       },
     });
-    const acquirerPayment = acquiredOrder.charges[0];
-    await this.paymentsService.createPayment({
-      acquirer: 'pagarme',
-      acquirer_id: acquirerPayment.id,
-      acquirer_metadata: { last_transaction: acquirerPayment.last_transaction },
-      order_id: order.id,
-      amount: acquirerPayment.amount,
-      currency: acquirerPayment.currency,
-      status:
-        acquirerPayment.last_transaction?.status || acquirerPayment.status,
-      method: acquirerPayment.payment_method,
-    });
+    const acquirerPayment = acquiredOrder.charges?.[0];
+    if (acquirerPayment) {
+      await this.paymentsService.createPayment({
+        acquirer: 'pagarme',
+        acquirer_id: acquirerPayment.id,
+        acquirer_metadata: {
+          last_transaction: acquirerPayment.last_transaction,
+        },
+        order_id: order.id,
+        amount: acquirerPayment.amount,
+        currency: acquirerPayment.currency,
+        status:
+          acquirerPayment.last_transaction?.status || acquirerPayment.status,
+        method: acquirerPayment.payment_method,
+      });
+    } else {
+      response.status(403);
+    }
     response.json(order);
   }
 

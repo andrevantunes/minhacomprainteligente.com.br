@@ -16,6 +16,9 @@
       flex-grow: 1;
       align-items: center;
     }
+    &__image img{
+      object-fit: contain;
+    }
   }
   &__price-quantity-subtotal {
     display: flex;

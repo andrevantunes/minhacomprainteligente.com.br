@@ -1,3 +1,5 @@
 .product {
-  background-color: red;
+  &__image{
+    max-height: 270px;
+  }
 }

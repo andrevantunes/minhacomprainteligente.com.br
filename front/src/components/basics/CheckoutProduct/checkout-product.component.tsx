@@ -29,7 +29,12 @@ const CheckoutProduct = ({
       {...props}
     >
       <div className="checkout-product__image-name-label">
-        <Image width={120} height={120} src={src} />
+        <Image
+          width={120}
+          height={120}
+          src={src}
+          className="checkout-product__image-name-label__image"
+        />
         <div className="checkout-product__image-name-label__name-label">
           <span>{name}</span>
           <div>

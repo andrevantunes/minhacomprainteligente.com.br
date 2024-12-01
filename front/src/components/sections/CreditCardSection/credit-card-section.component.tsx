@@ -6,6 +6,7 @@ import { useState } from "react";
 import { toBrCurrency } from "@/helpers/currency.helper";
 import { postBffApi } from "@/requests";
 import Router from "next/router";
+import { notifyError } from "@/helpers/notify.helper";
 
 const CreditCardSection = ({
   children,
@@ -61,8 +62,7 @@ const CreditCardSection = ({
       });
       Router.push("/pagamento/sucesso?hash=" + hash);
     } catch (error) {
-      console.error("Erro ao processar o pagamento:", error);
-      alert("Ocorreu um erro ao processar o pagamento.");
+      notifyError("Ocorreu um erro, confira seus dados e tente novamente");
     }
 
     setIsSubmitting(false);

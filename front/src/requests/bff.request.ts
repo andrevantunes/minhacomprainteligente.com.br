@@ -31,7 +31,10 @@ export const postBffApi = async <T = any>(endpoint?: string, data?: T) => {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(serializedData),
-  }).then((r) => r.json());
+  }).then(async (r) => {
+    if (r.status >= 300) return Promise.reject(await r.json());
+    return r.json();
+  });
 };
 
 export const putBffApi = async <T = any>(endpoint?: string, data?: T) => {

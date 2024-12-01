@@ -25,7 +25,7 @@ const Product = ({
   displayAs = "h2",
   ...props
 }: ProductProps) => {
-  const cn = classNames("flex align-items-center flex-column", className);
+  const cn = classNames("flex align-items-center flex-column product", className);
 
   const [{ products }, setCart] = useStore(StoreType.Cart);
   const handleOnClick = (event: any) => {
@@ -40,7 +40,7 @@ const Product = ({
         {title}
       </Title>
       <div className="flex-fill flex align-items-center gap-1x mb-1x">
-        <img src={src} alt="Product Image" />
+        <img src={src} alt="Product Image" className="product__image" />
       </div>
       <Title className="mb-1x">{toBrCurrency(price)}</Title>
       <Button onClick={handleOnClick}>Adicionar ao carrinho</Button>
