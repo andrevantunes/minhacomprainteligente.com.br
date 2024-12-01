@@ -1,19 +1,19 @@
-import type { CreditCardSectionProps } from "./credit-card-section.types";
+import type {CreditCardSectionProps} from "./credit-card-section.types";
 
 import classNames from "classnames";
-import { Button, Card, CreditCard, TextField } from "@andrevantunes/andrevds";
-import { useState } from "react";
-import { toBrCurrency } from "@/helpers/currency.helper";
-import { postBffApi } from "@/requests";
+import {Button, Card, CreditCard, TextField} from "@andrevantunes/andrevds";
+import {useState} from "react";
+import {toBrCurrency} from "@/helpers/currency.helper";
+import {postBffApi} from "@/requests";
 import Router from "next/router";
 
 const CreditCardSection = ({
-  children,
-  className,
-  totalPrice,
-  hash,
-  ...props
-}: CreditCardSectionProps) => {
+                             children,
+                             className,
+                             totalPrice,
+                             hash,
+                             ...props
+                           }: CreditCardSectionProps) => {
   const cn = classNames("credit-card-section", className);
   const [cardHolder, setCardHolder] = useState("");
   const [cardNumber, setCardNumber] = useState("");
@@ -59,8 +59,7 @@ const CreditCardSection = ({
         hash,
         payment_method: "credit_card",
       });
-      location.href = "/pagamento/sucesso?hash=" + hash;
-
+      Router.push("/pagamento/sucesso?hash=" + hash);
     } catch (error) {
       console.error("Erro ao processar o pagamento:", error);
       alert("Ocorreu um erro ao processar o pagamento.");
@@ -77,7 +76,7 @@ const CreditCardSection = ({
       </Card>
       <Card elevation="md" className={cn} {...props}>
         <CreditCard
-          style={{ maxWidth: 360 }}
+          style={{maxWidth: 360}}
           iconName={iconName}
           cardHolder={cardHolder}
           cardNumber={cardNumber}
@@ -89,7 +88,7 @@ const CreditCardSection = ({
             mask="9999 9999 9999 9999"
             onChange={handleChangeCardNumber}
           />
-          <TextField label="Nome impresso no cartão *" onChange={handleChangeCardHolder} />
+          <TextField label="Nome impresso no cartão *" onChange={handleChangeCardHolder}/>
           <div className="credit-card-section__form__expire-cvv">
             <div className="credit-card-section__form__expire-cvv__expire">
               <span>
@@ -98,7 +97,7 @@ const CreditCardSection = ({
               <TextField
                 mask="99/9999"
                 label="dd/aaaa"
-                style={{ width: 100 }}
+                style={{width: 100}}
                 onChange={handleChangeExpireDate}
               />
             </div>
@@ -114,10 +113,10 @@ const CreditCardSection = ({
               <span>
                 CVV<sup>*</sup>
               </span>
-              <TextField label="XXX" style={{ width: 46 }} onChange={handleChangeCvv} />
+              <TextField label="XXX" style={{width: 46}} onChange={handleChangeCvv}/>
             </div>
           </div>
-          <Button onClick={handleSubmitPayment} disabled={isSubmitting}>
+          <Button onClick={handleSubmitPayment} disabled={isSubmitting} loading={isSubmitting} className="flex flex-row">
             {isSubmitting ? "Processando..." : "Concluir compra"}
           </Button>
         </form>

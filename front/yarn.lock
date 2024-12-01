@@ -25,10 +25,10 @@
   resolved "https://registry.yarnpkg.com/@andrevantunes/andrevds-helpers/-/andrevds-helpers-2.2.2.tgz#18ea20f5a26569f9de42563cbae1c13a04b196c0"
   integrity sha512-geCQ8rjLeB4xyvjGTNJNf6YL8VzKv4fpfCjtt3Zq2tTpzf9xiU4XNPXacgb6eEyDcEGh5TvCO4gawKaYaid9SA==
 
-"@andrevantunes/andrevds@1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@andrevantunes/andrevds/-/andrevds-1.0.0.tgz#1c045bc373bb18c0f2cbace2cc76feab42669538"
-  integrity sha512-P24JDdxUOO1xPQc0T6F05fgvQk672Tn0gKU9z+J/K3jH4+lquQEGC3cUP9yq+vfX5orbI+3OriN/Gb7ZoF/q+w==
+"@andrevantunes/andrevds@1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@andrevantunes/andrevds/-/andrevds-1.0.2.tgz#766db813567d27bfae57bd683a96aff4256a8ab0"
+  integrity sha512-DU5ZSf7b2fm2npFnC/+5ITPWpSsFiFAdppL/oO47q3mf+XLYDv2E9ByJz51jCoem43s+vZ5CCRLwlXVfGV1rlg==
   dependencies:
     "@types/dompurify" "^2.3.4"
     dompurify "^2.4.0"
@@ -1654,9 +1654,9 @@
   integrity sha512-K0VQKziLUWkVKiRVrx4a40iPaxTUefQmjtkQofBkYRcoaaL/8rhwDWww9qWbrgicNOgnpIsMxyNIUM4+n6dUIA==
 
 "@types/node@*":
-  version "22.10.0"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-22.10.0.tgz#89bfc9e82496b9c7edea3382583fa94f75896e81"
-  integrity sha512-XC70cRZVElFHfIUB40FgZOBbgJYFKKMa5nb9lxcwYstFG/Mi+/Y0bGS+rs6Dmhmkpq4pnNiLiuZAbc02YCOnmA==
+  version "22.10.1"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-22.10.1.tgz#41ffeee127b8975a05f8c4f83fb89bcb2987d766"
+  integrity sha512-qKgsUwfHZV2WCWLAnVP1JqnpE6Im6h3Y0+fYgMTasNQ7V++CBX5OT1as0g0f+OyubbFqhf6XVNIsmN4IIhEgGQ==
   dependencies:
     undici-types "~6.20.0"
 
@@ -3286,9 +3286,9 @@ ejs@^3.1.6:
     jake "^10.8.5"
 
 electron-to-chromium@^1.5.41:
-  version "1.5.66"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.5.66.tgz#1e9b4bc7638ac02d3551eea1dbaeb0101ec5823f"
-  integrity sha512-pI2QF6+i+zjPbqRzJwkMvtvkdI7MjVbSh2g8dlMguDJIXEPw+kwasS1Jl+YGPEBfGVxsVgGUratAKymPdPo2vQ==
+  version "1.5.67"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.5.67.tgz#66ebd2be4a77469ac2760ef5e9e460ba9a43a845"
+  integrity sha512-nz88NNBsD7kQSAGGJyp8hS6xSPtWwqNogA0mjtc2nUYeEf3nURK9qpV18TuBdDmEDgVWotS8Wkzf+V52dSQ/LQ==
 
 embla-carousel-react@6.2.0:
   version "6.2.0"

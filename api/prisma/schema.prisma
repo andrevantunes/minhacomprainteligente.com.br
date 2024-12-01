@@ -201,45 +201,79 @@ model cart_products {
 }
 
 model orders {
-  id              Int        @id @default(autoincrement())
-  name            String
-  document_number String
-  discount        Int
-  price           Int
-  cart_id         Int
-  cart            carts      @relation(fields: [cart_id], references: [id])
-  address_id      Int
-  address         addresses  @relation(fields: [address_id], references: [id])
-  payments        payments[]
-  created_at      DateTime   @default(now())
-  updated_at      DateTime   @default(now())
-  deleted_at      DateTime?
+  id                Int          @id @default(autoincrement())
+  name              String?
+  document_number   String?
+  discount          Int?
+  amount            Int
+  status            OrderStatus?
+  acquirer          String?
+  acquirer_id       String?
+  acquirer_metadata Json?
+  currency          Currency     @default(BRL)
+  cart_id           Int
+  cart              carts        @relation(fields: [cart_id], references: [id])
+  address_id        Int?
+  address           addresses?   @relation(fields: [address_id], references: [id])
+  payments          payments[]
+  created_at        DateTime     @default(now())
+  updated_at        DateTime     @default(now())
+  deleted_at        DateTime?
 
   @@index([document_number])
   @@index([name])
 }
 
-model payments {
-  id                            Int           @id @default(autoincrement())
-  value                         Int
-  method                        String
-  status                        PaymentStatus
-  acquirer                      String
-  acquirer_transaction_id       String
-  acquirer_transaction_metadata Json
-  order_id                      Int
-  order                         orders        @relation(fields: [order_id], references: [id])
-  created_at                    DateTime      @default(now())
-  updated_at                    DateTime      @default(now())
-  deleted_at                    DateTime?
+enum OrderStatus {
+  paid
+  pending
+  authorized
+  captured
+  failed
+  refunded
+  cancelled
+  chargeback
+}
 
-  @@index([acquirer_transaction_id])
+enum Currency {
+  BRL
+  USD
+  MXN
+  CLP
+  COP
+  PEN
+  ARS
+  CRC
+  DOP
+  PAB
+  UYU
+  GTQ
+  PYG
+}
+
+model payments {
+  id                Int           @id @default(autoincrement())
+  amount            Int
+  method            String
+  status            PaymentStatus
+  currency          Currency      @default(BRL)
+  acquirer          String
+  acquirer_id       String
+  acquirer_metadata Json
+  order_id          Int
+  order             orders        @relation(fields: [order_id], references: [id])
+  created_at        DateTime      @default(now())
+  updated_at        DateTime      @default(now())
+  deleted_at        DateTime?
+
+  @@index([acquirer_id])
 }
 
 enum PaymentStatus {
+  paid
+  captured
   pending
   authorized
-  completed
   failed
   refunded
   cancelled

@@ -2,10 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../database/prisma.service';
 
 @Injectable()
-export class PaymentsService {
+export class OrdersService {
   constructor(private prisma: PrismaService) {}
 
-  async payment(
+  async order(
     where: any,
     params: {
       skip?: number;
@@ -17,7 +17,7 @@ export class PaymentsService {
     } = {},
   ): Promise<any> {
     const { skip, take, cursor, orderBy, include } = params;
-    return this.prisma.payments.findFirst({
+    return this.prisma.orders.findFirst({
       where,
       skip,
       take,
@@ -27,7 +27,7 @@ export class PaymentsService {
     });
   }
 
-  async payments(params: {
+  async orders(params: {
     skip?: number;
     take?: number;
     cursor?: any;
@@ -36,7 +36,7 @@ export class PaymentsService {
     orderBy?: any;
   }): Promise<any[]> {
     const { skip, take, cursor, where, orderBy, include } = params;
-    const properties = await this.prisma.payments.findMany({
+    const orders = await this.prisma.orders.findMany({
       skip,
       take,
       cursor,
@@ -44,10 +44,10 @@ export class PaymentsService {
       include,
       orderBy,
     });
-    return properties;
+    return orders;
   }
 
-  async createPayment(data: any): Promise<any> {
-    return this.prisma.payments.create({ data });
+  async createOrder(data: any): Promise<any> {
+    return this.prisma.orders.create({ data });
   }
 }

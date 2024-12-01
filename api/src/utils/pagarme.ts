@@ -43,12 +43,29 @@ export default class PagarmeTransaction {
   setCustomer(customer) {
     this.options.json.customer = customer;
   }
-  setCreditCardPayment({ number, holder_name, exp_month, exp_year, expire_date, cvv, billing_address}: { number: number | string; holder_name: string, exp_month?: number|string, exp_year?: number|string, expire_date?: string, cvv: number|string, billing_address: any}) {
+  setCreditCardPayment({
+    number,
+    holder_name,
+    exp_month,
+    exp_year,
+    expire_date,
+    cvv,
+    billing_address,
+  }: {
+    number: number | string;
+    holder_name: string;
+    exp_month?: number | string;
+    exp_year?: number | string;
+    expire_date?: string;
+    cvv: number | string;
+    billing_address: any;
+  }) {
     if (expire_date && (!exp_month || !exp_year)) {
       exp_month = expire_date.split('/')[0];
       exp_year = expire_date.split('/')[1];
     }
-    this.options.json.payments = [{
+    this.options.json.payments = [
+      {
         payment_method: 'credit_card',
         credit_card: {
           amount: this.options.json.amount,
@@ -84,7 +101,7 @@ export default class PagarmeTransaction {
     });
   }
 
-  private get headers(){
+  private get headers() {
     return {
       Authorization: this.AUTH_HEADER,
       'Content-Type': 'application/json',
