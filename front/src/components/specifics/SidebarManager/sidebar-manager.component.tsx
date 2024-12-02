@@ -30,9 +30,7 @@ const SidebarManager = ({
     <div className={cn} {...props} onClick={closeSidebar}>
       <div className="sidebar-manager__overlay" />
       <aside className="sidebar sidebar-manager__sidebar flex flex-column align-items-stretch">
-        <div className="pt-2x pb-2x flex justify-content-center">
-
-        </div>
+        <div className="pt-2x pb-2x flex justify-content-center"></div>
 
         <div className="card sidebar__profile-container">
           <div
