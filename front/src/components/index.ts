@@ -37,6 +37,7 @@ export * from "./basics/NotificationModal";
 export * from "./basics/PixSection";
 export * from "./basics/PopUpButton";
 export * from "./basics/Product";
+export * from "./basics/ProductList";
 export * from "./basics/PropertySelection";
 export * from "./basics/RawScript";
 export * from "./basics/RepositionFloatButton";

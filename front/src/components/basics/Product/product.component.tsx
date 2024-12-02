@@ -1,7 +1,7 @@
 import type { ProductProps } from "./product.types";
 
 import classNames from "classnames";
-import { Button, Card } from "@andrevantunes/andrevds";
+import { Button, Card, Label } from "@andrevantunes/andrevds";
 import { Title } from "@/components";
 import { StoreType, useStore } from "@/store";
 import { toBrCurrency } from "@/helpers/currency.helper";
@@ -21,6 +21,7 @@ const Product = ({
   className,
   src,
   productId,
+  category,
   elevation = "hg",
   displayAs = "h2",
   ...props
@@ -42,6 +43,7 @@ const Product = ({
       <div className="flex-fill flex align-items-center gap-1x mb-1x">
         <img src={src} alt="Product Image" className="product__image" />
       </div>
+      {category && <Label className="mb-1x mt-1x">{category}</Label>}
       <Title className="mb-1x">{toBrCurrency(price)}</Title>
       <Button onClick={handleOnClick}>Adicionar ao carrinho</Button>
     </Card>
