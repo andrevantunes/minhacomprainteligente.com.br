@@ -1,8 +1,8 @@
 export const ptBr = {
   seo: {
     url: "https://www.mesalva.com",
-    title: "Plataforma Fleming",
-    description: "Plataforma Fleming",
+    title: "Minha Compra Inteligente",
+    description: "Minha Compra Inteligente",
     image: "/banners-site-nota-mil-sisu-desktop-1-scaled.jpg",
   },
   common: {

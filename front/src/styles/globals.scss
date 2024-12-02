@@ -15,3 +15,15 @@ div#__next {
 html {
 	scroll-behavior: smooth;
 }
+.pagebreak {
+  display: block;
+  min-height: 1px;
+}
+
+@media print {
+  .pagebreak {
+    clear: both;
+    page-break-after: always;
+    break-after:page;
+  }
+}

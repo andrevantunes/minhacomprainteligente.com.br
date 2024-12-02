@@ -1,6 +1,6 @@
 import type { SidebarManagerProps } from "./sidebar-manager.types";
 import classNames from "classnames";
-import { Link, LogoFleming } from "@/components";
+import { Link } from "@/components";
 import { useEffect, useState } from "react";
 import { Icon } from "@andrevantunes/andrevds";
 
@@ -31,7 +31,7 @@ const SidebarManager = ({
       <div className="sidebar-manager__overlay" />
       <aside className="sidebar sidebar-manager__sidebar flex flex-column align-items-stretch">
         <div className="pt-2x pb-2x flex justify-content-center">
-          <LogoFleming />
+
         </div>
 
         <div className="card sidebar__profile-container">
