@@ -94,6 +94,7 @@ export default class PagarmeTransaction {
   }
 
   executeTransaction() {
+    console.log(this.options);
     return new Promise((resolve, reject) => {
       request(this.options, function (error: any, response: any, body: any) {
         if (error) return reject(error);

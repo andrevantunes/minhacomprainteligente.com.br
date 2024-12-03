@@ -49,7 +49,7 @@ export class PaymentsController {
     });
     const transaction = new PagarmeTransaction();
     transaction.setCode(hash);
-    transaction.setCustomer(this.customer(createPageDto.customer));
+    // transaction.setCustomer(this.customer(createPageDto.customer));
     transaction.setItemsFromCartProducts(cart.products);
 
     if (payment_method === 'credit_card') {
@@ -58,7 +58,7 @@ export class PaymentsController {
         holder_name: createPageDto.card_holder,
         expire_date: createPageDto.expire_date,
         cvv: createPageDto.cvv,
-        billing_address: this.billingAddress(createPageDto.billing_address),
+        billing_address: null, // this.billingAddress(createPageDto.billing_address),
       });
     }
     if (payment_method === 'pix') {
