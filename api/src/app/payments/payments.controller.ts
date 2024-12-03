@@ -157,8 +157,8 @@ export class PaymentsController {
   // }
   private billingAddress(_address: any) {
     return {
-      line_1: '123, Rua Exemplo, Bairro Exemplo',
-      line_2: 'Apto 202',
+      line_1: '545, Avenida Veiga, Aparício Borges',
+      line_2: '',
       zip_code: '91510120',
       city: 'Porto Alegre',
       state: 'RS',

@@ -67,6 +67,7 @@ export default class PagarmeTransaction {
     this.options.json.payments = [
       {
         payment_method: 'credit_card',
+        antifraud_enabled: false,
         credit_card: {
           amount: this.options.json.amount,
           installments: 1,
