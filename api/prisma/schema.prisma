@@ -278,6 +278,7 @@ enum PaymentStatus {
   refunded
   cancelled
   chargeback
+  not_authorized
 }
 
 model replacements {
