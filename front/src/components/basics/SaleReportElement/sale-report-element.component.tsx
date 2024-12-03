@@ -32,10 +32,15 @@ const SaleReportElement = ({
         </small>
       </div>
       <div className="sale-report-element__amount flex flex-column justify-content-center align-items-center">
-        <Title className={classNames({"sale-report-element__amount__canceled": !paid, "sale-report-element__amount__success": paid})}>{toBrCurrency(amount as string)}</Title>
-        <Label variant={(paid ? "success" : "error") as any}>
-          {paid ? "Pago" : "Cancelado"}
-        </Label>
+        <Title
+          className={classNames({
+            "sale-report-element__amount__canceled": !paid,
+            "sale-report-element__amount__success": paid,
+          })}
+        >
+          {toBrCurrency(amount as string)}
+        </Title>
+        <Label variant={(paid ? "success" : "error") as any}>{paid ? "Pago" : "Cancelado"}</Label>
       </div>
     </ItemElement>
   );

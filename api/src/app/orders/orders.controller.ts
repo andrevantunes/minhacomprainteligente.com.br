@@ -109,20 +109,20 @@ export class OrdersController {
       include: {
         payments: true,
         cart: {
-          include: {property: true}
-        }
+          include: { property: true },
+        },
       },
-      orderBy: [{created_at: 'desc'}]
+      orderBy: [{ created_at: 'desc' }],
     });
 
     const orders = resOrders.map((order: any) => ({
       name: order.name,
-        amount: order.amount,
-        status: order.status,
-        created_at: order.created_at,
-        property_name: order.cart?.property?.name,
-        payment_method: order.payments?.[0]?.method
-    }))
+      amount: order.amount,
+      status: order.status,
+      created_at: order.created_at,
+      property_name: order.cart?.property?.name,
+      payment_method: order.payments?.[0]?.method,
+    }));
     return { orders };
   }
   //
