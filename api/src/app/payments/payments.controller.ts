@@ -1,6 +1,6 @@
 import {
   Controller,
-  // Get,
+  Get,
   Post,
   // Body,
   // Put,
@@ -8,8 +8,8 @@ import {
   // Delete,
   // UseGuards,
   // SerializeOptions,
-  // HttpCode,
-  // HttpStatus,
+  HttpCode,
+  HttpStatus,
   // Logger,
   Req,
   Res,
@@ -119,12 +119,12 @@ export class PaymentsController {
   // @SerializeOptions({
   //   groups: ['admin'],
   // })
-  // @Get()
-  // @HttpCode(HttpStatus.OK)
-  // async findAll() {
-  //   const properties = await this.propertiesService.properties({ include: { address: true } });
-  //   return { properties, test: 'Abc123' };
-  // }
+  @Get()
+  @HttpCode(HttpStatus.OK)
+  async findAll() {
+    const payments = await this.paymentsService.payments({});
+    return { payments };
+  }
   //
   // @Get('/:hash(*)')
   // async findOne(@Param('hash') hash: string) {

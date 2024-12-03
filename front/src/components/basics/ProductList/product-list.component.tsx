@@ -43,15 +43,18 @@ const ProductList = ({ children, className, propertyProducts, ...props }: Produc
         />
       </div>
       <div className="mb-2x flex gap-1x">
-        {categories.map((category) => (
-          <Label
-            onClick={handleCategoryClick}
-            key={category}
-            variant={selectedCategory === category ? "primary" : "secondary"}
-          >
-            {category}
-          </Label>
-        ))}
+        {categories.map((category) => {
+          // @ts-ignore
+          return (
+            <Label
+              onClick={handleCategoryClick}
+              key={category}
+              variant={(selectedCategory === category ? "primary" : "warning") as any}
+            >
+              {category}
+            </Label>
+          );
+        })}
       </div>
       <Grid
         style={{ marginBottom: 60 }}
@@ -88,9 +91,9 @@ function propertyProductFilter(propertyProduct: any, searchKey: string, category
   return words.every((word: string) => propertySearcher.includes(word));
 }
 
-function categoriesFromPropertyProducts(propertyProducts) {
-  const setter = new Set();
-  propertyProducts.forEach((propertyProduct) => setter.add(propertyProduct.category));
+function categoriesFromPropertyProducts(propertyProducts: any) {
+  const setter: any = new Set();
+  propertyProducts.forEach((propertyProduct: any) => setter.add(propertyProduct.category));
   return [...setter.keys()];
 }
 

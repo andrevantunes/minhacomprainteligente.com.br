@@ -1,6 +1,6 @@
 import {
   Controller,
-  // Get,
+  Get,
   Post,
   // Body,
   // Put,
@@ -8,8 +8,8 @@ import {
   // Delete,
   // UseGuards,
   // SerializeOptions,
-  // HttpCode,
-  // HttpStatus,
+  HttpCode,
+  HttpStatus,
   // Logger,
   Req,
   Res,
@@ -27,9 +27,9 @@ import PagarmeTransaction from '../../utils/pagarme';
 @ApiBearerAuth()
 // @Roles(RoleEnum.admin)
 // @UseGuards(AuthGuard('jwt'), RolesGuard)
-@ApiTags('Payments')
+@ApiTags('Orders')
 @Controller({
-  path: 'payments',
+  path: 'orders',
   version: '1',
 })
 export class OrdersController {
@@ -102,12 +102,29 @@ export class OrdersController {
   // @SerializeOptions({
   //   groups: ['admin'],
   // })
-  // @Get()
-  // @HttpCode(HttpStatus.OK)
-  // async findAll() {
-  //   const properties = await this.propertiesService.properties({ include: { address: true } });
-  //   return { properties, test: 'Abc123' };
-  // }
+  @Get()
+  @HttpCode(HttpStatus.OK)
+  async findAll() {
+    const resOrders = await this.ordersService.orders({
+      include: {
+        payments: true,
+        cart: {
+          include: {property: true}
+        }
+      },
+      orderBy: {created_at: 'DESC'}
+    });
+
+    const orders = resOrders.map((order: any) => ({
+      name: order.name,
+        amount: order.amount,
+        status: order.status,
+        created_at: order.created_at,
+        property_name: order.cart?.property?.name,
+        payment_method: order.payments?.[0]?.method
+    }))
+    return { orders };
+  }
   //
   // @Get('/:hash(*)')
   // async findOne(@Param('hash') hash: string) {

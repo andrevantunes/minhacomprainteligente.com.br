@@ -41,6 +41,7 @@ export * from "./basics/ProductList";
 export * from "./basics/PropertySelection";
 export * from "./basics/RawScript";
 export * from "./basics/RepositionFloatButton";
+export * from "./basics/SaleReportElement";
 export * from "./basics/Step";
 export * from "./experimental/Conditional";
 export * from "./hocs/WithDateRange";
