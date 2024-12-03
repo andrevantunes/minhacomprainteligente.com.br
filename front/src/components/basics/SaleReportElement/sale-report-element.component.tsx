@@ -19,6 +19,7 @@ const SaleReportElement = ({
   ...props
 }: SaleReportElementProps) => {
   const cn = classNames("sale-report-element", className);
+  const paid = status === "paid";
   return (
     <ItemElement size={"md" as any} className={cn} {...props}>
       <div>
@@ -26,14 +27,16 @@ const SaleReportElement = ({
       </div>
       <div className="flex-grow">
         <Title>{propertyName}</Title>
-        <Title>{toBrCurrency(amount as string)}</Title>
         <small>
           {toBrDateTime(createdAt as string)} - {name}
         </small>
       </div>
-      <Label variant={(status === "paid" ? "success" : "default") as any}>
-        {status === "paid" ? "Pago" : "Erro"}
-      </Label>
+      <div className="sale-report-element__amount flex flex-column justify-content-center align-items-center">
+        <Title className={classNames({"sale-report-element__amount__canceled": !paid, "sale-report-element__amount__success": paid})}>{toBrCurrency(amount as string)}</Title>
+        <Label variant={(paid ? "success" : "error") as any}>
+          {paid ? "Pago" : "Cancelado"}
+        </Label>
+      </div>
     </ItemElement>
   );
 };

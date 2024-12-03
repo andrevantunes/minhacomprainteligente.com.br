@@ -3,4 +3,13 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
+  &__amount{
+    &__canceled{
+      color: var(--color-error-500);
+      text-decoration: line-through;
+    }
+    &__success{
+      color: var(--color-success-500);
+    }
+  }
 }

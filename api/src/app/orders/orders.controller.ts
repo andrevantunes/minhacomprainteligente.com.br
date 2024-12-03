@@ -112,7 +112,7 @@ export class OrdersController {
           include: {property: true}
         }
       },
-      orderBy: {created_at: 'DESC'}
+      orderBy: [{created_at: 'desc'}]
     });
 
     const orders = resOrders.map((order: any) => ({
