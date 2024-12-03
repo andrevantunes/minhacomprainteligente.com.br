@@ -77,7 +77,7 @@ export default class PagarmeTransaction {
             exp_month,
             exp_year: String(exp_year).slice(-2),
             cvv,
-            billing_address,
+            // billing_address,
           },
         },
       },
