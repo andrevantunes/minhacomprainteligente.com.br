@@ -49,7 +49,7 @@ export class PaymentsController {
     });
     const transaction = new PagarmeTransaction();
     transaction.setCode(hash);
-    // transaction.setCustomer(this.customer(createPageDto.customer));
+    transaction.setCustomer(this.customer(createPageDto.customer));
     transaction.setItemsFromCartProducts(cart.products);
 
     if (payment_method === 'credit_card') {
@@ -72,6 +72,7 @@ export class PaymentsController {
       .executeTransaction()
       .then((acquiredResponse: any) => {
         if (acquiredResponse.status === 'failed') {
+          console.log(acquiredResponse)
           return Promise.reject(acquiredResponse);
         }
         return acquiredResponse;
