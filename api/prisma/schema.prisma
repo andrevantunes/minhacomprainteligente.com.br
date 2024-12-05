@@ -279,6 +279,7 @@ enum PaymentStatus {
   cancelled
   chargeback
   not_authorized
+  waiting_payment
 }
 
 model replacements {

@@ -3,4 +3,10 @@
   flex-direction: column;
   gap: 16px;
   align-items: center;
+  .item-element{
+    width: 100%;
+    margin: 0 24px;
+    word-wrap: break-word;
+    max-width: 600px;
+  }
 }

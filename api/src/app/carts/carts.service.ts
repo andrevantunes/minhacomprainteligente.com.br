@@ -5,19 +5,16 @@ import { PrismaService } from '../../database/prisma.service';
 export class CartsService {
   constructor(private prisma: PrismaService) {}
 
-  async cart(
-    where: any,
-    params: {
-      skip?: number;
-      take?: number;
-      cursor?: any;
-      where?: any;
-      include?: any;
-      orderBy?: any;
-    },
-  ): Promise<any> {
-    const { skip, take, cursor, orderBy, include } = params;
-    return this.prisma.properties.findFirst({
+  async cart(params: {
+    skip?: number;
+    take?: number;
+    cursor?: any;
+    where?: any;
+    include?: any;
+    orderBy?: any;
+  }): Promise<any> {
+    const { skip, where, take, cursor, orderBy, include } = params;
+    return this.prisma.carts.findFirst({
       where,
       skip,
       take,

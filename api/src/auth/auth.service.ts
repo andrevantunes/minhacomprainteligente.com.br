@@ -41,7 +41,6 @@ export class AuthService {
   ) {}
 
   async validateLogin(loginDto: AuthEmailLoginDto): Promise<LoginResponseType> {
-    await console.log(loginDto);
     throw new HttpException(
       {
         status: HttpStatus.UNPROCESSABLE_ENTITY,
@@ -120,7 +119,6 @@ export class AuthService {
     authProvider: string,
     socialData: SocialInterface,
   ): Promise<LoginResponseType> {
-    await console.log(authProvider, socialData);
     throw new HttpException(
       {
         status: HttpStatus.UNPROCESSABLE_ENTITY,

@@ -23,6 +23,12 @@ export default class PagarmeTransaction {
     };
   }
 
+  find(id) {
+    this.options.method = 'GET';
+    this.options.uri += '/' + id;
+    return this.executeTransaction();
+  }
+
   setItems(items: PagarmeItem[]) {
     this.options.json.amount = 3000;
     this.options.json.items = items;
@@ -94,7 +100,6 @@ export default class PagarmeTransaction {
   }
 
   executeTransaction() {
-    console.log(this.options);
     return new Promise((resolve, reject) => {
       request(this.options, function (error: any, response: any, body: any) {
         if (error) return reject(error);

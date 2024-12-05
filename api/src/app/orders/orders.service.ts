@@ -5,18 +5,15 @@ import { PrismaService } from '../../database/prisma.service';
 export class OrdersService {
   constructor(private prisma: PrismaService) {}
 
-  async order(
-    where: any,
-    params: {
-      skip?: number;
-      take?: number;
-      cursor?: any;
-      where?: any;
-      include?: any;
-      orderBy?: any;
-    } = {},
-  ): Promise<any> {
-    const { skip, take, cursor, orderBy, include } = params;
+  async order(params: {
+    where: any;
+    skip?: number;
+    take?: number;
+    cursor?: any;
+    include?: any;
+    orderBy?: any;
+  }): Promise<any> {
+    const { skip, where, take, cursor, orderBy, include } = params;
     return this.prisma.orders.findFirst({
       where,
       skip,
@@ -49,5 +46,9 @@ export class OrdersService {
 
   async createOrder(data: any): Promise<any> {
     return this.prisma.orders.create({ data });
+  }
+
+  async updateOrder(where: any, data: any): Promise<any> {
+    return this.prisma.orders.update({ where, data });
   }
 }

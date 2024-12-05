@@ -41,7 +41,6 @@ export class OrdersController {
   //   const cart = await this.cartsService.cartWithProducts({
   //     where: { hash: hash },
   //   });
-  //   console.log('h0');
   //   const transaction = new PagarmeTransaction();
   //   transaction.setCode(hash);
   //   transaction.setCustomer(this.customer(createPageDto.customer));
@@ -141,7 +140,6 @@ export class OrdersController {
   // @Put('/:hash(*)')
   // update(@Param('hash') hash: string, @Req() request: any) {
   //   const updatePageDto: any = request.body;
-  //   console.log('update', updatePageDto);
   //   return this.cartsService.updateCart({
   //     where: { hash },
   //     data: updatePageDto,

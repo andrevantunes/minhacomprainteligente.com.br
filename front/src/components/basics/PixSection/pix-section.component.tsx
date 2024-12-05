@@ -1,10 +1,12 @@
 import type { PixSectionProps } from "./pix-section.types";
+import copy from "copy-to-clipboard";
 
 import classNames from "classnames";
-import { Button, Card, Loader, Image } from "@andrevantunes/andrevds";
+import { Button, Card, Loader, Image, ItemElement } from "@andrevantunes/andrevds";
 import { useEffect, useState } from "react";
 import { toBrCurrency } from "@/helpers/currency.helper";
-import { postBffApi } from "@/requests";
+import { getBffApi, postBffApi } from "@/requests";
+import { notifySuccess } from "@/helpers/notify.helper";
 
 let a = 0;
 const PixSection = ({
@@ -35,27 +37,21 @@ const PixSection = ({
     });
 
     console.log(response);
-    console.log(response?.charges[0]);
-    console.log(response?.charges[0].last_transaction);
-    console.log(response?.charges[0].last_transaction?.qr_code);
-    console.log(response?.charges[0].last_transaction?.qr_code_url);
 
-    setQrCode(response?.charges[0].last_transaction?.qr_code);
-    setQrUrl(response?.charges[0].last_transaction?.qr_code_url);
+    setQrCode(response?.charges?.[0].last_transaction?.qr_code);
+    setQrUrl(response?.charges?.[0].last_transaction?.qr_code_url);
 
     setIsCreatingTransaction(false);
   };
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(qrCode).then(
-      () => {
-        console.log("Async: Copying to clipboard was successful!");
-      },
-      (err) => {
-        console.error("Async: Could not copy text: ", err);
-      }
-    );
+    copy(qrCode, { format: "text/plain" });
+    notifySuccess("QRCode copiado com sucesso");
   };
+
+  useEffect(() => {
+    void poolingPayment(hash);
+  }, []);
 
   return (
     <>
@@ -68,6 +64,8 @@ const PixSection = ({
         {isCreatingTransaction && <Loader />}
         {!isCreatingTransaction && qrUrl && <Image src={qrUrl} alt="QR Code" />}
 
+        <ItemElement onClick={handleCopy}>{qrCode}</ItemElement>
+
         <Button onClick={handleCopy} disabled={isCreatingTransaction || !qrCode}>
           {isCreatingTransaction ? "Gerando PIX para pagamento" : "Copiar código PIX"}
         </Button>
@@ -75,5 +73,17 @@ const PixSection = ({
     </>
   );
 };
+
+function poolingPayment(hash: string) {
+  return getBffApi(`carts/payment/${hash}`).then((r) => {
+    if (r.order.status === "paid") {
+      location.href = `/pagamento/sucesso?hash=${hash}`;
+    } else {
+      setTimeout(() => {
+        poolingPayment(hash);
+      }, 20000);
+    }
+  });
+}
 
 export default PixSection;
