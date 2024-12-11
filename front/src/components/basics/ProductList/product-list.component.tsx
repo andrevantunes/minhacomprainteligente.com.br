@@ -5,7 +5,7 @@ import { Label, TextField } from "@andrevantunes/andrevds";
 import { Product, Grid } from "@/components";
 import { useState } from "react";
 
-const ProductList = ({ children, className, propertyProducts, ...props }: ProductListProps) => {
+const ProductList = ({ children, className, propertyProducts = [], ...props }: ProductListProps) => {
   const cn = classNames("product-list", className);
   const [propertyProductsState, setPropertyProductsState] = useState(propertyProducts);
   const categories = categoriesFromPropertyProducts(propertyProducts);
@@ -35,29 +35,32 @@ const ProductList = ({ children, className, propertyProducts, ...props }: Produc
   };
   return (
     <div className={cn} {...props}>
-      <div className="mb-2x">
-        <TextField
-          id="product-filter"
-          label="Pesquise pelo nome do produto ou categoria"
-          onChange={handleChangeFilter}
-        />
+      <div className="product-list__product-list-filters">
+        <div className="mb-2x">
+          <TextField
+            id="product-filter"
+            label="Pesquise pelo nome do produto ou categoria"
+            onChange={handleChangeFilter}
+          />
+        </div>
+        <div className="mb-2x flex gap-1x product-list__product-list-filters__categories">
+          {categories.map((category) => {
+            // @ts-ignore
+            return (
+              <Label
+                onClick={handleCategoryClick}
+                key={category}
+                variant={(selectedCategory === category ? "primary" : "warning") as any}
+              >
+                {category}
+              </Label>
+            );
+          })}
+        </div>
       </div>
-      <div className="mb-2x flex gap-1x">
-        {categories.map((category) => {
-          // @ts-ignore
-          return (
-            <Label
-              onClick={handleCategoryClick}
-              key={category}
-              variant={(selectedCategory === category ? "primary" : "warning") as any}
-            >
-              {category}
-            </Label>
-          );
-        })}
-      </div>
+
       <Grid
-        style={{ marginBottom: 60 }}
+        style={{marginBottom: 60}}
         columns={{
           md: [1, 1, 1],
           sm: [1, 1],
@@ -91,7 +94,7 @@ function propertyProductFilter(propertyProduct: any, searchKey: string, category
   return words.every((word: string) => propertySearcher.includes(word));
 }
 
-function categoriesFromPropertyProducts(propertyProducts: any) {
+function categoriesFromPropertyProducts(propertyProducts: any[]) {
   const setter: any = new Set();
   propertyProducts.forEach((propertyProduct: any) => setter.add(propertyProduct.category));
   return [...setter.keys()];

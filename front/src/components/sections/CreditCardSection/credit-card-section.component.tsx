@@ -7,6 +7,7 @@ import { toBrCurrency } from "@/helpers/currency.helper";
 import { postBffApi } from "@/requests";
 import Router from "next/router";
 import { notifyError } from "@/helpers/notify.helper";
+import Script from "next/script";
 
 const CreditCardSection = ({
   children,
@@ -40,7 +41,8 @@ const CreditCardSection = ({
     setExpireDate(event.target.value);
   };
 
-  const handleSubmitPayment = async () => {
+  const handleSubmitPayment = async (event: any) => {
+    event.preventDefault();
     setIsSubmitting(true);
 
     // Validação simples dos dados do formulário
@@ -51,16 +53,19 @@ const CreditCardSection = ({
     }
 
     try {
-      await postBffApi("payments", {
-        cardHolder,
-        cardNumber,
-        expireDate,
-        cvv,
-        totalPrice,
-        hash,
-        payment_method: "credit_card",
+      validateRecaptcha("PAY").then(async (recaptchaToken) => {
+        await postBffApi("payments", {
+          cardHolder,
+          cardNumber,
+          expireDate,
+          cvv,
+          totalPrice,
+          hash,
+          recaptchaToken,
+          payment_method: "credit_card",
+        });
+        Router.push("/pagamento/sucesso?hash=" + hash);
       });
-      Router.push("/pagamento/sucesso?hash=" + hash);
     } catch (error) {
       notifyError("Ocorreu um erro, confira seus dados e tente novamente");
     }
@@ -70,6 +75,9 @@ const CreditCardSection = ({
 
   return (
     <>
+      <Script
+        src={`https://www.google.com/recaptcha/enterprise.js?render=${process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}`}
+      />
       <Card elevation="md" className="text-center">
         <span>Valor a ser pago:</span>
         <strong>{toBrCurrency(totalPrice)}</strong>
@@ -82,13 +90,18 @@ const CreditCardSection = ({
           cardNumber={cardNumber}
         />
 
-        <form className="credit-card-section__form block">
+        <form action="#" className="credit-card-section__form block">
           <TextField
             label="Número impresso no cartão *"
+            name="credit_card_number"
             mask="9999 9999 9999 9999"
             onChange={handleChangeCardNumber}
           />
-          <TextField label="Nome impresso no cartão *" onChange={handleChangeCardHolder} />
+          <TextField
+            label="Nome impresso no cartão *"
+            onChange={handleChangeCardHolder}
+            name="credit_card_holder"
+          />
           <div className="credit-card-section__form__expire-cvv">
             <div className="credit-card-section__form__expire-cvv__expire">
               <span>
@@ -98,6 +111,7 @@ const CreditCardSection = ({
                 mask="99/9999"
                 label="dd/aaaa"
                 style={{ width: 100 }}
+                name="credit_card_expire_date"
                 onChange={handleChangeExpireDate}
               />
             </div>
@@ -113,7 +127,12 @@ const CreditCardSection = ({
               <span>
                 CVV<sup>*</sup>
               </span>
-              <TextField label="XXX" style={{ width: 46 }} onChange={handleChangeCvv} />
+              <TextField
+                label="XXX"
+                style={{ width: 46 }}
+                onChange={handleChangeCvv}
+                name="credit_card_cvv"
+              />
             </div>
           </div>
           <Button
@@ -129,5 +148,20 @@ const CreditCardSection = ({
     </>
   );
 };
+
+function validateRecaptcha(action = "PAY") {
+  return new Promise((resolve, _reject) => {
+    if (!process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY) return resolve("");
+    // @ts-ignore
+    grecaptcha.enterprise.ready(async () => {
+      // @ts-ignore
+      const recaptchaToken = await grecaptcha.enterprise.execute(
+        process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY,
+        { action }
+      );
+      resolve(recaptchaToken);
+    });
+  });
+}
 
 export default CreditCardSection;

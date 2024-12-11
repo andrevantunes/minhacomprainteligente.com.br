@@ -41,9 +41,25 @@ export class PaymentsController {
     private readonly cartsService: CartsService,
   ) {}
 
+  private async recaptcha(token?: string, expectedAction = 'PAY'){
+    if(!process.env.RECAPTCHA_USER_AUTH || !process.env.RECAPTCHA_SITE_KEY) return true;
+    const siteKey = process.env.RECAPTCHA_SITE_KEY;
+    return fetch(
+      `https://recaptchaenterprise.googleapis.com/v1/projects/minhacompraintel-1733872724443/assessments?key=${process.env.RECAPTCHA_USER_AUTH}`,
+      {
+        method: 'POST',
+        body: JSON.stringify({ event: { token, expectedAction, siteKey } }),
+      },
+    ).then(async (r) => (r.status === 200)).catch((_) => false);
+  }
+
   @Post()
   async create(@Req() request: any, @Res() response) {
-    const { payment_method, hash, ...createPageDto }: any = request.body;
+    // Recaptcha:
+    // { "event": { "token": recaptcha_token, "expectedAction": "PAY", "siteKey": "6Ldf6pcqAAAAAC0mpeEfrhwR29jPb1Xsecc1T7rm" } }
+    const { payment_method, recaptcha_token, hash, ...createPageDto }: any = request.body;
+    const valid = await this.recaptcha(recaptcha_token);
+
     const cart = await this.cartsService.cartWithProducts({
       where: { hash: hash },
     });

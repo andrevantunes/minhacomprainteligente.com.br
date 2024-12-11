@@ -76,7 +76,7 @@ const PixSection = ({
 
 function poolingPayment(hash: string) {
   return getBffApi(`carts/payment/${hash}`).then((r) => {
-    if (r.order.status === "paid") {
+    if (r?.order?.status === "paid") {
       location.href = `/pagamento/sucesso?hash=${hash}`;
     } else {
       setTimeout(() => {
