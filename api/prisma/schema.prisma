@@ -25,6 +25,7 @@ model users {
   properties_managers properties_managers[]
   users_companies     users_companies[]
   carts               carts[]
+  withdraws           withdraws[]
 }
 
 model pages {
@@ -48,6 +49,8 @@ model companies {
   properties_managers properties_managers[]
   companies_products  companies_products[]
   users_companies     users_companies[]
+  withdraws           withdraws[]
+  balances            balances[]
 }
 
 model products {
@@ -314,4 +317,39 @@ model replacement_property_products {
   deleted_at       DateTime?
 
   @@id([property_id, product_id, replacement_id])
+}
+
+model withdraws {
+  id                Int            @id @default(autoincrement())
+  amount            Int
+  tax               Int
+  status            WithdrawStatus
+  currency          Currency       @default(BRL)
+  company_id        Int
+  company           companies      @relation(fields: [company_id], references: [id])
+  user_requester_id Int
+  user_requester    users          @relation(fields: [user_requester_id], references: [id])
+  ip                String
+  fingerprint       String
+  created_at        DateTime       @default(now())
+  updated_at        DateTime       @default(now())
+  deleted_at        DateTime?
+}
+
+enum WithdrawStatus {
+  pending
+  paid
+  refused
+}
+
+model balances {
+  id         Int       @id @default(autoincrement())
+  amount     Int
+  type       String
+  currency   Currency  @default(BRL)
+  company_id Int
+  company    companies @relation(fields: [company_id], references: [id])
+  created_at DateTime  @default(now())
+  updated_at DateTime  @default(now())
+  deleted_at DateTime?
 }
