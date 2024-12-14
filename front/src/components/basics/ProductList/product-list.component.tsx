@@ -5,7 +5,12 @@ import { Label, TextField } from "@andrevantunes/andrevds";
 import { Product, Grid } from "@/components";
 import { useState } from "react";
 
-const ProductList = ({ children, className, propertyProducts = [], ...props }: ProductListProps) => {
+const ProductList = ({
+  children,
+  className,
+  propertyProducts = [],
+  ...props
+}: ProductListProps) => {
   const cn = classNames("product-list", className);
   const [propertyProductsState, setPropertyProductsState] = useState(propertyProducts);
   const categories = categoriesFromPropertyProducts(propertyProducts);
@@ -60,7 +65,7 @@ const ProductList = ({ children, className, propertyProducts = [], ...props }: P
       </div>
 
       <Grid
-        style={{marginBottom: 60}}
+        style={{ marginBottom: 60 }}
         columns={{
           md: [1, 1, 1],
           sm: [1, 1],

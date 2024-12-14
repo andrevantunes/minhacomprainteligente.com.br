@@ -1,9 +1,4 @@
-import {
-  Controller,
-  Get,
-  HttpCode,
-  HttpStatus,
-} from '@nestjs/common';
+import { Controller, Get, HttpCode, HttpStatus } from '@nestjs/common';
 import { BalancesService } from './balances.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 

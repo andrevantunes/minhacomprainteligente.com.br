@@ -32,8 +32,8 @@ import { PropertiesModule } from './app/properties/properties.module';
 import { CartsModule } from './app/carts/carts.module';
 import { PaymentsModule } from './app/payments/payments.module';
 import { OrdersModule } from './app/orders/orders.module';
-import {WithdrawsModule} from "./app/withdraws/withdraws.module";
-import {BalancesModule} from "./app/balances/balances.module";
+import { WithdrawsModule } from './app/withdraws/withdraws.module';
+import { BalancesModule } from './app/balances/balances.module';
 
 @Module({
   imports: [

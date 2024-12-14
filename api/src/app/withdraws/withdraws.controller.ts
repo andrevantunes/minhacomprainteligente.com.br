@@ -1,12 +1,7 @@
-import {
-  Controller,
-  Get,
-  HttpCode,
-  HttpStatus,
-} from '@nestjs/common';
+import { Controller, Get, HttpCode, HttpStatus } from '@nestjs/common';
 import { WithdrawsService } from './withdraws.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import {BalancesService} from "../balances/balances.service";
+import { BalancesService } from '../balances/balances.service';
 
 @ApiBearerAuth()
 // @Roles(RoleEnum.admin)

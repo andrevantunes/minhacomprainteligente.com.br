@@ -41,8 +41,9 @@ export class PaymentsController {
     private readonly cartsService: CartsService,
   ) {}
 
-  private async recaptcha(token?: string, expectedAction = 'PAY'){
-    if (!process.env.RECAPTCHA_USER_AUTH || !process.env.RECAPTCHA_SITE_KEY) return true;
+  private async recaptcha(token?: string, expectedAction = 'PAY') {
+    if (!process.env.RECAPTCHA_USER_AUTH || !process.env.RECAPTCHA_SITE_KEY)
+      return true;
     const siteKey = process.env.RECAPTCHA_SITE_KEY;
     return fetch(
       `https://recaptchaenterprise.googleapis.com/v1/projects/minhacompraintel-1733872724443/assessments?key=${process.env.RECAPTCHA_USER_AUTH}`,
@@ -50,7 +51,9 @@ export class PaymentsController {
         method: 'POST',
         body: JSON.stringify({ event: { token, expectedAction, siteKey } }),
       },
-    ).then(async (r) => (r.status === 200)).catch((_) => false);
+    )
+      .then(async (r) => r.status === 200)
+      .catch((_) => false);
   }
 
   @Post()
