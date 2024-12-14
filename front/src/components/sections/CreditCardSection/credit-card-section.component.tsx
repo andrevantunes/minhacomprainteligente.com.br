@@ -8,6 +8,7 @@ import { postBffApi } from "@/requests";
 import Router from "next/router";
 import { notifyError } from "@/helpers/notify.helper";
 import Script from "next/script";
+import FingerprintJS from "@fingerprintjs/fingerprintjs";
 
 const CreditCardSection = ({
   children,
@@ -52,6 +53,9 @@ const CreditCardSection = ({
       return;
     }
 
+    const fp = await FingerprintJS.load();
+    const { visitorId } = await fp.get();
+
     try {
       validateRecaptcha("PAY").then(async (recaptchaToken) => {
         await postBffApi("payments", {
@@ -63,6 +67,7 @@ const CreditCardSection = ({
           hash,
           recaptchaToken,
           payment_method: "credit_card",
+          fingerprint: visitorId,
         });
         Router.push("/pagamento/sucesso?hash=" + hash);
       });

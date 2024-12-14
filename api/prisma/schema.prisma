@@ -210,6 +210,7 @@ model orders {
   discount          Int?
   amount            Int
   status            OrderStatus?
+  fingerprint       String?
   acquirer          String?
   acquirer_id       String?
   acquirer_metadata Json?
@@ -262,6 +263,7 @@ model payments {
   currency          Currency      @default(BRL)
   acquirer          String
   acquirer_id       String
+  fingerprint       String?
   acquirer_metadata Json
   order_id          Int
   order             orders        @relation(fields: [order_id], references: [id])

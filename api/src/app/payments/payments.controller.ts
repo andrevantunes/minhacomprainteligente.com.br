@@ -42,7 +42,7 @@ export class PaymentsController {
   ) {}
 
   private async recaptcha(token?: string, expectedAction = 'PAY'){
-    if(!process.env.RECAPTCHA_USER_AUTH || !process.env.RECAPTCHA_SITE_KEY) return true;
+    if (!process.env.RECAPTCHA_USER_AUTH || !process.env.RECAPTCHA_SITE_KEY) return true;
     const siteKey = process.env.RECAPTCHA_SITE_KEY;
     return fetch(
       `https://recaptchaenterprise.googleapis.com/v1/projects/minhacompraintel-1733872724443/assessments?key=${process.env.RECAPTCHA_USER_AUTH}`,
@@ -57,15 +57,29 @@ export class PaymentsController {
   async create(@Req() request: any, @Res() response) {
     // Recaptcha:
     // { "event": { "token": recaptcha_token, "expectedAction": "PAY", "siteKey": "6Ldf6pcqAAAAAC0mpeEfrhwR29jPb1Xsecc1T7rm" } }
-    const { payment_method, recaptcha_token, hash, ...createPageDto }: any = request.body;
+    const {
+      payment_method,
+      recaptcha_token,
+      hash,
+      fingerprint,
+      ...createPageDto
+    }: any = request.body;
     const valid = await this.recaptcha(recaptcha_token);
+
+    if (!valid) {
+      response.status(403);
+      response.json({ error: 'invalid recaptcha' });
+      return null;
+    }
 
     const cart = await this.cartsService.cartWithProducts({
       where: { hash: hash },
     });
     const transaction = new PagarmeTransaction();
     transaction.setCode(hash);
-    transaction.setCustomer(this.customer(createPageDto.customer));
+    transaction.setCustomer(
+      this.customer(createPageDto.customer, hash, fingerprint),
+    );
     transaction.setItemsFromCartProducts(cart.products);
 
     if (payment_method === 'credit_card') {
@@ -74,7 +88,7 @@ export class PaymentsController {
         holder_name: createPageDto.card_holder,
         expire_date: createPageDto.expire_date,
         cvv: createPageDto.cvv,
-        billing_address: null, // this.billingAddress(createPageDto.billing_address),
+        billing_address: this.billingAddress(createPageDto.billing_address),
       });
     }
     if (payment_method === 'pix') {
@@ -105,6 +119,7 @@ export class PaymentsController {
       name: acquiredOrder.customer?.name,
       document_number: acquiredOrder.customer?.document,
       status: acquiredOrder.status,
+      fingerprint,
       cart: {
         connect: {
           id: cart.id,
@@ -114,6 +129,7 @@ export class PaymentsController {
     const acquirerPayment = acquiredOrder.charges?.[0];
     if (acquirerPayment) {
       await this.paymentsService.createPayment({
+        fingerprint,
         acquirer: 'pagarme',
         acquirer_id: acquirerPayment.id,
         acquirer_metadata: {
@@ -181,18 +197,22 @@ export class PaymentsController {
     };
   }
 
-  private customer(_customer: any) {
+  private customer(
+    customer: any = {},
+    cartHash?: string,
+    fingerprint?: string,
+  ) {
     return {
-      name: 'André Antunes Vieira',
-      email: 'andre@minhacomprainteligente.com.br',
-      document: '98968911096',
+      name: customer.name ?? `Venda direta: ${cartHash} - ${fingerprint}`,
+      email: customer.email ?? `${cartHash}-${fingerprint}@mci.com.br`,
+      document: customer.document ?? '01529151090',
       type: 'individual',
       document_type: 'cpf',
       phones: {
         mobile_phone: {
-          number: '992472756',
+          number: customer.phone ?? '992472756',
           country_code: '55',
-          area_code: '51',
+          area_code: customer.phone_area ?? '51',
         },
       },
     };
