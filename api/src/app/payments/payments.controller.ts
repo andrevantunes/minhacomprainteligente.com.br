@@ -25,6 +25,7 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 // import { AuthGuard } from '@nestjs/passport';
 // import { RolesGuard } from '../roles/roles.guard';
 import PagarmeTransaction from '../../utils/pagarme';
+import { ProductsService } from '../products/products.service';
 
 @ApiBearerAuth()
 // @Roles(RoleEnum.admin)
@@ -39,6 +40,7 @@ export class PaymentsController {
     private readonly paymentsService: PaymentsService,
     private readonly ordersService: OrdersService,
     private readonly cartsService: CartsService,
+    private readonly productsService: ProductsService,
   ) {}
 
   private async recaptcha(token?: string, expectedAction = 'PAY') {
@@ -75,9 +77,22 @@ export class PaymentsController {
       return null;
     }
 
+
     const cart = await this.cartsService.cartWithProducts({
       where: { hash: hash },
     });
+
+    const validProducts =
+      await this.productsService.validateProductsFromProperty(
+        cart.products,
+        cart.property_id,
+      );
+
+    if (!validProducts) {
+      response.status(403);
+      response.json({ error: 'invalid product quantities' });
+      return null;
+    }
     const transaction = new PagarmeTransaction();
     transaction.setCode(hash);
     transaction.setCustomer(
@@ -145,6 +160,11 @@ export class PaymentsController {
           acquirerPayment.last_transaction?.status || acquirerPayment.status,
         method: acquirerPayment.payment_method,
       });
+      // TODO remover do estoque
+      void this.productsService.removeProductsFromProperty(
+        cart.products,
+        cart.property_id,
+      );
     } else {
       response.status(403);
     }
