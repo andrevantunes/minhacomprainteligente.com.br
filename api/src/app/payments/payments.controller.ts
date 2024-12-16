@@ -67,7 +67,12 @@ export class PaymentsController {
       recaptcha_token,
       hash,
       fingerprint,
-      ...createPageDto
+      customer,
+      card_number,
+      card_holder,
+      expire_date,
+      cvv,
+      billing_address
     }: any = request.body;
     const valid = await this.recaptcha(recaptcha_token);
 
@@ -95,18 +100,16 @@ export class PaymentsController {
     }
     const transaction = new PagarmeTransaction();
     transaction.setCode(hash);
-    transaction.setCustomer(
-      this.customer(createPageDto.customer, hash, fingerprint),
-    );
+    transaction.setCustomer(this.customer(customer, hash, fingerprint));
     transaction.setItemsFromCartProducts(cart.products);
 
     if (payment_method === 'credit_card') {
       transaction.setCreditCardPayment({
-        number: createPageDto.card_number,
-        holder_name: createPageDto.card_holder,
-        expire_date: createPageDto.expire_date,
-        cvv: createPageDto.cvv,
-        billing_address: this.billingAddress(createPageDto.billing_address),
+        number: card_number,
+        holder_name: card_holder,
+        expire_date: expire_date,
+        cvv: cvv,
+        billing_address: this.billingAddress(billing_address),
       });
     }
     if (payment_method === 'pix') {
@@ -232,12 +235,21 @@ export class PaymentsController {
       type: 'individual',
       document_type: 'cpf',
       phones: {
-        mobile_phone: {
-          number: customer.phone ?? '992472756',
-          country_code: '55',
-          area_code: customer.phone_area ?? '51',
-        },
+        mobile_phone: this.splitPhone(customer.phone),
       },
+    };
+  }
+
+  private splitPhone(phone){
+    const number =
+      phone.replace(/\+55/, '').replace(/(\d{2})(\d{8}|\d{9})/, '$2') ??
+      '992472756';
+    const area_code =
+      phone.replace(/\+55/, '').replace(/(\d{2})(\d{8}|\d{9})/, '$1') ?? '51';
+    return {
+      number,
+      country_code: '55',
+      area_code,
     };
   }
 
