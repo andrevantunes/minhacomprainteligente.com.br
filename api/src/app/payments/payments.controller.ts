@@ -72,7 +72,7 @@ export class PaymentsController {
       card_holder,
       expire_date,
       cvv,
-      billing_address
+      billing_address,
     }: any = request.body;
     const valid = await this.recaptcha(recaptcha_token);
 
@@ -81,7 +81,6 @@ export class PaymentsController {
       response.json({ error: 'invalid recaptcha' });
       return null;
     }
-
 
     const cart = await this.cartsService.cartWithProducts({
       where: { hash: hash },
@@ -240,7 +239,7 @@ export class PaymentsController {
     };
   }
 
-  private splitPhone(phone){
+  private splitPhone(phone) {
     const number =
       phone.replace(/\+55/, '').replace(/(\d{2})(\d{8}|\d{9})/, '$2') ??
       '992472756';

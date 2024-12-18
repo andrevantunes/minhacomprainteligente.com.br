@@ -3,6 +3,21 @@
   gap: 16px;
   flex-direction: column;
   justify-content: center;
+  &__container{
+    display: flex;
+    gap: 16px;
+    flex-direction: column;
+    justify-content: center;
+
+    @media (min-width: 768px) {
+      flex-direction: row;
+    }
+  }
+  &__content{
+    &:not(.active) {
+      display: none;
+    }
+  }
   &__form {
     gap: 16px;
     display: flex;
@@ -48,10 +63,7 @@
   }
 
   @media (min-width: 768px){
-    flex-direction: row;
     &__form {
-      margin-left: 16px;
-
       &__expire-cvv {
         flex-direction: row;
       }

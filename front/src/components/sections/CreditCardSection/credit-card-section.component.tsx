@@ -1,7 +1,7 @@
 import type { CreditCardSectionProps } from "./credit-card-section.types";
 
 import classNames from "classnames";
-import { Button, Card, CreditCard, TextField } from "@andrevantunes/andrevds";
+import { Button, Card, CreditCard, Stepper, TextField } from "@andrevantunes/andrevds";
 import { useState } from "react";
 import { toBrCurrency } from "@/helpers/currency.helper";
 import { postBffApi } from "@/requests";
@@ -25,35 +25,87 @@ const CreditCardSection = ({
   const [expireDate, setExpireDate] = useState("");
   const [cvv, setCvv] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [customer, setCustomer] = useState({});
+  const [customer, setCustomer] = useState({} as any);
+  const [step, setStep] = useState(1);
+  const [stepOneValid, setStepOneValid] = useState(false);
+  const [stepTwoValid, setStepTwoValid] = useState(false);
+  const [stepThreeValid, setStepThreeValid] = useState(false);
+  const [billingAddress, setBillingAddress] = useState({} as any);
 
   const handleChangeCardHolder = (event: any) => {
     const cardHolder = event.target.value;
     setCardHolder(cardHolder);
+    setStepTwoValid(cardHolder && cardNumber && cvv && expireDate);
   };
   const handleChangeCardNumber = (event: any) => {
     const cardNumber = event.target.value;
     if (cardNumber.length > 4) setIconName("mastercard"); //TODO coletar bandeira correta
     setCardNumber(cardNumber);
+    setStepTwoValid(cardHolder && cardNumber && cvv && expireDate);
   };
   const handleChangeCvv = (event: any) => {
-    setCvv(event.target.value);
+    const cvv = event.target.value;
+    setCvv(cvv);
+    setStepTwoValid(cardHolder && cardNumber && cvv && expireDate);
   };
   const handleChangeExpireDate = (event: any) => {
-    setExpireDate(event.target.value);
+    const expireDate = event.target.value;
+    setExpireDate(expireDate);
+    setStepTwoValid(cardHolder && cardNumber && cvv && expireDate);
   };
 
   const handleChangeCustomerName = (event: any) => {
-    setCustomer({ ...customer, name: event.target.value });
+    const newCustomer = { ...customer, name: event.target.value };
+    setCustomer(newCustomer);
+    setStepOneValid(
+      newCustomer.name && newCustomer.document && (newCustomer.email || newCustomer.phone)
+    );
   };
   const handleChangeCustomerDocument = (event: any) => {
-    setCustomer({ ...customer, document: event.target.value });
+    const newCustomer = { ...customer, document: event.target.value };
+    setCustomer(newCustomer);
+    setStepOneValid(
+      newCustomer.name && newCustomer.document && (newCustomer.email || newCustomer.phone)
+    );
   };
   const handleChangeCustomerEmail = (event: any) => {
-    setCustomer({ ...customer, email: event.target.value });
+    const newCustomer = { ...customer, email: event.target.value };
+    setCustomer(newCustomer);
+    setStepOneValid(
+      newCustomer.name && newCustomer.document && (newCustomer.email || newCustomer.phone)
+    );
   };
   const handleChangeCustomerPhone = (event: any) => {
-    setCustomer({ ...customer, phone: event.target.value });
+    const newCustomer = { ...customer, phone: event.target.value };
+    setCustomer(newCustomer);
+    setStepOneValid(
+      newCustomer.name && newCustomer.document && (newCustomer.email || newCustomer.phone)
+    );
+  };
+
+  const handleChangeAddressStreet = (event: any) => {
+    const street = event.target.value;
+    const address = { ...billingAddress, street };
+    setBillingAddress(address);
+    setStepThreeValid(address.street && address.number && address.zipCode && address.state);
+  };
+  const handleChangeAddressNumber = (event: any) => {
+    const number = event.target.value;
+    const address = { ...billingAddress, number };
+    setBillingAddress(address);
+    setStepThreeValid(address.street && address.number && address.zipCode && address.state);
+  };
+  const handleChangeAddressZipCode = (event: any) => {
+    const zipCode = event.target.value;
+    const address = { ...billingAddress, zipCode };
+    setBillingAddress(address);
+    setStepThreeValid(address.street && address.number && address.zipCode && address.state);
+  };
+  const handleChangeAddressState = (event: any) => {
+    const state = event.target.value;
+    const address = { ...billingAddress, state };
+    setBillingAddress(address);
+    setStepThreeValid(address.street && address.number && address.zipCode && address.state);
   };
 
   const handleSubmitPayment = async (event: any) => {
@@ -103,79 +155,133 @@ const CreditCardSection = ({
         <strong>{toBrCurrency(totalPrice)}</strong>
       </Card>
       <Card elevation="md" className={cn} {...props}>
-        <div className="credit-card-section__credit_card_container">
-          <CreditCard
-            style={{ maxWidth: 360 }}
-            iconName={iconName}
-            cardHolder={cardHolder}
-            cardNumber={cardNumber}
+        <form action="#">
+          <Stepper
+            position={step}
+            steps={["Identificação", "Pagamento", "Nota"]}
+            onStepClick={(a) => console.log(a)}
           />
-        </div>
-
-        <form action="#" className="credit-card-section__form block">
-          <div className="credit-card-section__form__block1">
-            <h2>Dados do cartão:</h2>
-            <TextField
-              label="Número impresso no cartão *"
-              name="credit_card_number"
-              mask="9999 9999 9999 9999"
-              onChange={handleChangeCardNumber}
-            />
-            <TextField
-              label="Nome impresso no cartão *"
-              onChange={handleChangeCardHolder}
-              name="credit_card_holder"
-            />
-            <div className="credit-card-section__form__expire-cvv">
-              <div className="credit-card-section__form__expire-cvv__expire">
-                <span>
-                  Validade<sup>*</sup>
-                </span>
-                <TextField
-                  mask="99/9999"
-                  label="dd/aaaa"
-                  style={{ width: 100 }}
-                  name="credit_card_expire_date"
-                  onChange={handleChangeExpireDate}
-                />
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  width: 140,
-                  alignItems: "center",
-                  gap: 16,
-                  justifyContent: "space-between",
-                }}
-              >
-                <span>
-                  CVV<sup>*</sup>
-                </span>
-                <TextField
-                  label="XXX"
-                  style={{ width: 46 }}
-                  onChange={handleChangeCvv}
-                  name="credit_card_cvv"
-                />
-              </div>
-            </div>
-          </div>
-          <div className="credit-card-section__form__block2">
-            <h2>Dados para emissão da nota:</h2>
-            <TextField label="Seu nome completo" onChange={handleChangeCustomerName} name="name" />
-            <TextField label="Seu CPF" onChange={handleChangeCustomerDocument} name="document" />
-            <TextField label="Seu email" onChange={handleChangeCustomerEmail} name="email" />
-            <TextField label="Seu telefone" onChange={handleChangeCustomerPhone} name="phone" />
-          </div>
-          <div>
-            <Button
-              onClick={handleSubmitPayment}
-              disabled={isSubmitting}
-              loading={isSubmitting}
-              className="flex flex-row"
+          <div className="credit-card-section__container">
+            <div
+              className={classNames("credit-card-section__content gap-1x flex flex-column", {
+                active: step == 1,
+              })}
+              style={{ minWidth: 320 }}
             >
-              {isSubmitting ? "Processando..." : "Concluir compra"}
-            </Button>
+              <h2>Identificação:</h2>
+              <TextField
+                label="Seu nome completo"
+                onChange={handleChangeCustomerName}
+                name="name"
+              />
+              <TextField
+                label="Seu CPF"
+                onChange={handleChangeCustomerDocument}
+                mask="999.999.999-99"
+                name="document"
+              />
+              <TextField label="Seu email" onChange={handleChangeCustomerEmail} name="email" />
+              <TextField
+                label="Seu telefone"
+                onChange={handleChangeCustomerPhone}
+                mask="(99) 99999-9999"
+                name="phone"
+              />
+              <Button onClick={() => setStep(2)} disabled={!stepOneValid} className="flex flex-row">
+                Continuar
+              </Button>
+            </div>
+            <div
+              className={classNames("credit-card-section__content gap-1x flex flex-column", {
+                active: step == 2,
+              })}
+              style={{ minWidth: 320 }}
+            >
+              <div className="credit-card-section__form">
+                <div className="credit-card-section__credit_card_container">
+                  <CreditCard
+                    style={{ maxWidth: 360 }}
+                    iconName={iconName}
+                    cardHolder={cardHolder}
+                    cardNumber={cardNumber}
+                  />
+                </div>
+
+                <div className="credit-card-section__form__block1">
+                  <h2>Dados do cartão:</h2>
+                  <TextField
+                    label="Número impresso no cartão *"
+                    name="credit_card_number"
+                    mask="9999 9999 9999 9999"
+                    onChange={handleChangeCardNumber}
+                  />
+                  <TextField
+                    label="Nome impresso no cartão *"
+                    onChange={handleChangeCardHolder}
+                    name="credit_card_holder"
+                  />
+                  <div className="credit-card-section__form__expire-cvv">
+                    <div className="credit-card-section__form__expire-cvv__expire">
+                      <span>
+                        Validade<sup>*</sup>
+                      </span>
+                      <TextField
+                        mask="99/9999"
+                        label="dd/aaaa"
+                        style={{ width: 100 }}
+                        name="credit_card_expire_date"
+                        onChange={handleChangeExpireDate}
+                      />
+                    </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        width: 140,
+                        alignItems: "center",
+                        gap: 16,
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <span>
+                        CVV<sup>*</sup>
+                      </span>
+                      <TextField
+                        label="XXX"
+                        style={{ width: 46 }}
+                        onChange={handleChangeCvv}
+                        name="credit_card_cvv"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <Button onClick={() => setStep(3)} disabled={!stepTwoValid} className="flex flex-row">
+                Continuar
+              </Button>
+            </div>
+
+            <div
+              className={classNames("credit-card-section__content gap-1x flex flex-column", {
+                active: step == 3,
+              })}
+              style={{ minWidth: 320 }}
+            >
+              <h2>Dados para nota fiscal:</h2>
+              <TextField label="CEP" onChange={handleChangeAddressZipCode} name="zip_code" />
+              <TextField label="Rua" onChange={handleChangeAddressStreet} name="line_1_2" />
+              <TextField label="Número" onChange={handleChangeAddressNumber} name="line_1_1" />
+              <TextField label="Estado" onChange={handleChangeAddressState} name="state" />
+              {/*<TextField label="País" onChange={handleChangeAddressCountry} name="country"/>*/}
+
+              <Button
+                onClick={handleSubmitPayment}
+                disabled={isSubmitting || !stepThreeValid}
+                loading={isSubmitting}
+                className="flex flex-row"
+              >
+                {isSubmitting ? "Processando..." : "Concluir compra"}
+              </Button>
+            </div>
           </div>
         </form>
       </Card>

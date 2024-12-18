@@ -67,13 +67,13 @@ export class ProductsService {
     });
   }
 
-  async removeProductsFromProperty(products, propertyId){
-    console.log('Remover', {products, propertyId})
-    return {products, propertyId}
+  async removeProductsFromProperty(products, propertyId) {
+    console.log('Remover', { products, propertyId });
+    return { products, propertyId };
   }
 
-  async validateProductsFromProperty(products, propertyId){
-    console.log('Validate', {products, propertyId})
-    return {products, propertyId}
+  async validateProductsFromProperty(products, propertyId) {
+    console.log('Validate', { products, propertyId });
+    return { products, propertyId };
   }
 }
