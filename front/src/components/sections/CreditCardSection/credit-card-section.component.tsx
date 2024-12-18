@@ -87,25 +87,41 @@ const CreditCardSection = ({
     const street = event.target.value;
     const address = { ...billingAddress, street };
     setBillingAddress(address);
-    setStepThreeValid(address.street && address.number && address.zipCode && address.state);
+    setStepThreeValid(
+      address.street && address.number && address.zipCode && address.state && address.city
+    );
   };
   const handleChangeAddressNumber = (event: any) => {
     const number = event.target.value;
     const address = { ...billingAddress, number };
     setBillingAddress(address);
-    setStepThreeValid(address.street && address.number && address.zipCode && address.state);
+    setStepThreeValid(
+      address.street && address.number && address.zipCode && address.state && address.city
+    );
   };
   const handleChangeAddressZipCode = (event: any) => {
     const zipCode = event.target.value;
     const address = { ...billingAddress, zipCode };
     setBillingAddress(address);
-    setStepThreeValid(address.street && address.number && address.zipCode && address.state);
+    setStepThreeValid(
+      address.street && address.number && address.zipCode && address.state && address.city
+    );
   };
   const handleChangeAddressState = (event: any) => {
     const state = event.target.value;
     const address = { ...billingAddress, state };
     setBillingAddress(address);
-    setStepThreeValid(address.street && address.number && address.zipCode && address.state);
+    setStepThreeValid(
+      address.street && address.number && address.zipCode && address.state && address.city
+    );
+  };
+  const handleChangeAddressCity = (event: any) => {
+    const city = event.target.value;
+    const address = { ...billingAddress, city };
+    setBillingAddress(address);
+    setStepThreeValid(
+      address.street && address.number && address.zipCode && address.state && address.city
+    );
   };
 
   const handleSubmitPayment = async (event: any) => {
@@ -133,6 +149,7 @@ const CreditCardSection = ({
           hash,
           customer,
           recaptchaToken,
+          billingAddress,
           payment_method: "credit_card",
           fingerprint: visitorId,
         });
@@ -266,8 +283,13 @@ const CreditCardSection = ({
               <TextField label="CEP" onChange={handleChangeAddressZipCode} name="zip_code" />
               <TextField label="Rua" onChange={handleChangeAddressStreet} name="line_1_2" />
               <TextField label="Número" onChange={handleChangeAddressNumber} name="line_1_1" />
-              <TextField label="Estado" onChange={handleChangeAddressState} name="state" />
-              {/*<TextField label="País" onChange={handleChangeAddressCountry} name="country"/>*/}
+              <TextField
+                label="Estado"
+                onChange={handleChangeAddressState}
+                mask="AA"
+                name="state"
+              />
+              <TextField label="Cidade" onChange={handleChangeAddressCity} name="city" />
 
               <Button
                 onClick={handleSubmitPayment}

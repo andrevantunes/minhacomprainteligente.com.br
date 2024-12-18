@@ -211,14 +211,21 @@ export class PaymentsController {
   // remove(@Param('path') path: string) {
   //   return this.propertiesService.deletePage({ path });
   // }
-  private billingAddress(_address: any) {
+  private billingAddress({
+    number,
+    street,
+    zip_code,
+    city,
+    state,
+    country = 'BR',
+  }: any) {
+    const line_1 = `${number}, ${street}`;
     return {
-      line_1: '545, Avenida Veiga, Aparício Borges',
-      line_2: '',
-      zip_code: '91510120',
-      city: 'Porto Alegre',
-      state: 'RS',
-      country: 'BR',
+      line_1,
+      zip_code: zip_code.replace(/\D/, ''),
+      city,
+      state,
+      country,
     };
   }
 
@@ -230,7 +237,9 @@ export class PaymentsController {
     return {
       name: customer.name ?? `Venda direta: ${cartHash} - ${fingerprint}`,
       email: customer.email ?? `${cartHash}-${fingerprint}@mci.com.br`,
-      document: customer.document ?? '01529151090',
+      document: customer.document
+        ? customer.document.replace(/\D/g, '')
+        : '01529151090',
       type: 'individual',
       document_type: 'cpf',
       phones: {
@@ -241,10 +250,10 @@ export class PaymentsController {
 
   private splitPhone(phone) {
     const number =
-      phone.replace(/\+55/, '').replace(/(\d{2})(\d{8}|\d{9})/, '$2') ??
+      phone.replace(/\D/g, '').replace(/^\+55/, '').replace(/(\d{2})(\d{8}|\d{9})/, '$2') ??
       '992472756';
     const area_code =
-      phone.replace(/\+55/, '').replace(/(\d{2})(\d{8}|\d{9})/, '$1') ?? '51';
+      phone.replace(/\D/g, '').replace(/^\+55/, '').replace(/(\d{2})(\d{8}|\d{9})/, '$1') ?? '51';
     return {
       number,
       country_code: '55',
