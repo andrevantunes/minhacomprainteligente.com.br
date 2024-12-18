@@ -179,7 +179,6 @@ const CreditCardSection = ({
               className={classNames("credit-card-section__content gap-1x flex flex-column", {
                 active: step == 1,
               })}
-              style={{ minWidth: 320 }}
             >
               <h2>Identificação:</h2>
               <TextField
@@ -208,7 +207,6 @@ const CreditCardSection = ({
               className={classNames("credit-card-section__content gap-1x flex flex-column", {
                 active: step == 2,
               })}
-              style={{ minWidth: 320 }}
             >
               <div className="credit-card-section__form">
                 <div className="credit-card-section__credit_card_container">
@@ -277,7 +275,6 @@ const CreditCardSection = ({
               className={classNames("credit-card-section__content gap-1x flex flex-column", {
                 active: step == 3,
               })}
-              style={{ minWidth: 320 }}
             >
               <h2>Dados para nota fiscal:</h2>
               <TextField label="CEP" onChange={handleChangeAddressZipCode} name="zip_code" />

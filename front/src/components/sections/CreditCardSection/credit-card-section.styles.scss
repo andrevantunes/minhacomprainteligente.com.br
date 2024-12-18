@@ -14,8 +14,13 @@
     }
   }
   &__content{
+    align-items: center;
     &:not(.active) {
       display: none;
+    }
+
+    @media (min-width: 768px) {
+      min-width: 400px;
     }
   }
   &__form {
