@@ -156,11 +156,7 @@ const CreditCardSection = ({
       </Card>
       <Card elevation="md" className={cn} {...props}>
         <form action="#">
-          <Stepper
-            position={step}
-            steps={["Identificação", "Pagamento", "Nota"]}
-            onStepClick={(a) => console.log(a)}
-          />
+          <Stepper position={step} steps={["Identificação", "Pagamento", "Nota"]} />
           <div className="credit-card-section__container">
             <div
               className={classNames("credit-card-section__content gap-1x flex flex-column", {
