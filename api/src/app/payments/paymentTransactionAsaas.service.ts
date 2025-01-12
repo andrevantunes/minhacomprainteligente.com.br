@@ -62,7 +62,7 @@ export class PaymentTransactionAsaasService {
     billing_address: any;
   }) {
     this.options.method = 'POST';
-    this.options.uri = `${this.BASE_URL}payments`;
+    this.options.uri = `${this.BASE_URL}v3/payments`;
     this.options.json.billingType = 'CREDIT_CARD';
     this._method = 'credit_card';
     if (expire_date && (!exp_month || !exp_year)) {
@@ -83,8 +83,8 @@ export class PaymentTransactionAsaasService {
   setPixPayment(_expires_in = 60 * 60 * 24) {
     this.options.method = 'POST';
     this._method = 'pix';
-    this.options.json.addressKey = '8be74c86-0acc-4f05-831b-bbe2e63b2e51';
-    this.options.uri = `${this.BASE_URL}pix/qrCodes/static`;
+    this.options.json.addressKey = process.env.ASAAS_PIX_KEY;
+    this.options.uri = `${this.BASE_URL}v3/pix/qrCodes/static`;
     this.options.format = 'ALL';
     this.options.json.format = 'ALL';
     this.options.json.description = this.codeMessage;
