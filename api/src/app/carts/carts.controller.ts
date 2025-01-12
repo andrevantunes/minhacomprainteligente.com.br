@@ -11,6 +11,7 @@ import { CartsService } from './carts.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { PaymentsService } from '../payments/payments.service';
 import { OrdersService } from '../orders/orders.service';
+import { PaymentTransactionAsaasService } from '../payments/paymentTransactionAsaas.service';
 
 @ApiBearerAuth()
 // @Roles(RoleEnum.admin)
@@ -33,16 +34,6 @@ export class CartsController {
     return this.cartsService.createCart(createPageDto);
   }
 
-  // @SerializeOptions({
-  //   groups: ['admin'],
-  // })
-  // @Get()
-  // @HttpCode(HttpStatus.OK)
-  // async findAll() {
-  //   const properties = await this.propertiesService.properties({ include: { address: true } });
-  //   return { properties, test: 'Abc123' };
-  // }
-  //
   @Get('/payment/:hash(*)')
   async findCartPayment(@Param('hash') hash: string) {
     const cart = await this.cartsService.cart({ where: { hash: hash } });
@@ -50,12 +41,18 @@ export class CartsController {
       where: { cart_id: cart.id },
       orderBy: { id: 'desc' },
     });
-    // order.acquirer_id
     const acquirerOrder: any = {};
     if (order?.acquirer_id && order.status !== 'paid') {
       if (order.acquirer === 'asaas') {
-        // const acquirer = new PaymentTransactionAsaasService()
-        // console.log(await acquirer.find(order.acquirer_id))
+        const acquirer = new PaymentTransactionAsaasService();
+        const aquirerOrder = await acquirer.findPayment(order.acquirer_id);
+        if (['RECEIVED', 'PAID'].includes(aquirerOrder?.status)) {
+          order.status = 'paid';
+          await this.ordersService.updateOrder(
+            { id: order.id },
+            { updated_at: new Date(), status: 'paid' },
+          );
+        }
       }
       if (order.acquirer === 'pagarme') {
       }
@@ -91,12 +88,4 @@ export class CartsController {
       data: updatePageDto,
     });
   }
-
-  // @SerializeOptions({
-  //   groups: ['admin'],
-  // })
-  // @Delete('/:path(*)')
-  // remove(@Param('path') path: string) {
-  //   return this.propertiesService.deletePage({ path });
-  // }
 }

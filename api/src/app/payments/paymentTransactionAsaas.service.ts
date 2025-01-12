@@ -19,20 +19,24 @@ export class PaymentTransactionAsaasService {
     };
   }
   setItemsFromCartProducts(products: any[]) {
-    this.options.json.description = `${this.codeMessage}Compra de produtos realizada no AirBnB:\n`;
+    this.options.description = `${this.codeMessage}Compra de produtos realizada no AirBnB:\n`;
     this._valueInCents = 0;
     products.forEach((product: any) => {
-      this.options.json.description += `- ${product.quantity} x ${toBrCurrency(
+      this.options.description += `- ${product.quantity} x ${toBrCurrency(
         product.unity_price,
       )} - ${product.name}\n`;
       this._valueInCents += product.quantity * product.unity_price;
     });
 
-    this.options.json.value = this._valueInCents / 100;
+    this.options.value = this._valueInCents / 100;
+  }
+
+  async findPayment(id: string): Promise<any> {
+    return this.request(`v3/payments/${id}`, 'GET');
   }
   setCode(code) {
     this.code = code;
-    this.options.json.externalReference = code;
+    this.options.externalReference = code;
   }
 
   get codeMessage() {
@@ -40,24 +44,11 @@ export class PaymentTransactionAsaasService {
     return `(#${this.code}) `;
   }
   async setCustomer(customer: any) {
-    console.log('customer', customer);
-    if (!customer) {
-      this.options.json.customer = 'cus_000006408014'; // TODO: tratar isso
-      return null;
-    }
-    const options = {
-      headers: this.headers,
-      method: 'POST',
-      uri: `${this.BASE_URL}v3/customers`,
-      json: { name: customer.name, cpfCnpj: customer.document },
-    };
-    return new Promise((resolve, reject) => {
-      request(options, (error: any, _response: any, body: any) => {
-        if (error) return reject(error);
-        console.log('customer result', body);
-        this.options.json.customer = body.id;
-        resolve(body);
-      });
+    return this.request('v3/customers', 'POST', {
+      name: customer.name,
+      cpfCnpj: customer.document,
+    }).then((result: any) => {
+      this.options.customer = result.id;
     });
   }
   setCreditCardPayment({
@@ -76,17 +67,15 @@ export class PaymentTransactionAsaasService {
     cvv: number | string;
     billing_address: any;
   }) {
-    this.options.method = 'POST';
-    this.options.uri = `${this.BASE_URL}v3/payments`;
-    this.options.json.billingType = 'CREDIT_CARD';
+    this.options.billingType = 'CREDIT_CARD';
     this._billingType = 'credit_card';
     if (expire_date && (!exp_month || !exp_year)) {
       exp_month = expire_date.split('/')[0];
       exp_year = expire_date.split('/')[1];
     }
-    this.options.json.dueDate = new Date().toISOString().split('T')[0];
-    this.options.json.postalService = false;
-    this.options.json.creditCard = {
+    this.options.dueDate = new Date().toISOString().split('T')[0];
+    this.options.postalService = false;
+    this.options.creditCard = {
       holderName: holder_name,
       number: number,
       expiryMonth: exp_month,
@@ -96,14 +85,12 @@ export class PaymentTransactionAsaasService {
   }
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setPixPayment(_expires_in = 60 * 60 * 24) {
-    this.options.method = 'POST';
     this._billingType = 'pix';
-    this.options.uri = `${this.BASE_URL}v3/payments`;
-    this.options.json.dueDate = new Date().toISOString().split('T')[0];
-    this.options.json.billingType = 'PIX';
-    this.options.json.format = 'ALL';
-    this.options.json.description = this.codeMessage;
-    this.options.json.allowsMultiplePayments = false;
+    this.options.dueDate = new Date().toISOString().split('T')[0];
+    this.options.billingType = 'PIX';
+    this.options.format = 'ALL';
+    this.options.description = this.codeMessage;
+    this.options.allowsMultiplePayments = false;
   }
 
   get paymentResult() {
@@ -119,41 +106,20 @@ export class PaymentTransactionAsaasService {
     };
   }
   async executeTransaction() {
-    return new Promise(async (resolve, reject) => {
-      request(this.options, (error: any, _response: any, body: any) => {
-        if (error) return reject(error);
-        void this.getPixInfo(body.id).then((pixInfo) => {
+    return this.request(`v3/payments`, 'POST', this.options).then(
+      (body: any) => {
+        console.log('executeTransaction', body);
+        return this.getPixInfo(body.id).then((pixInfo) => {
           this._paymentResult = { ...body, ...pixInfo };
-          return resolve(this._paymentResult);
+          return this._paymentResult;
         });
-      });
-    });
+      },
+    );
   }
 
   async getPixInfo(id: string): Promise<any> {
     if (this._billingType != 'pix') return {};
-
-    return new Promise(async (resolve, reject) => {
-      const options = {
-        headers: this.headers,
-        method: 'GET',
-        uri: `${this.BASE_URL}v3/payments/${id}/pixQrCode`,
-      };
-
-      request(options, (error: any, _response: any, body: any) => {
-        if (error) return reject(error);
-        if (typeof body === 'string') {
-          try {
-            console.log('json', body);
-            return resolve(JSON.parse(body));
-          } catch (e) {
-            console.log(body);
-            return resolve(body);
-          }
-        }
-        return resolve(body);
-      });
-    });
+    return this.request(`v3/payments/${id}/pixQrCode`, 'GET');
   }
 
   private get headers() {
@@ -163,5 +129,24 @@ export class PaymentTransactionAsaasService {
       'User-Agent': 'insomnia/10.2.0',
       'Content-Type': 'application/json',
     };
+  }
+
+  private async request(route: string, method: string, json?: any) {
+    const uri = `${this.BASE_URL}${route}`;
+    const options = { headers: this.headers, method, uri, json };
+    console.log('request', options);
+    return new Promise(async (resolve, reject) => {
+      request(options, (error: any, _response: any, body: any) => {
+        if (error) return reject(error);
+        if (typeof body !== 'string') return resolve(body);
+        try {
+          console.log('json', body);
+          return resolve(JSON.parse(body));
+        } catch (e) {
+          console.log(body);
+          return resolve(body);
+        }
+      });
+    });
   }
 }
