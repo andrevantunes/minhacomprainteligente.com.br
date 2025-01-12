@@ -75,16 +75,14 @@ export class PaymentsController {
     );
     this.paymentTransaction.setItemsFromCartProducts(cart.products);
 
-    console.log('h2');
     if (payment_method === 'credit_card') {
       this.paymentTransaction.setCreditCardPayment({
         number: card_number,
         holder_name: card_holder,
         expire_date: expire_date,
         cvv: cvv,
-        billing_address: this.billingAddress(billing_address),
+        billing_address: this.billingAddress(billing_address ?? {}),
       });
-      console.log('h3');
     }
     if (payment_method === 'pix') {
       this.paymentTransaction.setPixPayment();
@@ -93,7 +91,6 @@ export class PaymentsController {
       //   return undefined;
       // }
     }
-    console.log('h4');
     const acquiredOrder = await this.paymentTransaction
       .executeTransaction()
       .then((acquiredResponse: any) => {
