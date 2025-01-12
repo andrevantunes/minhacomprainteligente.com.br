@@ -130,7 +130,15 @@ export class PaymentTransactionAsaasService {
 
       request(options, (error: any, _response: any, body: any) => {
         if (error) return reject(error);
-        if (typeof body === 'string') return resolve(JSON.parse(body));
+        if (typeof body === 'string') {
+          try {
+            return resolve(JSON.parse(body));
+          } catch (e) {
+            console.log('json error', e);
+            console.log(body);
+            return resolve(body);
+          }
+        }
         return resolve(body);
       });
     });
