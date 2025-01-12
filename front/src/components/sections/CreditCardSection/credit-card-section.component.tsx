@@ -9,7 +9,7 @@ import Router from "next/router";
 import { notifyError } from "@/helpers/notify.helper";
 import Script from "next/script";
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
-import {validateRecaptcha} from "@/helpers/recaptcha.helper";
+import { validateRecaptcha } from "@/helpers/recaptcha.helper";
 
 const CreditCardSection = ({
   children,
