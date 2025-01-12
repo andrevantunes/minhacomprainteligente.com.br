@@ -39,8 +39,11 @@ export class PaymentTransactionAsaasService {
     if (!this.code) return '';
     return `(#${this.code}) `;
   }
-  async setCustomer(customer?: string) {
-    this.options.json.customer = customer ?? 'cus_000006408014'; // TODO: tratar isso
+  async setCustomer(customer: any) {
+    if (customer) {
+      //TODO find_customer_id from customer
+    }
+    this.options.json.customer = 'cus_000006408014'; // TODO: tratar isso
   }
   setCreditCardPayment({
     number,
