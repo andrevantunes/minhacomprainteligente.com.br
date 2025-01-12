@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 import { toBrCurrency } from "@/helpers/currency.helper";
 import { getBffApi, postBffApi } from "@/requests";
 import { notifySuccess } from "@/helpers/notify.helper";
+import { validateRecaptcha } from "@/helpers/recaptcha.helper";
+import Script from "next/script";
 
 let a = 0;
 const PixSection = ({
@@ -23,20 +25,21 @@ const PixSection = ({
   const [qrUrl, setQrUrl] = useState("");
 
   useEffect(() => {
-    if (a < 1) a++;
+    if (a < 1) a++; // TODO: resolver isso
     else createPix();
   }, []);
 
   const createPix = async () => {
     setIsCreatingTransaction(true);
 
-    const response = await postBffApi("payments", {
-      totalPrice,
-      hash,
-      payment_method: "pix",
+    const response = await validateRecaptcha("PAY").then(async (recaptchaToken) => {
+      return postBffApi("payments", {
+        totalPrice,
+        hash,
+        recaptchaToken,
+        payment_method: "pix",
+      });
     });
-
-    console.log(response);
 
     setQrCode(response?.qrCode);
     setQrUrl(response?.qrImage);
@@ -55,6 +58,9 @@ const PixSection = ({
 
   return (
     <>
+      <Script
+        src={`https://www.google.com/recaptcha/enterprise.js?render=${process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}`}
+      />
       <Card elevation="md" className="text-center">
         <span>Valor a ser pago:</span>
         <strong>{toBrCurrency(totalPrice)}</strong>

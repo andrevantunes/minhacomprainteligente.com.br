@@ -9,6 +9,7 @@ import Router from "next/router";
 import { notifyError } from "@/helpers/notify.helper";
 import Script from "next/script";
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
+import {validateRecaptcha} from "@/helpers/recaptcha.helper";
 
 const CreditCardSection = ({
   children,
@@ -234,20 +235,5 @@ const CreditCardSection = ({
     </>
   );
 };
-
-function validateRecaptcha(action = "PAY") {
-  return new Promise((resolve, _reject) => {
-    if (!process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY) return resolve("");
-    // @ts-ignore
-    grecaptcha.enterprise.ready(async () => {
-      // @ts-ignore
-      const recaptchaToken = await grecaptcha.enterprise.execute(
-        process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY,
-        { action }
-      );
-      resolve(recaptchaToken);
-    });
-  });
-}
 
 export default CreditCardSection;

@@ -219,7 +219,7 @@ export class PaymentsController {
     city,
     state,
     country = 'BR',
-  }: any) {
+  }: any = {}) {
     if (!zip_code) return null;
     const line_1 = `${number}, ${street}`;
     return {
