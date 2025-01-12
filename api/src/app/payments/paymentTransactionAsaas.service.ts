@@ -6,7 +6,7 @@ import { toBrCurrency } from '../../utils/currency-helper';
 export class PaymentTransactionAsaasService {
   ACCESSS_TOKEN = process.env.ASAAS_ACCESS_TOKEN;
   ACQUIRED = 'asaas';
-  BASE_URL = 'https://sandbox.asaas.com/api/v3/';
+  BASE_URL = process.env.ASAAS_BASE_URL;
   options: any = {};
   code?: string;
   _paymentResult: any;
