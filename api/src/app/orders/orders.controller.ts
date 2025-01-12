@@ -1,28 +1,6 @@
-import {
-  Controller,
-  Get,
-  Post,
-  // Body,
-  // Put,
-  // Param,
-  // Delete,
-  // UseGuards,
-  // SerializeOptions,
-  HttpCode,
-  HttpStatus,
-  // Logger,
-  Req,
-  Res,
-} from '@nestjs/common';
+import { Controller, Get, HttpCode, HttpStatus } from '@nestjs/common';
 import { OrdersService } from './orders.service';
-// import { CreatePageDto } from './dto/create-page.dto';
-// import { UpdatePageDto } from './dto/update-page.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-// import { Roles } from '../roles/roles.decorator';
-// import { RoleEnum } from '../roles/roles.enum';
-// import { AuthGuard } from '@nestjs/passport';
-// import { RolesGuard } from '../roles/roles.guard';
-import PagarmeTransaction from '../../utils/pagarme';
 
 @ApiBearerAuth()
 // @Roles(RoleEnum.admin)

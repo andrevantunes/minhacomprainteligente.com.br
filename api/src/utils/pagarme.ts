@@ -108,6 +108,10 @@ export default class PagarmeTransaction {
     });
   }
 
+  get paymentResult() {
+    return {};
+  }
+
   private get headers() {
     return {
       Authorization: this.AUTH_HEADER,

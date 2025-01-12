@@ -2,7 +2,7 @@ import type { PixSectionProps } from "./pix-section.types";
 import copy from "copy-to-clipboard";
 
 import classNames from "classnames";
-import { Button, Card, Loader, Image, ItemElement } from "@andrevantunes/andrevds";
+import { Button, Card, Loader, ItemElement } from "@andrevantunes/andrevds";
 import { useEffect, useState } from "react";
 import { toBrCurrency } from "@/helpers/currency.helper";
 import { getBffApi, postBffApi } from "@/requests";
@@ -38,8 +38,8 @@ const PixSection = ({
 
     console.log(response);
 
-    setQrCode(response?.charges?.[0].last_transaction?.qr_code);
-    setQrUrl(response?.charges?.[0].last_transaction?.qr_code_url);
+    setQrCode(response?.qrCode);
+    setQrUrl(response?.qrImage);
 
     setIsCreatingTransaction(false);
   };
@@ -62,7 +62,7 @@ const PixSection = ({
       <Card elevation="md" className={cn} {...props}>
         <p>{subTitle}</p>
         {isCreatingTransaction && <Loader />}
-        {!isCreatingTransaction && qrUrl && <Image src={qrUrl} alt="QR Code" />}
+        {!isCreatingTransaction && qrUrl && <img src={qrUrl} alt="QR Code" />}
 
         <ItemElement onClick={handleCopy}>{qrCode}</ItemElement>
 

@@ -40,7 +40,10 @@ export class AuthService {
     private prisma: PrismaService,
   ) {}
 
-  async validateLogin(loginDto: AuthEmailLoginDto): Promise<LoginResponseType> {
+  async validateLogin(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _loginDto: AuthEmailLoginDto,
+  ): Promise<LoginResponseType> {
     throw new HttpException(
       {
         status: HttpStatus.UNPROCESSABLE_ENTITY,
@@ -116,8 +119,10 @@ export class AuthService {
   }
 
   async validateSocialLogin(
-    authProvider: string,
-    socialData: SocialInterface,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _authProvider: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _socialData: SocialInterface,
   ): Promise<LoginResponseType> {
     throw new HttpException(
       {

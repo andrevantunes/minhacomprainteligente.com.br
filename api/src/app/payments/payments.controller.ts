@@ -2,30 +2,17 @@ import {
   Controller,
   Get,
   Post,
-  // Body,
-  // Put,
-  // Param,
-  // Delete,
-  // UseGuards,
-  // SerializeOptions,
   HttpCode,
   HttpStatus,
-  // Logger,
   Req,
   Res,
 } from '@nestjs/common';
 import { PaymentsService } from './payments.service';
 import { CartsService } from '../carts/carts.service';
 import { OrdersService } from '../orders/orders.service';
-// import { CreatePageDto } from './dto/create-page.dto';
-// import { UpdatePageDto } from './dto/update-page.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-// import { Roles } from '../roles/roles.decorator';
-// import { RoleEnum } from '../roles/roles.enum';
-// import { AuthGuard } from '@nestjs/passport';
-// import { RolesGuard } from '../roles/roles.guard';
-import PagarmeTransaction from '../../utils/pagarme';
 import { ProductsService } from '../products/products.service';
+import { PaymentTransactionAsaasService } from './paymentTransactionAsaas.service';
 
 @ApiBearerAuth()
 // @Roles(RoleEnum.admin)
@@ -41,27 +28,11 @@ export class PaymentsController {
     private readonly ordersService: OrdersService,
     private readonly cartsService: CartsService,
     private readonly productsService: ProductsService,
+    private readonly paymentTransaction: PaymentTransactionAsaasService,
   ) {}
-
-  private async recaptcha(token?: string, expectedAction = 'PAY') {
-    if (!process.env.RECAPTCHA_USER_AUTH || !process.env.RECAPTCHA_SITE_KEY)
-      return true;
-    const siteKey = process.env.RECAPTCHA_SITE_KEY;
-    return fetch(
-      `https://recaptchaenterprise.googleapis.com/v1/projects/minhacompraintel-1733872724443/assessments?key=${process.env.RECAPTCHA_USER_AUTH}`,
-      {
-        method: 'POST',
-        body: JSON.stringify({ event: { token, expectedAction, siteKey } }),
-      },
-    )
-      .then(async (r) => r.status === 200)
-      .catch((_) => false);
-  }
 
   @Post()
   async create(@Req() request: any, @Res() response) {
-    // Recaptcha:
-    // { "event": { "token": recaptcha_token, "expectedAction": "PAY", "siteKey": "6Ldf6pcqAAAAAC0mpeEfrhwR29jPb1Xsecc1T7rm" } }
     const {
       payment_method,
       recaptcha_token,
@@ -92,35 +63,53 @@ export class PaymentsController {
         cart.property_id,
       );
 
+    console.log('h1');
     if (!validProducts) {
       response.status(403);
       response.json({ error: 'invalid product quantities' });
       return null;
     }
-    const transaction = new PagarmeTransaction();
-    transaction.setCode(hash);
-    transaction.setCustomer(this.customer(customer, hash, fingerprint));
-    transaction.setItemsFromCartProducts(cart.products);
+    this.paymentTransaction.setCode(hash);
+    await this.paymentTransaction.setCustomer(
+      this.customer(customer, hash, fingerprint),
+    );
+    this.paymentTransaction.setItemsFromCartProducts(cart.products);
 
+    console.log('h2');
     if (payment_method === 'credit_card') {
-      transaction.setCreditCardPayment({
+      this.paymentTransaction.setCreditCardPayment({
         number: card_number,
         holder_name: card_holder,
         expire_date: expire_date,
         cvv: cvv,
         billing_address: this.billingAddress(billing_address),
       });
+      console.log('h3');
     }
     if (payment_method === 'pix') {
-      transaction.setPixPayment();
-      if (this.isTest()) {
-        response.json(this.mockPixResponse());
-        return undefined;
-      }
+      this.paymentTransaction.setPixPayment();
+      // if (this.isTest()) {
+      //   response.json(this.mockPixResponse());
+      //   return undefined;
+      // }
     }
-    const acquiredOrder = await transaction
+    console.log('h4');
+    const acquiredOrder = await this.paymentTransaction
       .executeTransaction()
       .then((acquiredResponse: any) => {
+        console.log('x1', acquiredResponse);
+        if (acquiredResponse.encodedImage) {
+          // TODO mudar para ficar livre para trodos os brokers
+          acquiredResponse.qrImage = `data:image/png;base64, ${acquiredResponse.encodedImage}`;
+          acquiredResponse.qrCode = acquiredResponse.payload;
+        }
+        if (response?.charges?.[0].last_transaction?.qr_code) {
+          // TODO mudar para ficar livre para trodos os brokers
+          acquiredResponse.qrImage =
+            response?.charges?.[0].last_transaction?.qr_code_url;
+          acquiredResponse.qrCode =
+            response?.charges?.[0].last_transaction?.qr_code;
+        }
         if (acquiredResponse.status === 'failed') {
           return Promise.reject(acquiredResponse);
         }
@@ -130,15 +119,16 @@ export class PaymentsController {
         response.status(403);
         return acquiredResponse;
       });
-    const order = await this.ordersService.createOrder({
-      acquirer: 'pagarme',
+    console.log('h5', acquiredOrder);
+    console.log('h6', {
+      acquirer: this.paymentTransaction.ACQUIRED,
       acquirer_id: acquiredOrder.id,
       acquirer_metadata: { customer: acquiredOrder.customer },
       amount: cart.total_price,
-      currency: acquiredOrder.currency,
+      currency: acquiredOrder.currency ?? 'BRL',
       name: acquiredOrder.customer?.name,
       document_number: acquiredOrder.customer?.document,
-      status: acquiredOrder.status,
+      status: acquiredOrder.status?.toLowerCase(),
       fingerprint,
       cart: {
         connect: {
@@ -146,21 +136,32 @@ export class PaymentsController {
         },
       },
     });
-    const acquirerPayment = acquiredOrder.charges?.[0];
-    if (acquirerPayment) {
-      await this.paymentsService.createPayment({
-        fingerprint,
-        acquirer: 'pagarme',
-        acquirer_id: acquirerPayment.id,
-        acquirer_metadata: {
-          last_transaction: acquirerPayment.last_transaction,
+    const order = await this.ordersService.createOrder({
+      acquirer: this.paymentTransaction.ACQUIRED,
+      acquirer_id: acquiredOrder.id,
+      acquirer_metadata: { customer: acquiredOrder.customer },
+      amount: cart.total_price,
+      currency: acquiredOrder.currency,
+      name: acquiredOrder.customer?.name,
+      document_number: acquiredOrder.customer?.document,
+      status: acquiredOrder.status?.toLowerCase() ?? 'pending',
+      fingerprint,
+      cart: {
+        connect: {
+          id: cart.id,
         },
-        order_id: order.id,
-        amount: acquirerPayment.amount,
-        currency: acquirerPayment.currency,
-        status:
-          acquirerPayment.last_transaction?.status || acquirerPayment.status,
-        method: acquirerPayment.payment_method,
+      },
+    });
+    console.log('a2', order);
+    const acquirerPayment = this.paymentTransaction.paymentResult;
+    if (acquirerPayment) {
+      console.log('h8', acquirerPayment);
+      await this.paymentsService.createPayment({
+        ...acquirerPayment,
+        fingerprint,
+        order: {
+          connect: { id: order.id },
+        },
       });
       // TODO remover do estoque
       void this.productsService.removeProductsFromProperty(
@@ -219,6 +220,7 @@ export class PaymentsController {
     state,
     country = 'BR',
   }: any) {
+    if (!zip_code) return null;
     const line_1 = `${number}, ${street}`;
     return {
       line_1,
@@ -236,24 +238,29 @@ export class PaymentsController {
   ) {
     return {
       name: customer.name ?? `Venda direta: ${cartHash} - ${fingerprint}`,
-      email: customer.email ?? `${cartHash}-${fingerprint}@mci.com.br`,
+      // email: customer.email ?? `${cartHash}-${fingerprint}@mci.com.br`,
       document: customer.document
         ? customer.document.replace(/\D/g, '')
         : '01529151090',
-      type: 'individual',
-      document_type: 'cpf',
-      phones: {
-        mobile_phone: this.splitPhone(customer.phone),
-      },
+      // type: 'individual',
+      // document_type: 'cpf',
+      // phones: {
+      //   mobile_phone: this.splitPhone(customer.phone),
+      // },
     };
   }
 
   private splitPhone(phone) {
     const number =
-      phone.replace(/\D/g, '').replace(/^\+55/, '').replace(/(\d{2})(\d{8}|\d{9})/, '$2') ??
-      '992472756';
+      phone
+        .replace(/\D/g, '')
+        .replace(/^\+55/, '')
+        .replace(/(\d{2})(\d{8}|\d{9})/, '$2') ?? '992472756';
     const area_code =
-      phone.replace(/\D/g, '').replace(/^\+55/, '').replace(/(\d{2})(\d{8}|\d{9})/, '$1') ?? '51';
+      phone
+        .replace(/\D/g, '')
+        .replace(/^\+55/, '')
+        .replace(/(\d{2})(\d{8}|\d{9})/, '$1') ?? '51';
     return {
       number,
       country_code: '55',
@@ -355,6 +362,21 @@ export class PaymentsController {
         },
       ],
     };
+  }
+
+  private async recaptcha(token?: string, expectedAction = 'PAY') {
+    if (!process.env.RECAPTCHA_USER_AUTH || !process.env.RECAPTCHA_SITE_KEY)
+      return true;
+    const siteKey = process.env.RECAPTCHA_SITE_KEY;
+    return fetch(
+      `https://recaptchaenterprise.googleapis.com/v1/projects/minhacompraintel-1733872724443/assessments?key=${process.env.RECAPTCHA_USER_AUTH}`,
+      {
+        method: 'POST',
+        body: JSON.stringify({ event: { token, expectedAction, siteKey } }),
+      },
+    )
+      .then(async (r) => r.status === 200)
+      .catch(() => false);
   }
 
   private isTest() {

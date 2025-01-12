@@ -232,6 +232,7 @@ enum OrderStatus {
   paid
   pending
   authorized
+  confirmed
   captured
   failed
   refunded
@@ -279,6 +280,7 @@ enum PaymentStatus {
   captured
   pending
   authorized
+  confirmed
   failed
   refunded
   cancelled
