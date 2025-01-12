@@ -2,7 +2,15 @@ import type { PixSectionProps } from "./pix-section.types";
 import copy from "copy-to-clipboard";
 
 import classNames from "classnames";
-import { Button, Card, Loader, ItemElement } from "@andrevantunes/andrevds";
+import {
+  Image,
+  Button,
+  Card,
+  Loader,
+  ItemElement,
+  Stepper,
+  TextField,
+} from "@andrevantunes/andrevds";
 import { useEffect, useState } from "react";
 import { toBrCurrency } from "@/helpers/currency.helper";
 import { getBffApi, postBffApi } from "@/requests";
@@ -10,7 +18,6 @@ import { notifySuccess } from "@/helpers/notify.helper";
 import { validateRecaptcha } from "@/helpers/recaptcha.helper";
 import Script from "next/script";
 
-let a = 0;
 const PixSection = ({
   children,
   className,
@@ -23,11 +30,22 @@ const PixSection = ({
   const [isCreatingTransaction, setIsCreatingTransaction] = useState(false);
   const [qrCode, setQrCode] = useState("");
   const [qrUrl, setQrUrl] = useState("");
+  const [step, setStep] = useState(1);
+  const [stepOneValid, setStepOneValid] = useState(false);
+  const [customer, setCustomer] = useState({} as any);
 
-  useEffect(() => {
-    if (a < 1) a++; // TODO: resolver isso
-    else createPix();
-  }, []);
+  const handleChangeCustomerField = (event: any) => {
+    const name = event.target.name;
+    console.log(event.target.name, event.target);
+    const newCustomer = { ...customer, [name]: event.target.value };
+    setCustomer(newCustomer);
+    setStepOneValid(newCustomer.name && newCustomer.document);
+  };
+
+  const handleNextStep = () => {
+    void createPix();
+    setStep(2);
+  };
 
   const createPix = async () => {
     setIsCreatingTransaction(true);
@@ -37,6 +55,7 @@ const PixSection = ({
         totalPrice,
         hash,
         recaptchaToken,
+        customer,
         payment_method: "pix",
       });
     });
@@ -66,15 +85,69 @@ const PixSection = ({
         <strong>{toBrCurrency(totalPrice)}</strong>
       </Card>
       <Card elevation="md" className={cn} {...props}>
-        <p>{subTitle}</p>
-        {isCreatingTransaction && <Loader />}
-        {!isCreatingTransaction && qrUrl && <img src={qrUrl} alt="QR Code" />}
+        <form action="#">
+          <Stepper position={step} steps={["Identificação", "Pagamento"]} />
+          <div className="payment-section__container">
+            <div
+              className={classNames(
+                "payment-section__content gap-1x flex flex-column align-items-stretch",
+                {
+                  active: step == 1,
+                }
+              )}
+            >
+              <h2 className="text-center">Identificação:</h2>
+              <div>
+                <TextField
+                  label="Seu nome completo*"
+                  onChange={handleChangeCustomerField}
+                  name="name"
+                />
+              </div>
+              <div>
+                <TextField
+                  label="Seu CPF*"
+                  onChange={handleChangeCustomerField}
+                  mask="999.999.999-99"
+                  name="document"
+                />
+              </div>
+              <div>
+                <TextField label="Seu email" onChange={handleChangeCustomerField} name="email" />
+              </div>
+              <div>
+                <TextField
+                  label="Seu telefone"
+                  onChange={handleChangeCustomerField}
+                  mask="(99) 99999-9999"
+                  name="phone"
+                />
+              </div>
+              <Button onClick={handleNextStep} disabled={!stepOneValid} className="flex flex-row">
+                Continuar
+              </Button>
+            </div>
 
-        <ItemElement onClick={handleCopy}>{qrCode}</ItemElement>
+            <div
+              className={classNames(
+                "payment-section__content gap-1x flex flex-column align-items-center",
+                {
+                  active: step == 2,
+                }
+              )}
+            >
+              <p>{subTitle}</p>
+              {isCreatingTransaction && <Loader />}
+              {!isCreatingTransaction && qrUrl && <Image src={qrUrl} alt="QR Code" />}
 
-        <Button onClick={handleCopy} disabled={isCreatingTransaction || !qrCode}>
-          {isCreatingTransaction ? "Gerando PIX para pagamento" : "Copiar código PIX"}
-        </Button>
+              <ItemElement onClick={handleCopy}>{qrCode}</ItemElement>
+
+              <Button onClick={handleCopy} disabled={isCreatingTransaction || !qrCode}>
+                {isCreatingTransaction ? "Gerando PIX para pagamento" : "Copiar código PIX"}
+              </Button>
+            </div>
+          </div>
+        </form>
       </Card>
     </>
   );

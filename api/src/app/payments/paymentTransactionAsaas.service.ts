@@ -10,7 +10,7 @@ export class PaymentTransactionAsaasService {
   options: any = {};
   code?: string;
   _paymentResult: any;
-  _value = 0;
+  _valueInCents = 0;
   _billingType?: string;
   constructor() {
     this.options = {
@@ -20,15 +20,15 @@ export class PaymentTransactionAsaasService {
   }
   setItemsFromCartProducts(products: any[]) {
     this.options.json.description = `${this.codeMessage}Compra de produtos realizada no AirBnB:\n`;
-    this._value = 0;
+    this._valueInCents = 0;
     products.forEach((product: any) => {
       this.options.json.description += `- ${product.quantity} x ${toBrCurrency(
         product.unity_price,
       )} - ${product.name}\n`;
-      this._value += product.quantity * product.unity_price;
+      this._valueInCents += product.quantity * product.unity_price;
     });
 
-    this.options.json.value = this._value / 100;
+    this.options.json.value = this._valueInCents / 100;
   }
   setCode(code) {
     this.code = code;
@@ -40,10 +40,25 @@ export class PaymentTransactionAsaasService {
     return `(#${this.code}) `;
   }
   async setCustomer(customer: any) {
-    if (customer) {
-      //TODO find_customer_id from customer
+    console.log('customer', customer);
+    if (!customer) {
+      this.options.json.customer = 'cus_000006408014'; // TODO: tratar isso
+      return null;
     }
-    this.options.json.customer = 'cus_000006408014'; // TODO: tratar isso
+    const options = {
+      headers: this.headers,
+      method: 'POST',
+      uri: `${this.BASE_URL}v3/customers`,
+      json: { name: customer.name, cpfCnpj: customer.document },
+    };
+    return new Promise((resolve, reject) => {
+      request(options, (error: any, _response: any, body: any) => {
+        if (error) return reject(error);
+        console.log('customer result', body);
+        this.options.json.customer = body.id;
+        resolve(body);
+      });
+    });
   }
   setCreditCardPayment({
     number,
@@ -83,9 +98,6 @@ export class PaymentTransactionAsaasService {
   setPixPayment(_expires_in = 60 * 60 * 24) {
     this.options.method = 'POST';
     this._billingType = 'pix';
-    // this.options.json.addressKey = process.env.ASAAS_PIX_KEY;
-    // this.options.uri = `${this.BASE_URL}v3/pix/qrCodes/static`;
-
     this.options.uri = `${this.BASE_URL}v3/payments`;
     this.options.json.dueDate = new Date().toISOString().split('T')[0];
     this.options.json.billingType = 'PIX';
@@ -100,7 +112,7 @@ export class PaymentTransactionAsaasService {
       acquirer: this.ACQUIRED,
       acquirer_id: this._paymentResult.id,
       acquirer_metadata: this._paymentResult,
-      amount: this._value,
+      amount: this._valueInCents,
       currency: 'BRL',
       status: this._paymentResult.status?.toLowerCase() ?? 'pending',
       method: this._billingType,
@@ -132,9 +144,9 @@ export class PaymentTransactionAsaasService {
         if (error) return reject(error);
         if (typeof body === 'string') {
           try {
+            console.log('json', body);
             return resolve(JSON.parse(body));
           } catch (e) {
-            console.log('json error', e);
             console.log(body);
             return resolve(body);
           }

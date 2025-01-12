@@ -120,11 +120,14 @@ const CreditCardSection = ({
       <Card elevation="md" className={cn} {...props}>
         <form action="#">
           <Stepper position={step} steps={["Identificação", "Pagamento"]} />
-          <div className="credit-card-section__container">
+          <div className="payment-section__container">
             <div
-              className={classNames("credit-card-section__content gap-1x flex flex-column", {
-                active: step == 1,
-              })}
+              className={classNames(
+                "payment-section__content gap-1x flex flex-column align-items-stretch",
+                {
+                  active: step == 1,
+                }
+              )}
             >
               <h2 className="text-center">Identificação:</h2>
               <div>
@@ -158,9 +161,12 @@ const CreditCardSection = ({
               </Button>
             </div>
             <div
-              className={classNames("credit-card-section__content gap-1x flex flex-column", {
-                active: step == 2,
-              })}
+              className={classNames(
+                "payment-section__content gap-1x flex flex-column align-items-stretch",
+                {
+                  active: step == 2,
+                }
+              )}
             >
               <div className="credit-card-section__form">
                 <div className="credit-card-section__credit_card_container">

@@ -1,4 +1,4 @@
-.credit-card-section {
+.payment-section {
   display: flex;
   gap: 16px;
   flex-direction: column;
@@ -13,8 +13,8 @@
       flex-direction: row;
     }
   }
+
   &__content{
-    align-items: stretch;
     gap: 16px;
     &:not(.active) {
       display: none;
@@ -24,6 +24,14 @@
       min-width: 400px;
     }
   }
+  .item-element{
+    width: 100%;
+    margin: 0 24px;
+    word-wrap: break-word;
+    max-width: 600px;
+  }
+}
+.credit-card-section {
   &__form {
     gap: 16px;
     display: flex;
