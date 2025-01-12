@@ -4,28 +4,28 @@ import { toBrCurrency } from '../../utils/currency-helper';
 
 @Injectable()
 export class PaymentTransactionAsaasService {
-  ACCESSS_TOKEN = process.env.ASAAS_ACCESS_TOKEN;
+  ACCESS_TOKEN = process.env.ASAAS_ACCESS_TOKEN;
   ACQUIRED = 'asaas';
   BASE_URL = process.env.ASAAS_BASE_URL;
   options: any = {};
   code?: string;
   _paymentResult: any;
   _value = 0;
-  _method?: string;
+  _billingType?: string;
   constructor() {
     this.options = {
       headers: this.headers,
       json: {},
     };
   }
-  setItemsFromCartProducts(products) {
+  setItemsFromCartProducts(products: any[]) {
     this.options.json.description = `${this.codeMessage}Compra de produtos realizada no AirBnB:\n`;
     this._value = 0;
     products.forEach((product: any) => {
       this.options.json.description += `- ${product.quantity} x ${toBrCurrency(
         product.unity_price,
       )} - ${product.name}\n`;
-      this._value += product.unity_price * product.unity_price;
+      this._value += product.quantity * product.unity_price;
     });
 
     this.options.json.value = this._value / 100;
@@ -64,7 +64,7 @@ export class PaymentTransactionAsaasService {
     this.options.method = 'POST';
     this.options.uri = `${this.BASE_URL}v3/payments`;
     this.options.json.billingType = 'CREDIT_CARD';
-    this._method = 'credit_card';
+    this._billingType = 'credit_card';
     if (expire_date && (!exp_month || !exp_year)) {
       exp_month = expire_date.split('/')[0];
       exp_year = expire_date.split('/')[1];
@@ -82,17 +82,20 @@ export class PaymentTransactionAsaasService {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setPixPayment(_expires_in = 60 * 60 * 24) {
     this.options.method = 'POST';
-    this._method = 'pix';
-    this.options.json.addressKey = process.env.ASAAS_PIX_KEY;
-    this.options.uri = `${this.BASE_URL}v3/pix/qrCodes/static`;
-    this.options.format = 'ALL';
+    this._billingType = 'pix';
+    // this.options.json.addressKey = process.env.ASAAS_PIX_KEY;
+    // this.options.uri = `${this.BASE_URL}v3/pix/qrCodes/static`;
+
+    this.options.uri = `${this.BASE_URL}v3/payments`;
+    this.options.json.dueDate = new Date().toISOString().split('T')[0];
+    this.options.json.billingType = 'PIX';
     this.options.json.format = 'ALL';
     this.options.json.description = this.codeMessage;
     this.options.json.allowsMultiplePayments = false;
   }
 
   get paymentResult() {
-    console.log('A1', this._paymentResult);
+    // console.log('A1', this._paymentResult);
     return {
       acquirer: this.ACQUIRED,
       acquirer_id: this._paymentResult.id,
@@ -100,19 +103,34 @@ export class PaymentTransactionAsaasService {
       amount: this._value,
       currency: 'BRL',
       status: this._paymentResult.status?.toLowerCase() ?? 'pending',
-      method: this._method,
+      method: this._billingType,
     };
   }
   async executeTransaction() {
-    return new Promise((resolve, reject) => {
-      console.log('b1: ', this.options);
+    return new Promise(async (resolve, reject) => {
       request(this.options, (error: any, _response: any, body: any) => {
-        if (error) {
-          console.log('e2: ', error);
-          return reject(error);
-        }
-        this._paymentResult = body;
-        console.log('b2: ', this._paymentResult);
+        if (error) return reject(error);
+        void this.getPixInfo(body.id).then((pixInfo) => {
+          this._paymentResult = { ...body, ...pixInfo };
+          return resolve(this._paymentResult);
+        });
+      });
+    });
+  }
+
+  async getPixInfo(id: string): Promise<any> {
+    if (this._billingType != 'pix') return {};
+
+    return new Promise(async (resolve, reject) => {
+      const options = {
+        headers: this.headers,
+        method: 'GET',
+        uri: `${this.BASE_URL}v3/payments/${id}/pixQrCode`,
+      };
+
+      request(options, (error: any, _response: any, body: any) => {
+        if (error) return reject(error);
+        if (typeof body === 'string') return resolve(JSON.parse(body));
         return resolve(body);
       });
     });
@@ -120,8 +138,8 @@ export class PaymentTransactionAsaasService {
 
   private get headers() {
     return {
-      access_token: this.ACCESSS_TOKEN,
-      accept: 'application/json',
+      ACCESS_TOKEN: this.ACCESS_TOKEN,
+      ACCEPT: 'application/json',
       'User-Agent': 'insomnia/10.2.0',
       'Content-Type': 'application/json',
     };

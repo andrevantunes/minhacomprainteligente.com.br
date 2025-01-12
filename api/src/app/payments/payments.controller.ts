@@ -116,23 +116,23 @@ export class PaymentsController {
         response.status(403);
         return acquiredResponse;
       });
-    console.log('h5', acquiredOrder);
-    console.log('h6', {
-      acquirer: this.paymentTransaction.ACQUIRED,
-      acquirer_id: acquiredOrder.id,
-      acquirer_metadata: { customer: acquiredOrder.customer },
-      amount: cart.total_price,
-      currency: acquiredOrder.currency ?? 'BRL',
-      name: acquiredOrder.customer?.name,
-      document_number: acquiredOrder.customer?.document,
-      status: acquiredOrder.status?.toLowerCase(),
-      fingerprint,
-      cart: {
-        connect: {
-          id: cart.id,
-        },
-      },
-    });
+    // console.log('h5', acquiredOrder);
+    // console.log('h6', {
+    //   acquirer: this.paymentTransaction.ACQUIRED,
+    //   acquirer_id: acquiredOrder.id,
+    //   acquirer_metadata: { customer: acquiredOrder.customer },
+    //   amount: cart.total_price,
+    //   currency: acquiredOrder.currency ?? 'BRL',
+    //   name: acquiredOrder.customer?.name,
+    //   document_number: acquiredOrder.customer?.document,
+    //   status: acquiredOrder.status?.toLowerCase(),
+    //   fingerprint,
+    //   cart: {
+    //     connect: {
+    //       id: cart.id,
+    //     },
+    //   },
+    // });
     const order = await this.ordersService.createOrder({
       acquirer: this.paymentTransaction.ACQUIRED,
       acquirer_id: acquiredOrder.id,
