@@ -6,13 +6,19 @@ import { Title } from "@/components";
 import { StoreType, useStore } from "@/store";
 import { toBrCurrency } from "@/helpers/currency.helper";
 
-const upsertProduct = (products: any = [], productId: string | number, price: number) => {
+const upsertProduct = (
+  products: any = [],
+  productId: string | number,
+  price: number,
+  category: string
+) => {
   const product = products.find((p: any) => p.productId == Number(productId));
   if (product) {
     product.quantity += 1;
     return [...products];
   }
-  return [...products, { productId: Number(productId), price, quantity: 1 }];
+  console.log("product", product);
+  return [...products, { productId: Number(productId), price, quantity: 1, category }];
 };
 const Product = ({
   title,
@@ -22,6 +28,7 @@ const Product = ({
   src,
   productId,
   category,
+  buttonLabel = "Adicionar ao carrinho",
   elevation = "hg",
   displayAs = "h2",
   ...props
@@ -45,7 +52,7 @@ const Product = ({
       </div>
       {category && <Label className="mb-1x mt-1x">{category}</Label>}
       <Title className="mb-1x">{toBrCurrency(price)}</Title>
-      <Button onClick={handleOnClick}>Adicionar ao carrinho</Button>
+      <Button onClick={handleOnClick}>{buttonLabel}</Button>
     </Card>
   );
 };

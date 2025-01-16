@@ -193,6 +193,7 @@ model cart_products {
   unity_price    Int
   subtotal_price Int
   product_id     Int
+  category       String    @default("Bebidas")
   product        products  @relation(fields: [product_id], references: [id])
   cart_id        Int
   cart           carts     @relation(fields: [cart_id], references: [id])
@@ -309,7 +310,7 @@ enum ReplacementStatus {
 
 model replacement_property_products {
   quantity         Int
-  unity_paid_price Int
+  unity_paid_price Int?
   property_id      Int
   property         properties   @relation(fields: [property_id], references: [id])
   product_id       Int

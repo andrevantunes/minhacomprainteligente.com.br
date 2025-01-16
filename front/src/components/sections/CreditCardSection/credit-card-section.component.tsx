@@ -55,12 +55,12 @@ const CreditCardSection = ({
   const handleChangeCustomerName = (event: any) => {
     const newCustomer = { ...customer, name: event.target.value };
     setCustomer(newCustomer);
-    setStepOneValid(newCustomer.name && newCustomer.document);
+    setStepOneValid(newCustomer.name);
   };
   const handleChangeCustomerDocument = (event: any) => {
     const newCustomer = { ...customer, document: event.target.value };
     setCustomer(newCustomer);
-    setStepOneValid(newCustomer.name && newCustomer.document);
+    setStepOneValid(newCustomer.name);
   };
   const handleChangeCustomerEmail = (event: any) => {
     const newCustomer = { ...customer, email: event.target.value };
@@ -139,7 +139,7 @@ const CreditCardSection = ({
               </div>
               <div>
                 <TextField
-                  label="Seu CPF*"
+                  label="Seu CPF"
                   onChange={handleChangeCustomerDocument}
                   mask="999.999.999-99"
                   name="document"

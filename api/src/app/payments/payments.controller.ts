@@ -63,7 +63,6 @@ export class PaymentsController {
         cart.property_id,
       );
 
-    console.log('h1');
     if (!validProducts) {
       response.status(403);
       response.json({ error: 'invalid product quantities' });
@@ -86,15 +85,10 @@ export class PaymentsController {
     }
     if (payment_method === 'pix') {
       this.paymentTransaction.setPixPayment();
-      // if (this.isTest()) {
-      //   response.json(this.mockPixResponse());
-      //   return undefined;
-      // }
     }
     const acquiredOrder = await this.paymentTransaction
       .executeTransaction()
       .then((acquiredResponse: any) => {
-        console.log('x1', acquiredResponse);
         if (acquiredResponse.encodedImage) {
           // TODO mudar para ficar livre para trodos os brokers
           acquiredResponse.qrImage = `data:image/png;base64, ${acquiredResponse.encodedImage}`;
@@ -116,23 +110,6 @@ export class PaymentsController {
         response.status(403);
         return acquiredResponse;
       });
-    // console.log('h5', acquiredOrder);
-    // console.log('h6', {
-    //   acquirer: this.paymentTransaction.ACQUIRED,
-    //   acquirer_id: acquiredOrder.id,
-    //   acquirer_metadata: { customer: acquiredOrder.customer },
-    //   amount: cart.total_price,
-    //   currency: acquiredOrder.currency ?? 'BRL',
-    //   name: acquiredOrder.customer?.name,
-    //   document_number: acquiredOrder.customer?.document,
-    //   status: acquiredOrder.status?.toLowerCase(),
-    //   fingerprint,
-    //   cart: {
-    //     connect: {
-    //       id: cart.id,
-    //     },
-    //   },
-    // });
     const order = await this.ordersService.createOrder({
       acquirer: this.paymentTransaction.ACQUIRED,
       acquirer_id: acquiredOrder.id,
@@ -149,10 +126,8 @@ export class PaymentsController {
         },
       },
     });
-    console.log('a2', order);
     const acquirerPayment = this.paymentTransaction.paymentResult;
     if (acquirerPayment) {
-      console.log('h8', acquirerPayment);
       await this.paymentsService.createPayment({
         ...acquirerPayment,
         fingerprint,

@@ -47,9 +47,15 @@ export class PaymentTransactionAsaasService {
     return this.request('v3/customers', 'POST', {
       name: customer.name,
       cpfCnpj: customer.document,
+      foreignCustomer: this.isInvalidCustomerDocument(customer.document),
     }).then((result: any) => {
       this.options.customer = result.id;
     });
+  }
+
+  private isInvalidCustomerDocument(document?: string) {
+    if (!document) return true;
+    return document.length < 10;
   }
   setCreditCardPayment({
     number,
@@ -106,9 +112,10 @@ export class PaymentTransactionAsaasService {
     };
   }
   async executeTransaction() {
+    console.log('executeTransaction request', this.options);
     return this.request(`v3/payments`, 'POST', this.options).then(
       (body: any) => {
-        console.log('executeTransaction', body);
+        console.log('executeTransaction response', this.options);
         return this.getPixInfo(body.id).then((pixInfo) => {
           this._paymentResult = { ...body, ...pixInfo };
           return this._paymentResult;

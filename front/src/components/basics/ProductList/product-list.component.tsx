@@ -9,6 +9,7 @@ const ProductList = ({
   children,
   className,
   propertyProducts = [],
+  buttonLabel,
   ...props
 }: ProductListProps) => {
   const cn = classNames("product-list", className);
@@ -74,6 +75,7 @@ const ProductList = ({
       >
         {propertyProductsState.map((propertiesProduct) => (
           <Product
+            buttonLabel={buttonLabel}
             src={propertiesProduct.product.image}
             category={propertiesProduct.category}
             price={propertiesProduct.price}

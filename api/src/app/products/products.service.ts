@@ -68,8 +68,26 @@ export class ProductsService {
   }
 
   async removeProductsFromProperty(products, propertyId) {
-    console.log('Remover', { products, propertyId });
-    return { products, propertyId };
+    return await Promise.all(
+      products.map(async (product) => {
+        const dbPropertyProduct =
+          await this.prisma.properties_products.findFirst({
+            where: { product_id: product.id, property_id: propertyId },
+          });
+        await this.prisma.properties_products.update({
+          data: {
+            current_quantity:
+              (dbPropertyProduct?.current_quantity ?? 1) - product.quantity,
+          },
+          where: {
+            product_id_property_id: {
+              product_id: product.id,
+              property_id: propertyId,
+            },
+          },
+        });
+      }),
+    );
   }
 
   async validateProductsFromProperty(products, propertyId) {

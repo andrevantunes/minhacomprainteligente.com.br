@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 import { Button, Card, Display } from "@andrevantunes/andrevds";
 import { toBrCurrency } from "@/helpers/currency.helper";
 import { updateCartOnApi } from "@/requests";
+import { notifyWarning } from "@/helpers/notify.helper";
+import Router from "next/router";
 
 const CartSummary = ({
   children,
@@ -21,11 +23,11 @@ const CartSummary = ({
     typeof products === "object" ? products || [] : []
   );
   const [stateTotalPrice, setStateTotalPrice] = useState(totalPrice || 0);
+  const [notified, setNotified] = useState(false);
 
-  const [{ byHash }, setCartByHash] = useStore(StoreType.Cart);
+  const [_cartHash, setCartByHash] = useStore(StoreType.Cart);
   useEffect(() => {
     setCartByHash({ byHash: { [hash]: { products, totalPrice } } });
-    console.log({ byHash }); //TODO adicionar ao sessionStorage
   }, []);
   const handleIncreaseProduct = (productId: number | string) => {
     let totalPrice = 0;
@@ -38,6 +40,24 @@ const CartSummary = ({
     setStateTotalPrice(totalPrice);
     setStateProducts(stateProducts2);
     updateCartOnApi(hash, { products: stateProducts2 });
+  };
+
+  const handlePaymentClick = (event: any) => {
+    const shouldNotify = stateProducts.some(
+      (product) => product.currentQuantity - product.quantity < 0
+    );
+    const href = event.target.getAttribute("href");
+    if (!notified && shouldNotify) {
+      setNotified(true);
+      event.preventDefault();
+      event.stopPropagation();
+      notifyWarning(
+        "Confira se a quantidade dos produtos selecionados está presente antes de realizar o pagamento"
+      );
+      setTimeout(() => {
+        Router.push(href);
+      }, 8000);
+    }
   };
   const handleDecreaseProduct = (productId: number | string) => {
     let totalPrice = 0;
@@ -69,8 +89,10 @@ const CartSummary = ({
             src={product.image}
             name={product.name}
             price={product.unity_price}
-            labels={["Bebidas"]}
-            quantity={product.quantity}
+            labels={[product.category]}
+            saleQuantity={product.quantity}
+            currentQuantity={product.currentQuantity}
+            expectedQuantity={product.expectedQuantity}
             onIncrease={handleIncreaseProduct}
             onDecrease={handleDecreaseProduct}
             elevation="md"
@@ -96,9 +118,15 @@ const CartSummary = ({
               flexDirection: "column",
             }}
           >
-            <Button href={`/pagamento/cartao/${hash}`}>Pagar com cartão de crédito</Button>
-            <Button href={`/pagamento/pix/${hash}`}>Pagar com PIX</Button>
-            <Button href={`/pagamento/paypal/${hash}`}>Pagar com PayPal (internacional)</Button>
+            <Button onClick={handlePaymentClick} href={`/pagamento/cartao/${hash}`}>
+              Pagar com cartão de crédito
+            </Button>
+            <Button onClick={handlePaymentClick} href={`/pagamento/pix/${hash}`}>
+              Pagar com PIX
+            </Button>
+            <Button onClick={handlePaymentClick} href={`/pagamento/paypal/${hash}`}>
+              Pagar com PayPal (internacional)
+            </Button>
           </div>
         </Card>
       </div>

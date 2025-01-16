@@ -1,0 +1,16 @@
+.product-management-list {
+  .missing-product{
+    background-color: var(--color-error-300);
+  }
+
+  img{
+    object-fit: contain;
+  }
+  &__product{
+    align-items: center;
+    justify-content: stretch;
+  }
+  .quantity-error{
+    color: var(--color-error-500);
+  }
+}

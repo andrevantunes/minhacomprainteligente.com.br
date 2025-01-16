@@ -34,6 +34,7 @@ import { PaymentsModule } from './app/payments/payments.module';
 import { OrdersModule } from './app/orders/orders.module';
 import { WithdrawsModule } from './app/withdraws/withdraws.module';
 import { BalancesModule } from './app/balances/balances.module';
+import { ReplacementsModule } from './app/replacements/replacements.module';
 
 @Module({
   imports: [
@@ -99,6 +100,7 @@ import { BalancesModule } from './app/balances/balances.module';
     CartsModule,
     PaymentsModule,
     OrdersModule,
+    ReplacementsModule,
   ],
 })
 export class AppModule {}

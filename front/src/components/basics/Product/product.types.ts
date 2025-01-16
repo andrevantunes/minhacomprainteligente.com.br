@@ -4,6 +4,7 @@ interface ProductProps extends PropsWithChildren<HTMLProps<HTMLDivElement>> {
   elevation?: string;
   price: string;
   src: string;
+  buttonLabel: string;
   displayAs?: string;
   category: string;
   productId: string | number;

@@ -14,7 +14,7 @@ import {
   Req,
 } from '@nestjs/common';
 import { PagesService } from './pages.service';
-// import { CreatePageDto } from './dto/create-page.dto';
+// import { CreateReplacementDto } from './dto/create-page.dto';
 // import { UpdatePageDto } from './dto/update-page.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 // import { Roles } from '../roles/roles.decorator';

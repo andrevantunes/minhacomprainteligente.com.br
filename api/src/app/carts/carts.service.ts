@@ -51,9 +51,26 @@ export class CartsService {
       ...product,
       ...cart_product,
     }));
+    console.log(products);
+    const productsInProperty = await Promise.all(
+      products.map(async (product) => {
+        const propertyProduct = await this.prisma.properties_products.findFirst(
+          {
+            where: { product_id: product.id, property_id: cart?.property_id },
+          },
+        );
+        console.log(propertyProduct);
+        return {
+          ...product,
+          currentQuantity: propertyProduct?.current_quantity,
+          expectedQuantity: propertyProduct?.expected_quantity,
+          category: propertyProduct?.category,
+        };
+      }),
+    );
     // @ts-expect-error error
     delete cart.cart_products;
-    return { products, ...cart };
+    return { products: productsInProperty, ...cart };
   }
 
   async carts(params: {
@@ -94,6 +111,7 @@ export class CartsService {
           return {
             product_id: product.product_id,
             quantity: product.quantity,
+            category: product.category,
             unity_price,
             subtotal_price,
           };

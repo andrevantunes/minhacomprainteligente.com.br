@@ -12,7 +12,9 @@ const CheckoutProduct = ({
   price,
   productId,
   labels = [],
-  quantity,
+  saleQuantity,
+  currentQuantity,
+  expectedQuantity,
   onIncrease = () => {},
   onDecrease = () => {},
   ...props
@@ -36,9 +38,13 @@ const CheckoutProduct = ({
           className="checkout-product__image-name-label__image"
         />
         <div className="checkout-product__image-name-label__name-label">
-          <span>{name}</span>
+          <label
+            title={`Esperado que ainda tenha ${currentQuantity} (do total de ${expectedQuantity}) unidades deste produto presentes no imóvel`}
+          >
+            <b>{name}</b>
+          </label>
           <div>
-            {labels.map((label: string) => (
+            {labels?.map((label: string) => (
               <Label key={label}>{label}</Label>
             ))}
           </div>
@@ -70,7 +76,7 @@ const CheckoutProduct = ({
           >
             -
           </Button>
-          <TextField value={quantity} />
+          <TextField value={saleQuantity} />
           <Button
             style={{
               padding: 8,
@@ -87,7 +93,7 @@ const CheckoutProduct = ({
             textAlign: "center",
           }}
         >
-          {toBrCurrency(price * quantity)}
+          {toBrCurrency(price * saleQuantity)}
         </Display>
       </div>
     </Card>
