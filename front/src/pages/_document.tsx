@@ -6,12 +6,13 @@ export default class CustomDocument extends Document {
     return (
       <Html lang="pt-BR">
         <Head>
-          <meta charSet="utf-8"/>
-          <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>
-          <link rel="icon" href="/favicon.ico" type="image/x-icon"/>
-          <meta httpEquiv="X-UA-Compatible" content="IE=edge"/>
-          <Script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer/>
-          <script
+          <meta charSet="utf-8" />
+          <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+          <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+          <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+          <Script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer />
+          <Script
+            id="one-signal"
             dangerouslySetInnerHTML={{
               __html: `window.OneSignalDeferred = window.OneSignalDeferred || [];
 OneSignalDeferred.push(async function (OneSignal) {
@@ -27,8 +28,8 @@ OneSignalDeferred.push(async function (OneSignal) {
           />
         </Head>
         <body>
-        <Main/>
-        <NextScript/>
+          <Main />
+          <NextScript />
         </body>
       </Html>
     );
