@@ -1,34 +1,34 @@
-import type {ProductManagementListProps} from "./product-management-list.types";
+import type { ProductManagementListProps } from "./product-management-list.types";
 
 import classNames from "classnames";
-import {Card, Hr, Image, Button} from "@andrevantunes/andrevds";
-import {toBrCurrency} from "@/helpers/currency.helper";
-import {Title} from "@/components";
-import {postBffApi} from "@/requests";
+import { Card, Hr, Image, Button } from "@andrevantunes/andrevds";
+import { toBrCurrency } from "@/helpers/currency.helper";
+import { Title } from "@/components";
+import { postBffApi } from "@/requests";
 import Router from "next/router";
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
 
 const ProductManagementList = ({
-                                 children,
-                                 className,
-                                 propertyProducts = [],
-                                 propertyId,
-                                 propertyHash,
-                                 ...props
-                               }: ProductManagementListProps) => {
+  children,
+  className,
+  propertyProducts = [],
+  propertyId,
+  propertyHash,
+  ...props
+}: ProductManagementListProps) => {
   const cn = classNames("product-management-list", className);
   const propertyProductsState = sortPropertyProductsByDisponibility(propertyProducts);
   const propertyProductsMissing = filterPropertyProductsMissing(propertyProducts);
 
   const handleReplacementClick = async () => {
     const fp = await FingerprintJS.load();
-    const {visitorId} = await fp.get();
+    const { visitorId } = await fp.get();
     const propertyProducts = propertyProductsMissing.map((property) => ({
       productId: property.id,
       quantity: property.quantity,
       propertyId: propertyId,
     }));
-    postBffApi("replacements", {fingerprint: visitorId, propertyProducts})
+    postBffApi("replacements", { fingerprint: visitorId, propertyProducts })
       .then((replacement) => {
         Router.push(`/dashboard/replacements/${replacement.id}`);
       })
@@ -61,7 +61,7 @@ const ProductManagementList = ({
                       className={classNames("flex gap-1x missing-product")}
                     >
                       <div>
-                        <Image src={product.image} width={150} height={150}/>
+                        <Image src={product.image} width={150} height={150} />
                       </div>
                       <div className="flex flex-column justify-content-center">
                         <div>
@@ -86,7 +86,7 @@ const ProductManagementList = ({
 
               <Button onClick={handleReplacementClick}>Criar evento de reposição</Button>
             </section>
-            <Hr/>
+            <Hr />
           </>
         )}
 
@@ -102,7 +102,7 @@ const ProductManagementList = ({
           </div>
         </section>
 
-        <Hr/>
+        <Hr />
 
         <section className="flex flex-column gap-1x">
           <Title>Administrar produtos no imóvel</Title>
@@ -110,14 +110,14 @@ const ProductManagementList = ({
             Aqui você irá revisar quantidade esperada de cada produto no imóvel, assim como imagem e
             preço.
           </p>
-          {propertyProductsState.map(({product, ...propertyProduct}) => (
+          {propertyProductsState.map(({ product, ...propertyProduct }) => (
             <Card
               key={product.name}
               elevation="md"
               className={classNames("flex gap-1x align-items-center justify-content-between")}
             >
               <div>
-                <Image src={product.image} width={150} height={150}/>
+                <Image src={product.image} width={150} height={150} />
               </div>
               <div className="flex flex-column justify-content-center flex-grow">
                 <div>
@@ -151,7 +151,9 @@ const ProductManagementList = ({
                 </div>
               </div>
               <div>
-                <Button variant="secondary" href={`/dashboard/products`}>Editar</Button>
+                <Button variant="secondary" href={`/dashboard/products`}>
+                  Editar
+                </Button>
               </div>
             </Card>
           ))}
@@ -174,7 +176,7 @@ function sortPropertyProductsByDisponibility(propertyProducts: any[]) {
 
 function filterPropertyProductsMissing(propertyProducts: any[] = []) {
   if (!Array.isArray(propertyProducts)) {
-    console.log({propertyProducts});
+    console.log({ propertyProducts });
     return [];
   }
   return propertyProducts
