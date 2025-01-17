@@ -17,8 +17,8 @@ export default class CustomDocument extends Document {
               __html: `window.OneSignalDeferred = window.OneSignalDeferred || [];
 OneSignalDeferred.push(async function (OneSignal) {
   await OneSignal.init({
-    appId: ${process.env.NEXT_PUBLIC_ONESIGNAL_ID},
-    safari_web_id: ${process.env.NEXT_PUBLIC_ONESIGNAL_SAFARI_ID},
+    appId: "${process.env.NEXT_PUBLIC_ONESIGNAL_ID}",
+    safari_web_id: "${process.env.NEXT_PUBLIC_ONESIGNAL_SAFARI_ID}",
     notifyButton: {
       enable: true,
     },
