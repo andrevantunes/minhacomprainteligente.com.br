@@ -13,6 +13,7 @@ const ProductManagementList = ({
   className,
   propertyProducts = [],
   propertyId,
+  propertyHash,
   ...props
 }: ProductManagementListProps) => {
   const cn = classNames("product-management-list", className);
@@ -88,57 +89,71 @@ const ProductManagementList = ({
 
         <Hr />
 
-        <Title>Administrar produtos no imóvel</Title>
-        <p>
-          Aqui você irá revisar quantidade esperada de cada produto no imóvel, assim como imagem e
-          preço.
-        </p>
+        <section>
+          <Title>Administrar produtos no imóvel</Title>
+          <p>
+            Aqui você irá revisar quantidade esperada de cada produto no imóvel, assim como imagem e
+            preço.
+          </p>
 
-        {propertyProductsState.map(({ product, ...propertyProduct }) => (
-          <Card
-            key={product.name}
-            elevation="md"
-            className={classNames("flex gap-1x align-items-center justify-content-between")}
-          >
-            <div>
-              <Image src={product.image} width={150} height={150} />
-            </div>
-            <div className="flex flex-column justify-content-center flex-grow">
+          {propertyProductsState.map(({ product, ...propertyProduct }) => (
+            <Card
+              key={product.name}
+              elevation="md"
+              className={classNames("flex gap-1x align-items-center justify-content-between")}
+            >
               <div>
-                <div className="flex gap-1x">
-                  <span>Nome do produto:</span>
-                  <b>{product.name}</b>
-                </div>
-                <div className="flex gap-1x">
-                  <span>Preço de venda neste imóvel:</span>
-                  <b>{toBrCurrency(propertyProduct.price)}</b>
-                </div>
-                <div className="flex gap-1x">
-                  <span>Quantidade esperada neste imóvel (máxima):</span>
-                  <b>{propertyProduct.expected_quantity}</b>
-                </div>
-                <div className="flex gap-1x">
-                  <span>Quantidade presente neste imóvel agora:</span>
-                  <b
-                    className={classNames({
-                      "quantity-error":
-                        propertyProduct.expected_quantity > propertyProduct.current_quantity,
-                    })}
-                  >
-                    {propertyProduct.current_quantity}
-                  </b>
-                </div>
-                <div className="flex gap-1x">
-                  <span>Categoria deste produto no imóvel:</span>
-                  <b>{propertyProduct.category}</b>
+                <Image src={product.image} width={150} height={150} />
+              </div>
+              <div className="flex flex-column justify-content-center flex-grow">
+                <div>
+                  <div className="flex gap-1x">
+                    <span>Nome do produto:</span>
+                    <b>{product.name}</b>
+                  </div>
+                  <div className="flex gap-1x">
+                    <span>Preço de venda neste imóvel:</span>
+                    <b>{toBrCurrency(propertyProduct.price)}</b>
+                  </div>
+                  <div className="flex gap-1x">
+                    <span>Quantidade esperada neste imóvel (máxima):</span>
+                    <b>{propertyProduct.expected_quantity}</b>
+                  </div>
+                  <div className="flex gap-1x">
+                    <span>Quantidade presente neste imóvel agora:</span>
+                    <b
+                      className={classNames({
+                        "quantity-error":
+                          propertyProduct.expected_quantity > propertyProduct.current_quantity,
+                      })}
+                    >
+                      {propertyProduct.current_quantity}
+                    </b>
+                  </div>
+                  <div className="flex gap-1x">
+                    <span>Categoria deste produto no imóvel:</span>
+                    <b>{propertyProduct.category}</b>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div>
-              <Button>Editar</Button>
-            </div>
-          </Card>
-        ))}
+              <div>
+                <Button>Editar</Button>
+              </div>
+            </Card>
+          ))}
+        </section>
+        <Hr />
+        <section>
+          <Title>Links úteis para o imóvel</Title>
+          <div className="flex flex-column gap-1x">
+            <Button variant="secondary" href={`/i/${propertyHash}`}>
+              Acessar como hospede
+            </Button>
+            <Button variant="secondary" href={`/i/${propertyHash}/qrcode`}>
+              Imprimir folha de QR Code
+            </Button>
+          </div>
+        </section>
       </div>
     </div>
   );

@@ -7,6 +7,11 @@ interface PropertySelectionProps extends PropsWithChildren<HTMLProps<HTMLDivElem
   checkAllowed?: boolean;
   buttonLabel?: string;
   buttonFull?: boolean;
+  buttons?: {
+    full: boolean;
+    children: string;
+    href?: string;
+  }[];
 }
 
 export type { PropertySelectionProps };

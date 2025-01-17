@@ -13,6 +13,7 @@ const PropertySelection = ({
   checkAllowed,
   buttonLabel = "Gerenciar",
   buttonFull = false,
+  buttons,
   ...props
 }: PropertySelectionProps) => {
   const [{ properties }, setProperty] = useStore(StoreType.Cart);
@@ -44,7 +45,12 @@ const PropertySelection = ({
       </Display>
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         {checkAllowed && <Checkbox onChange={handleOnClick} />}
-        <Button href={href}>{buttonLabel}</Button>
+        {href && <Button href={href}>{buttonLabel}</Button>}
+        <div className="flex gap-1x">
+          {buttons?.map((button) => (
+            <Button key={button.href} {...button} />
+          ))}
+        </div>
       </div>
     </Card>
   );
