@@ -1,10 +1,10 @@
-import type { SaleReportElementProps } from "./sale-report-element.types";
+import type {SaleReportElementProps} from "./sale-report-element.types";
 
 import classNames from "classnames";
-import { Icon, ItemElement, Label } from "@andrevantunes/andrevds";
-import { Title } from "@/components";
-import { toBrCurrency } from "@/helpers/currency.helper";
-import { toBrDateTime } from "@/helpers/datetime.helper";
+import {Icon, ItemElement, Label, LabelVariants} from "@andrevantunes/andrevds";
+import {Title} from "@/components";
+import {toBrCurrency} from "@/helpers/currency.helper";
+import {toBrDateTime} from "@/helpers/datetime.helper";
 
 const SaleReportElement = ({
   children,
@@ -21,6 +21,7 @@ const SaleReportElement = ({
 }: SaleReportElementProps) => {
   const cn = classNames("sale-report-element", className);
   const paid = status === "paid";
+  // @ts-ignore
   return (
     <ItemElement size={"md" as any} className={cn} {...props}>
       {paymentMethod === "credit_card" && (
@@ -61,9 +62,9 @@ const SaleReportElement = ({
         >
           {toBrCurrency(amount as string)}
         </Title>
-        {paid && <Label variant="success">Pago</Label>}
-        {status == "pending" && <Label variant="warning">Pendente</Label>}
-        {!paid && status != "pending" && <Label variant="error">Cancelado</Label>}
+        {paid && <Label variant={LabelVariants.Success}>Pago</Label>}
+        {status == "pending" && <Label variant={LabelVariants.Success}>Pendente</Label>}
+        {!paid && status != "pending" && <Label variant={LabelVariants.Error}>Cancelado</Label>}
       </div>
     </ItemElement>
   );
