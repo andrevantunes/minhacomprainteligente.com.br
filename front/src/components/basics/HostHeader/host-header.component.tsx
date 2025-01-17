@@ -7,20 +7,19 @@ const HostHeader = ({ children, className, src, text, ...props }: HostHeaderProp
   return (
     <Card
       className={cn}
+      elevation="md"
       {...props}
       style={{
-        color: "white",
         width: "100%",
         display: "flex",
         padding: 24,
         alignItems: "center",
         borderRadius: 8,
         flexDirection: "column",
-        backgroundColor: "#1f7445",
       }}
     >
-      <Image src={src} />
-      <Text>{text}</Text>
+      <Image src={src} style={{marginBottom: 16}} />
+      {children}
     </Card>
   );
 };

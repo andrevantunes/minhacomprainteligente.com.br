@@ -1,4 +1,4 @@
-import { Controller, Post, Req } from '@nestjs/common';
+import {Controller, Get, Param, Post, Req} from '@nestjs/common';
 import { ReplacementsService } from './replacements.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CreateReplacementDto } from './dto/create-replacement.dto';
@@ -20,5 +20,12 @@ export class ReplacementsController {
     return this.replacementsService.createReplacement(
       createReplacementDto.property_products,
     );
+  }
+
+  @Get('/:id(*)')
+  async show(@Param('id') id: number) {
+    console.log('aqui')
+    const replacement = await this.replacementsService.findReplacementById(id);
+    return { replacement };
   }
 }

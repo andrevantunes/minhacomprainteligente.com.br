@@ -6,10 +6,8 @@ import RiboAdapter from "@/libs/ribo-adapter";
 import { getPage } from "@/requests";
 
 export const getServerSideProps: GetServerSideProps = async ({ resolvedUrl }) => {
-  console.log({ resolvedUrl })
-  const page = await getPage("i/{hash}/qrcode");
-  const hash = resolvedUrl.replace("/i/", "").replace("/qrcode", "");
-  console.log({ hash, resolvedUrl })
+  const page = await getPage("dashboard/replacements/{id}");
+  const hash = resolvedUrl.replace("/dashboard/replacements/", "");
   return { props: { ...page, resolvedUrl, hash } };
 };
 
@@ -39,7 +37,7 @@ const Page = ({
         <RiboAdapter>
           {{
             component: "DynamicContent",
-            path: `properties/${hash}`,
+            path: `replacements/${hash}`,
             status: { default: children },
           }}
         </RiboAdapter>
