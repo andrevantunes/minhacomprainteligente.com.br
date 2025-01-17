@@ -1,6 +1,6 @@
 import type { HostHeaderProps } from "./host-header.types";
 import classNames from "classnames";
-import { Card, Text, Image } from "@andrevantunes/andrevds";
+import { Card, Image } from "@andrevantunes/andrevds";
 
 const HostHeader = ({ children, className, src, text, ...props }: HostHeaderProps) => {
   const cn = classNames("host-header", className);
@@ -18,7 +18,7 @@ const HostHeader = ({ children, className, src, text, ...props }: HostHeaderProp
         flexDirection: "column",
       }}
     >
-      <Image src={src} style={{marginBottom: 16}} />
+      <Image src={src} style={{ marginBottom: 16 }} />
       {children}
     </Card>
   );

@@ -5,15 +5,20 @@ import { PrismaService } from '../../database/prisma.service';
 export class ReplacementsService {
   constructor(private prisma: PrismaService) {}
 
-  async findReplacementById(id: number){
+  async findReplacementById(id: number) {
     return await this.prisma.replacements.findFirst({
       where: {
-        id
+        id,
       },
       include: {
-        replacement_property_products: true
-      }
-    })
+        replacement_property_products: {
+          include: {
+            product: true,
+            property: true,
+          },
+        },
+      },
+    });
   }
 
   async createReplacement(replacement_property_products: any[]): Promise<any> {

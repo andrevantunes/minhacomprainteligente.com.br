@@ -13,7 +13,9 @@ const ProductList = ({
   ...props
 }: ProductListProps) => {
   const cn = classNames("product-list", className);
-  const [propertyProductsState, setPropertyProductsState] = useState(Array.isArray(propertyProducts) ? propertyProducts : []);
+  const [propertyProductsState, setPropertyProductsState] = useState(
+    Array.isArray(propertyProducts) ? propertyProducts : []
+  );
   const categories = categoriesFromPropertyProducts(propertyProducts);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [searchKeyState, setSearchKeyState] = useState("");
@@ -102,7 +104,7 @@ function propertyProductFilter(propertyProduct: any, searchKey: string, category
 }
 
 function categoriesFromPropertyProducts(propertyProducts: any[]) {
-  if(!Array.isArray(propertyProducts)) return [];
+  if (!Array.isArray(propertyProducts)) return [];
   const setter: any = new Set();
   propertyProducts.forEach((propertyProduct: any) => setter.add(propertyProduct.category));
   return [...setter.keys()];
