@@ -116,7 +116,7 @@ export class PaymentsController {
       acquirer_metadata: { customer: acquiredOrder.customer },
       amount: cart.total_price,
       currency: acquiredOrder.currency,
-      name: acquiredOrder.customer?.name,
+      name: customer?.name,
       document_number: acquiredOrder.customer?.document,
       status: acquiredOrder.status?.toLowerCase() ?? 'pending',
       fingerprint,
