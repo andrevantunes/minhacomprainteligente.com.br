@@ -31,12 +31,14 @@ const CheckoutProduct = ({
       {...props}
     >
       <div className="checkout-product__image-name-label">
-        <Image
-          width={120}
-          height={120}
-          src={src}
-          className="checkout-product__image-name-label__image"
-        />
+        <div className="checkout-product__image-container">
+          <Image
+            width={120}
+            height={120}
+            src={src}
+            className="checkout-product__image-name-label__image"
+          />
+        </div>
         <div className="checkout-product__image-name-label__name-label">
           <label
             title={`Esperado que ainda tenha ${currentQuantity} (do total de ${expectedQuantity}) unidades deste produto presentes no imóvel`}

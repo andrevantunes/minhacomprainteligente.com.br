@@ -60,7 +60,7 @@ const ProductManagementList = ({
                       elevation="md"
                       className={classNames("flex gap-1x missing-product")}
                     >
-                      <div>
+                      <div className="product-management-list__image-container">
                         <Image src={product.image} width={150} height={150} />
                       </div>
                       <div className="flex flex-column justify-content-center">
@@ -116,7 +116,7 @@ const ProductManagementList = ({
               elevation="md"
               className={classNames("flex gap-1x align-items-center justify-content-between")}
             >
-              <div>
+              <div className="product-management-list__image-container">
                 <Image src={product.image} width={150} height={150} />
               </div>
               <div className="flex flex-column justify-content-center flex-grow">

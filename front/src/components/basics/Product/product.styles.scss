@@ -1,4 +1,15 @@
 .product {
+  //background-color: white;
+  //color: black;
+  &__image-container{
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border-radius: 8px;
+    padding: 8px;
+    border: 1px solid #DDD
+  }
   &__image{
     max-height: 270px;
   }

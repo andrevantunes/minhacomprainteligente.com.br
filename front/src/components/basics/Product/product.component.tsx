@@ -17,7 +17,6 @@ const upsertProduct = (
     product.quantity += 1;
     return [...products];
   }
-  console.log("product", product);
   return [...products, { productId: Number(productId), price, quantity: 1, category }];
 };
 const Product = ({
@@ -47,7 +46,7 @@ const Product = ({
       <Title as={displayAs} size="sm">
         {title}
       </Title>
-      <div className="flex-fill flex align-items-center gap-1x mb-1x">
+      <div className="flex-fill flex align-items-center gap-1x mb-1x product__image-container">
         <img src={src} alt="Product Image" className="product__image" />
       </div>
       {category && <Label className="mb-1x mt-1x">{category}</Label>}

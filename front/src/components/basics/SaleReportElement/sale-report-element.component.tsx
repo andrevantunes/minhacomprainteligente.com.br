@@ -57,13 +57,13 @@ const SaleReportElement = ({
           className={classNames({
             "sale-report-element__amount__success": paid,
             "sale-report-element__amount__canceled": !paid && status != "pending",
-            "sale-report-element__amount__pending": status == "pending",
+            "sale-report-element__amount__pending": !paid && status == "pending",
           })}
         >
           {toBrCurrency(amount as string)}
         </Title>
         {paid && <Label variant={LabelVariants.Success}>Pago</Label>}
-        {status == "pending" && <Label variant={LabelVariants.Success}>Pendente</Label>}
+        {!paid && status == "pending" && <Label variant={LabelVariants.Warning}>Pendente</Label>}
         {!paid && status != "pending" && <Label variant={LabelVariants.Error}>Cancelado</Label>}
       </div>
     </ItemElement>

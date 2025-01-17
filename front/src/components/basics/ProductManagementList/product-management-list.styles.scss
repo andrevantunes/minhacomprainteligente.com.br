@@ -3,6 +3,14 @@
     background-color: var(--color-error-300);
   }
 
+  &__image-container{
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border-radius: 8px;
+    padding: 8px;
+    border: 1px solid #DDD
+  }
   img{
     object-fit: contain;
   }
