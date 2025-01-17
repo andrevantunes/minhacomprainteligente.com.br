@@ -1,10 +1,10 @@
-import type {SaleReportElementProps} from "./sale-report-element.types";
+import type { SaleReportElementProps } from "./sale-report-element.types";
 
 import classNames from "classnames";
-import {Icon, ItemElement, Label, LabelVariants} from "@andrevantunes/andrevds";
-import {Title} from "@/components";
-import {toBrCurrency} from "@/helpers/currency.helper";
-import {toBrDateTime} from "@/helpers/datetime.helper";
+import { Icon, ItemElement, Label, LabelVariants } from "@andrevantunes/andrevds";
+import { Title } from "@/components";
+import { toBrCurrency } from "@/helpers/currency.helper";
+import { toBrDateTime } from "@/helpers/datetime.helper";
 
 const SaleReportElement = ({
   children,
