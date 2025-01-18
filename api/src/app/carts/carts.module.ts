@@ -3,16 +3,16 @@ import { CartsService } from './carts.service';
 import { CartsController } from './carts.controller';
 import { PrismaService } from '../../database/prisma.service';
 import { OrdersService } from '../orders/orders.service';
-import { PaymentsService } from '../payments/payments.service';
 import { PaymentMailer } from '../payments/payment.mailer';
 import { PropertiesService } from '../properties/properties.service';
+import { ProductsService } from '../products/products.service';
 
 @Module({
   controllers: [CartsController],
   providers: [
     CartsService,
     OrdersService,
-    PaymentsService,
+    ProductsService,
     PaymentMailer,
     PropertiesService,
     PrismaService,

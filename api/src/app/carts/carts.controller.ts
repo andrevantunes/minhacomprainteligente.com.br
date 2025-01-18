@@ -9,26 +9,21 @@ import {
 } from '@nestjs/common';
 import { CartsService } from './carts.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { PaymentsService } from '../payments/payments.service';
 import { OrdersService } from '../orders/orders.service';
 import { PaymentTransactionAsaasService } from '../payments/paymentTransactionAsaas.service';
 import { PaymentMailer } from '../payments/payment.mailer';
 import { PropertiesService } from '../properties/properties.service';
 import { toBrCurrency } from '../../utils/currency-helper';
+import { ProductsService } from '../products/products.service';
 
 @ApiBearerAuth()
-// @Roles(RoleEnum.admin)
-// @UseGuards(AuthGuard('jwt'), RolesGuard)
 @ApiTags('Carts')
-@Controller({
-  path: 'carts',
-  version: '1',
-})
+@Controller({ path: 'carts', version: '1' })
 export class CartsController {
   constructor(
     private readonly cartsService: CartsService,
     private readonly ordersService: OrdersService,
-    private readonly paymentsService: PaymentsService,
+    private readonly productsService: ProductsService,
     private readonly paymentMailer: PaymentMailer,
     private readonly propertiesService: PropertiesService,
   ) {}
@@ -64,25 +59,14 @@ export class CartsController {
             { updated_at: new Date(), status: 'paid' },
           );
           await this.sendPaymentConfirmationNotifications(cart, order);
+          await this.removeProductsFromByCart(cart);
         }
       }
-      if (order.acquirer === 'pagarme') {
-      }
-      // const pagarme = new PagarmeTransaction();
-      // acquirerOrder = await pagarme.find(order.acquirer_id);
-      // if (acquirerOrder.status === 'paid') {
-      //   order.status = 'paid';
-      //   await this.ordersService.updateOrder(
-      //     { id: order.id },
-      //     { updated_at: new Date(), status: order.status },
-      //   );
-      // }
     }
     return { cart, order, acquirerOrder };
   }
   @Get('/:hash(*)')
   async findOne(@Param('hash') hash: string) {
-    //TODO deve verificar se a pessoa tem acesso a página antes de devolver
     const cart = await this.cartsService.cartWithProducts({
       where: { hash: hash },
     });
@@ -99,6 +83,12 @@ export class CartsController {
       where: { hash },
       data: updatePageDto,
     });
+  }
+  private async removeProductsFromByCart(cart) {
+    return this.productsService.removeProductsFromProperty(
+      cart.products,
+      cart.property_id,
+    );
   }
 
   private isPaid(aquirerOrder: any): boolean {
