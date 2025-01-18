@@ -112,10 +112,8 @@ export class PaymentTransactionAsaasService {
     };
   }
   async executeTransaction() {
-    console.log('executeTransaction request', this.options);
     return this.request(`v3/payments`, 'POST', this.options).then(
       (body: any) => {
-        console.log('executeTransaction response', this.options);
         return this.getPixInfo(body.id).then((pixInfo) => {
           this._paymentResult = { ...body, ...pixInfo };
           return this._paymentResult;
@@ -141,16 +139,13 @@ export class PaymentTransactionAsaasService {
   private async request(route: string, method: string, json?: any) {
     const uri = `${this.BASE_URL}${route}`;
     const options = { headers: this.headers, method, uri, json };
-    console.log('request', options);
     return new Promise(async (resolve, reject) => {
       request(options, (error: any, _response: any, body: any) => {
         if (error) return reject(error);
         if (typeof body !== 'string') return resolve(body);
         try {
-          console.log('json', body);
           return resolve(JSON.parse(body));
         } catch (e) {
-          console.log(body);
           return resolve(body);
         }
       });

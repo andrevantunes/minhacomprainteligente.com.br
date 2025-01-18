@@ -51,6 +51,7 @@ model companies {
   users_companies     users_companies[]
   withdraws           withdraws[]
   balances            balances[]
+  company_notifiers   company_notifiers[]
 }
 
 model products {

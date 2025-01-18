@@ -12,6 +12,9 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { PaymentsService } from '../payments/payments.service';
 import { OrdersService } from '../orders/orders.service';
 import { PaymentTransactionAsaasService } from '../payments/paymentTransactionAsaas.service';
+import { PaymentMailer } from '../payments/payment.mailer';
+import { PropertiesService } from '../properties/properties.service';
+import { toBrCurrency } from '../../utils/currency-helper';
 
 @ApiBearerAuth()
 // @Roles(RoleEnum.admin)
@@ -26,6 +29,8 @@ export class CartsController {
     private readonly cartsService: CartsService,
     private readonly ordersService: OrdersService,
     private readonly paymentsService: PaymentsService,
+    private readonly paymentMailer: PaymentMailer,
+    private readonly propertiesService: PropertiesService,
   ) {}
 
   @Post()
@@ -36,9 +41,15 @@ export class CartsController {
 
   @Get('/payment/:hash(*)')
   async findCartPayment(@Param('hash') hash: string) {
-    const cart = await this.cartsService.cart({ where: { hash: hash } });
+    const cart = await this.cartsService.cart({
+      where: { hash: hash },
+      include: { cart_products: { include: { product: true } } },
+    });
     const order = await this.ordersService.order({
       where: { cart_id: cart.id },
+      include: {
+        payments: true,
+      },
       orderBy: { id: 'desc' },
     });
     const acquirerOrder: any = {};
@@ -46,12 +57,13 @@ export class CartsController {
       if (order.acquirer === 'asaas') {
         const acquirer = new PaymentTransactionAsaasService();
         const aquirerOrder = await acquirer.findPayment(order.acquirer_id);
-        if (['RECEIVED', 'PAID'].includes(aquirerOrder?.status)) {
+        if (this.isPaid(aquirerOrder)) {
           order.status = 'paid';
           await this.ordersService.updateOrder(
             { id: order.id },
             { updated_at: new Date(), status: 'paid' },
           );
+          await this.sendPaymentConfirmationNotifications(cart, order);
         }
       }
       if (order.acquirer === 'pagarme') {
@@ -87,5 +99,36 @@ export class CartsController {
       where: { hash },
       data: updatePageDto,
     });
+  }
+
+  private isPaid(aquirerOrder: any): boolean {
+    return ['received', 'paid'].includes(aquirerOrder?.status.toLowerCase());
+  }
+  private async sendPaymentConfirmationNotifications(cart, order) {
+    const property = await this.propertiesService.property(
+      { id: cart.property_id },
+      {
+        include: {
+          properties_managers: {
+            include: {
+              user: true,
+            },
+          },
+        },
+      },
+    );
+    const payment = order.payments?.[0] ?? { method: '?', amount: '?' };
+    const products = cart.cart_products.map(
+      (cart_product) =>
+        `${cart_product.quantity}x ${cart_product.product.name}`,
+    );
+    const context = {
+      propertyName: property.name,
+      billingType: payment.method,
+      value: toBrCurrency(payment.amount),
+      product: products.join(', '),
+    };
+    const emails = property.properties_managers.map(({ user }) => user.email);
+    return this.paymentMailer.sendPaymentConfirmation(emails, context);
   }
 }

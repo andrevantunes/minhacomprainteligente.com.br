@@ -91,7 +91,6 @@ export class ProductsService {
   }
 
   async validateProductsFromProperty(products, propertyId) {
-    console.log('Validate', { products, propertyId });
     return { products, propertyId };
   }
 }

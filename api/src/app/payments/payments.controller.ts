@@ -13,6 +13,9 @@ import { OrdersService } from '../orders/orders.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { ProductsService } from '../products/products.service';
 import { PaymentTransactionAsaasService } from './paymentTransactionAsaas.service';
+import { PaymentMailer } from './payment.mailer';
+import { PropertiesService } from '../properties/properties.service';
+import { toBrCurrency } from '../../utils/currency-helper';
 
 @ApiBearerAuth()
 // @Roles(RoleEnum.admin)
@@ -29,6 +32,8 @@ export class PaymentsController {
     private readonly cartsService: CartsService,
     private readonly productsService: ProductsService,
     private readonly paymentTransaction: PaymentTransactionAsaasService,
+    private readonly paymentMailer: PaymentMailer,
+    private readonly propertiesService: PropertiesService,
   ) {}
 
   @Post()
@@ -88,7 +93,7 @@ export class PaymentsController {
     }
     const acquiredOrder = await this.paymentTransaction
       .executeTransaction()
-      .then((acquiredResponse: any) => {
+      .then(async (acquiredResponse: any) => {
         if (acquiredResponse.encodedImage) {
           // TODO mudar para ficar livre para trodos os brokers
           acquiredResponse.qrImage = `data:image/png;base64, ${acquiredResponse.encodedImage}`;
@@ -101,6 +106,9 @@ export class PaymentsController {
           acquiredResponse.qrCode =
             response?.charges?.[0].last_transaction?.qr_code;
         }
+        if (this.isPaid(acquiredResponse)) {
+          await this.sendPaymentConfirmationNotifications(cart, payment_method);
+        }
         if (acquiredResponse.status === 'failed') {
           return Promise.reject(acquiredResponse);
         }
@@ -110,6 +118,7 @@ export class PaymentsController {
         response.status(403);
         return acquiredResponse;
       });
+    console.log('acquiredOrder', acquiredOrder);
     const order = await this.ordersService.createOrder({
       acquirer: this.paymentTransaction.ACQUIRED,
       acquirer_id: acquiredOrder.id,
@@ -353,5 +362,36 @@ export class PaymentsController {
 
   private isTest() {
     return String(process.env.PAGARME_API_KEY).match(/test/);
+  }
+
+  private isPaid(acquiredResponse: any): boolean {
+    return ['paid', 'confirmed'].includes(
+      acquiredResponse?.status.toLowerCase(),
+    );
+  }
+  private async sendPaymentConfirmationNotifications(cart, billingType) {
+    const property = await this.propertiesService.property(
+      { id: cart.property_id },
+      {
+        include: {
+          properties_managers: {
+            include: {
+              user: true,
+            },
+          },
+        },
+      },
+    );
+    const products = cart.products.map(
+      (product) => `${product.quantity}x ${product.name}`,
+    );
+    const context = {
+      propertyName: property.name,
+      billingType,
+      value: toBrCurrency(cart.value),
+      product: products.join(', '),
+    };
+    const emails = property.properties_managers.map(({ user }) => user.email);
+    return this.paymentMailer.sendPaymentConfirmation(emails, context);
   }
 }
