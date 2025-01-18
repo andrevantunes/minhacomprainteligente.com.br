@@ -4,8 +4,8 @@ import { AppTemplate, Seo } from "@/components";
 import RiboAdapter from "@/libs/ribo-adapter";
 import { getPage } from "@/requests";
 
-function getHashFromUrl(resolvedUrl: string){
-  if(!/(payment\/)(\d+)/.test(resolvedUrl)) return  null;
+function getHashFromUrl(resolvedUrl: string) {
+  if (!/(payment\/)(\d+)/.test(resolvedUrl)) return null;
   return resolvedUrl
     .replace(/(payment\/)(\d+)/, "$2")
     .replace(/(\d+)\/.*/, "$1")
@@ -41,7 +41,7 @@ const Page = ({
     <>
       <Seo {...seo} />
       <AppTemplate {...props}>
-        { hash ? (
+        {hash ? (
           <RiboAdapter>
             {{
               component: "DynamicContent",
