@@ -99,7 +99,7 @@ const CreditCardSection = ({
           payment_method: "credit_card",
           fingerprint: visitorId,
         });
-        Router.push("/pagamento/sucesso?hash=" + hash);
+        Router.push("/payment/success?hash=" + hash);
       });
     } catch (error) {
       notifyError("Ocorreu um erro, confira seus dados e tente novamente");

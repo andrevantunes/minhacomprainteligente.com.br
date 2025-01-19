@@ -16,7 +16,7 @@ const CartSummary = ({
   products,
   totalPrice,
   hash,
-  bilingTypes,
+  billingTypes,
   ...props
 }: CartSummaryProps) => {
   const cn = classNames("cart-summary", className);
@@ -119,18 +119,18 @@ const CartSummary = ({
               flexDirection: "column",
             }}
           >
-            {bilingTypes.creditCard && (
-              <Button onClick={handlePaymentClick} href={`/pagamento/cartao/${hash}`}>
+            {billingTypes?.creditCard && (
+              <Button onClick={handlePaymentClick} href={`/payment/${hash}/creditcard`}>
                 Pagar com cartão de crédito
               </Button>
             )}
-            {bilingTypes.pix && (
-              <Button onClick={handlePaymentClick} href={`/pagamento/pix/${hash}`}>
+            {billingTypes?.pix && (
+              <Button onClick={handlePaymentClick} href={`/payment/${hash}/pix`}>
                 Pagar com PIX
               </Button>
             )}
-            {bilingTypes.paypal && (
-              <Button onClick={handlePaymentClick} href={`/pagamento/paypal/${hash}`}>
+            {billingTypes?.paypal && (
+              <Button onClick={handlePaymentClick} href={`/payment/${hash}/paypal`}>
                 Pagar com PayPal (internacional)
               </Button>
             )}

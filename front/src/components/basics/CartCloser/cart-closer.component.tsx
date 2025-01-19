@@ -28,7 +28,7 @@ const CartCloser = ({
     const hash = String(new Date().getTime());
     postBffApi("carts", { products, fingerprint: visitorId, propertyId, hash })
       .then((cart) => {
-        Router.push(`/carrinho/${cart.hash}`);
+        Router.push(`/payment/${cart.hash}`);
       })
       .catch((e) => console.log(e));
   };

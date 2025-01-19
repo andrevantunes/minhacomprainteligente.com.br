@@ -36,7 +36,6 @@ const PixSection = ({
 
   const handleChangeCustomerField = (event: any) => {
     const name = event.target.name;
-    console.log(event.target.name, event.target);
     const newCustomer = { ...customer, [name]: event.target.value };
     setCustomer(newCustomer);
     setStepOneValid(newCustomer.name && newCustomer.document);
@@ -156,7 +155,7 @@ const PixSection = ({
 function poolingPayment(hash: string) {
   return getBffApi(`carts/payment/${hash}`).then((r) => {
     if (r?.order?.status === "paid") {
-      location.href = `/pagamento/sucesso?hash=${hash}`;
+      location.href = `/payment/success?hash=${hash}`;
     } else {
       setTimeout(() => {
         poolingPayment(hash);

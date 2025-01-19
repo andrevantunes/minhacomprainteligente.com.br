@@ -4,7 +4,7 @@ interface CartSummaryProps extends PropsWithChildren<HTMLProps<HTMLDivElement>> 
   products: any[];
   totalPrice: number;
   hash: string;
-  bilingTypes: {
+  billingTypes: {
     pix: boolean;
     paypal: boolean;
     creditCard: boolean;
