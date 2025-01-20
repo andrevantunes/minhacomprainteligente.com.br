@@ -15,7 +15,7 @@ model users {
   email               String?
   phone               String?
   password            String?
-  provider            String
+  provider            String?
   social_id           String?
   name                String?
   role                String?
@@ -51,7 +51,6 @@ model companies {
   users_companies     users_companies[]
   withdraws           withdraws[]
   balances            balances[]
-  company_notifiers   company_notifiers[]
 }
 
 model products {

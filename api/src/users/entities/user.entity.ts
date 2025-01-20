@@ -20,7 +20,7 @@ import { AuthProvidersEnum } from '../../auth/auth-providers.enum';
 import { Exclude, Expose } from 'class-transformer';
 
 @Entity()
-export class User extends EntityHelper {
+export class Users extends EntityHelper {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -51,45 +51,41 @@ export class User extends EntityHelper {
     }
   }
 
-  @Column({ default: AuthProvidersEnum.email })
-  @Expose({ groups: ['me', 'admin'] })
-  provider: string;
+  // @Column({ default: AuthProvidersEnum.email })
+  // @Expose({ groups: ['me', 'admin'] })
+  // provider: string;
+
+  // @Index()
+  // @Column({ type: String, nullable: true })
+  // @Expose({ groups: ['me', 'admin'] })
+  // social_id: string | null;
 
   @Index()
   @Column({ type: String, nullable: true })
-  @Expose({ groups: ['me', 'admin'] })
-  socialId: string | null;
+  name: string | null;
 
-  @Index()
-  @Column({ type: String, nullable: true })
-  firstName: string | null;
+  // @ManyToOne(() => FileEntity, {
+  //   eager: true,
+  // })
+  // photo?: FileEntity | null;
 
-  @Index()
-  @Column({ type: String, nullable: true })
-  lastName: string | null;
-
-  @ManyToOne(() => FileEntity, {
-    eager: true,
-  })
-  photo?: FileEntity | null;
-
-  @ManyToOne(() => Role, {
-    eager: true,
-  })
-  role?: Role | null;
-  roleId?: number | null;
-
-  @ManyToOne(() => Status, {
-    eager: true,
-  })
-  status?: Status;
+  // @ManyToOne(() => Role, {
+  //   eager: true,
+  // })
+  role?: string;
+  // roleId?: number | null;
+  //
+  // @ManyToOne(() => Status, {
+  //   eager: true,
+  // })
+  // status?: Status;
 
   @CreateDateColumn()
-  createdAt: Date;
+  created_at: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updated_at: Date;
 
-  @DeleteDateColumn()
-  deletedAt: Date;
+  // @DeleteDateColumn()
+  // deleted_at: Date;
 }

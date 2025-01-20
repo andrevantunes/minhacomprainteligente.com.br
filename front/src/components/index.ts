@@ -31,6 +31,7 @@ export * from "./basics/GroupNavigation";
 export * from "./basics/HostHeader";
 export * from "./basics/InfoButton";
 export * from "./basics/LabelList";
+export * from "./basics/LoginForm";
 export * from "./basics/ModalContent";
 export * from "./basics/NavigationItem";
 export * from "./basics/NotificationModal";

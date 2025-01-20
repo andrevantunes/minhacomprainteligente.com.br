@@ -21,7 +21,7 @@ import { RoleEnum } from '../roles/roles.enum';
 import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from '../roles/roles.guard';
 import { infinityPagination } from '../utils/infinity-pagination';
-import { User } from './entities/user.entity';
+import { Users } from './entities/user.entity';
 import { InfinityPaginationResultType } from '../utils/types/infinity-pagination-result.type';
 import { NullableType } from '../utils/types/nullable.type';
 import { QueryUserDto } from './dto/query-user.dto';
@@ -42,7 +42,7 @@ export class UsersController {
   })
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  create(@Body() createProfileDto: CreateUserDto): Promise<User> {
+  create(@Body() createProfileDto: CreateUserDto): Promise<Users> {
     return this.usersService.create(createProfileDto);
   }
 
@@ -53,7 +53,7 @@ export class UsersController {
   @HttpCode(HttpStatus.OK)
   async findAll(
     @Query() query: QueryUserDto,
-  ): Promise<InfinityPaginationResultType<User>> {
+  ): Promise<InfinityPaginationResultType<Users>> {
     const page = query?.page ?? 1;
     let limit = query?.limit ?? 10;
     if (limit > 50) {
@@ -78,7 +78,7 @@ export class UsersController {
   })
   @Get(':id')
   @HttpCode(HttpStatus.OK)
-  findOne(@Param('id') id: string): Promise<NullableType<User>> {
+  findOne(@Param('id') id: string): Promise<NullableType<Users>> {
     return this.usersService.findOne({ id: +id });
   }
 
@@ -90,7 +90,7 @@ export class UsersController {
   update(
     @Param('id') id: number,
     @Body() updateProfileDto: UpdateUserDto,
-  ): Promise<User> {
+  ): Promise<Users> {
     return this.usersService.update(id, updateProfileDto);
   }
 

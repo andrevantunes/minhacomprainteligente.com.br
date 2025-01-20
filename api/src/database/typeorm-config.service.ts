@@ -9,8 +9,9 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
 
   createTypeOrmOptions(): TypeOrmModuleOptions {
     return {
+      schema: this.getSchema(),
       type: this.configService.get('database.type', { infer: true }),
-      url: this.configService.get('database.url', { infer: true }),
+      url: this.databaseUrl,
       host: this.configService.get('database.host', { infer: true }),
       port: this.configService.get('database.port', { infer: true }),
       username: this.configService.get('database.username', { infer: true }),
@@ -53,5 +54,16 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
           : undefined,
       },
     } as TypeOrmModuleOptions;
+  }
+
+  private get databaseUrl(): string{
+    return this.configService.get('database.url', { infer: true }) ?? ''
+  }
+
+  private getSchema(): string {
+    const schema = this.databaseUrl
+      .replace(/.*schema=(\w+)&.*/, '$1')
+      .replace(/.*schema=/, '');
+    return schema ?? 'public';
   }
 }

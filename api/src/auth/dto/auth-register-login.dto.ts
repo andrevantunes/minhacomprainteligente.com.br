@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, MinLength, Validate } from 'class-validator';
+import {IsEmail, IsNotEmpty, IsOptional, MinLength, Validate} from 'class-validator';
 import { IsNotExist } from '../../utils/validators/is-not-exists.validator';
 import { Transform } from 'class-transformer';
 import { lowerCaseTransformer } from '../../utils/transformers/lower-case.transformer';
@@ -7,9 +7,9 @@ import { lowerCaseTransformer } from '../../utils/transformers/lower-case.transf
 export class AuthRegisterLoginDto {
   @ApiProperty({ example: 'test1@example.com' })
   @Transform(lowerCaseTransformer)
-  @Validate(IsNotExist, ['User'], {
-    message: 'emailAlreadyExists',
-  })
+  // @Validate(IsNotExist, ['users'], {
+  //   message: 'emailAlreadyExists',
+  // })
   @IsEmail()
   email: string;
 
@@ -17,11 +17,15 @@ export class AuthRegisterLoginDto {
   @MinLength(6)
   password: string;
 
-  @ApiProperty({ example: 'John' })
+  @ApiProperty({ example: 'John Senna' })
   @IsNotEmpty()
-  firstName: string;
+  name: string;
+  //
+  // @ApiProperty({ example: 'email' })
+  // @IsOptional()
+  // provider?: string;
 
-  @ApiProperty({ example: 'Doe' })
-  @IsNotEmpty()
-  lastName: string;
+  @ApiProperty({ example: 'user' })
+  @IsOptional()
+  role?: string;
 }

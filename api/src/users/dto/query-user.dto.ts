@@ -7,7 +7,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { Transform, Type, plainToInstance } from 'class-transformer';
-import { User } from '../entities/user.entity';
+import { Users } from '../entities/user.entity';
 
 export class FilterUserDto {
   @ApiProperty({ type: Role })
@@ -20,7 +20,7 @@ export class FilterUserDto {
 export class SortUserDto {
   @ApiProperty()
   @IsString()
-  orderBy: keyof User;
+  orderBy: keyof Users;
 
   @ApiProperty()
   @IsString()

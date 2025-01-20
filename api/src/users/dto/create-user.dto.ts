@@ -18,9 +18,9 @@ export class CreateUserDto {
   @ApiProperty({ example: 'test1@example.com' })
   @Transform(lowerCaseTransformer)
   @IsNotEmpty()
-  @Validate(IsNotExist, ['User'], {
-    message: 'emailAlreadyExists',
-  })
+  // @Validate(IsNotExist, ['User'], {
+  //   message: 'emailAlreadyExists',
+  // })
   @IsEmail()
   email: string | null;
 
@@ -28,36 +28,31 @@ export class CreateUserDto {
   @MinLength(6)
   password?: string;
 
-  provider?: string;
+  // provider?: string;
 
-  socialId?: string | null;
+  social_id?: string | null;
 
-  @ApiProperty({ example: 'John' })
-  @IsNotEmpty()
-  firstName: string | null;
+  @ApiProperty({ example: 'André Antunes Vieira' })
+  name: string | null;
 
-  @ApiProperty({ example: 'Doe' })
-  @IsNotEmpty()
-  lastName: string | null;
+  // @ApiProperty({ type: () => FileEntity })
+  // @IsOptional()
+  // @Validate(IsExist, ['FileEntity', 'id'], {
+  //   message: 'imageNotExists',
+  // })
+  // photo?: FileEntity | null;
 
-  @ApiProperty({ type: () => FileEntity })
-  @IsOptional()
-  @Validate(IsExist, ['FileEntity', 'id'], {
-    message: 'imageNotExists',
-  })
-  photo?: FileEntity | null;
+  // @ApiProperty({ type: Role })
+  // @Validate(IsExist, ['Role', 'id'], {
+  //   message: 'roleNotExists',
+  // })
+  role?: string;
+  //
+  // @ApiProperty({ type: Status })
+  // @Validate(IsExist, ['Status', 'id'], {
+  //   message: 'statusNotExists',
+  // })
+  // status?: Status;
 
-  @ApiProperty({ type: Role })
-  @Validate(IsExist, ['Role', 'id'], {
-    message: 'roleNotExists',
-  })
-  role?: Role | null;
-
-  @ApiProperty({ type: Status })
-  @Validate(IsExist, ['Status', 'id'], {
-    message: 'statusNotExists',
-  })
-  status?: Status;
-
-  hash?: string | null;
+  // hash?: string | null;
 }

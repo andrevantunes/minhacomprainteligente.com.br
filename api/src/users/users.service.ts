@@ -4,18 +4,18 @@ import { EntityCondition } from 'src/utils/types/entity-condition.type';
 import { IPaginationOptions } from 'src/utils/types/pagination-options';
 import { DeepPartial, FindOptionsWhere, Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
-import { User } from './entities/user.entity';
+import { Users } from './entities/user.entity';
 import { NullableType } from '../utils/types/nullable.type';
 import { FilterUserDto, SortUserDto } from './dto/query-user.dto';
 
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectRepository(User)
-    private usersRepository: Repository<User>,
+    @InjectRepository(Users)
+    private usersRepository: Repository<Users>,
   ) {}
 
-  create(createProfileDto: CreateUserDto): Promise<User> {
+  create(createProfileDto: CreateUserDto): Promise<Users> {
     return this.usersRepository.save(
       this.usersRepository.create(createProfileDto),
     );
@@ -29,13 +29,11 @@ export class UsersService {
     filterOptions?: FilterUserDto | null;
     sortOptions?: SortUserDto[] | null;
     paginationOptions: IPaginationOptions;
-  }): Promise<User[]> {
-    const where: FindOptionsWhere<User> = {};
-    if (filterOptions?.roles?.length) {
-      where.role = filterOptions.roles.map((role) => ({
-        id: role.id,
-      }));
-    }
+  }): Promise<Users[]> {
+    const where: FindOptionsWhere<Users> = {};
+    // if (filterOptions?.roles?.length) {
+    //   where.role = filterOptions.roles;
+    // }
 
     return this.usersRepository.find({
       skip: (paginationOptions.page - 1) * paginationOptions.limit,
@@ -51,13 +49,13 @@ export class UsersService {
     });
   }
 
-  findOne(fields: EntityCondition<User>): Promise<NullableType<User>> {
+  findOne(fields: EntityCondition<Users>): Promise<NullableType<Users>> {
     return this.usersRepository.findOne({
       where: fields,
     });
   }
 
-  update(id: User['id'], payload: DeepPartial<User>): Promise<User> {
+  update(id: Users['id'], payload: DeepPartial<Users>): Promise<Users> {
     return this.usersRepository.save(
       this.usersRepository.create({
         id,
@@ -66,7 +64,7 @@ export class UsersService {
     );
   }
 
-  async softDelete(id: User['id']): Promise<void> {
+  async softDelete(id: Users['id']): Promise<void> {
     await this.usersRepository.softDelete(id);
   }
 }

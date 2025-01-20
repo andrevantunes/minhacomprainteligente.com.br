@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import ms from 'ms';
 import { JwtService } from '@nestjs/jwt';
-import { User } from '../users/entities/user.entity';
+import { Users } from '../users/entities/user.entity';
 import bcrypt from 'bcryptjs';
 import { AuthEmailLoginDto } from './dto/auth-email-login.dto';
 import { AuthUpdateDto } from './dto/auth-update.dto';
@@ -35,7 +35,7 @@ export class AuthService {
     private jwtService: JwtService,
     private usersService: UsersService,
     private sessionService: SessionService,
-    private mailService: MailService,
+    // private mailService: MailService,
     private configService: ConfigService<AllConfigType>,
     private prisma: PrismaService,
   ) {}
@@ -213,46 +213,44 @@ export class AuthService {
     // };
   }
 
-  async register(dto: AuthRegisterLoginDto): Promise<void> {
+  async register(dto: AuthRegisterLoginDto): Promise<any> {
     const user = await this.usersService.create({
-      ...dto,
+      name: dto.email,
       email: dto.email,
-      role: {
-        id: RoleEnum.user,
-      } as Role,
-      status: {
-        id: StatusEnum.inactive,
-      } as Status,
+      password: dto.password,
+      role: dto.role,
     });
+    console.log('created', user)
+    return user;
 
-    const hash = await this.jwtService.signAsync(
-      {
-        confirmEmailUserId: user.id,
-      },
-      {
-        secret: this.configService.getOrThrow('auth.confirmEmailSecret', {
-          infer: true,
-        }),
-        expiresIn: this.configService.getOrThrow('auth.confirmEmailExpires', {
-          infer: true,
-        }),
-      },
-    );
+    // const hash = await this.jwtService.signAsync(
+    //   {
+    //     confirmEmailUserId: user.id,
+    //   },
+    //   {
+    //     secret: this.configService.getOrThrow('auth.confirmEmailSecret', {
+    //       infer: true,
+    //     }),
+    //     expiresIn: this.configService.getOrThrow('auth.confirmEmailExpires', {
+    //       infer: true,
+    //     }),
+    //   },
+    // );
 
-    await this.mailService.userSignUp({
-      to: dto.email,
-      data: {
-        hash,
-      },
-    });
+    // await this.mailService.userSignUp({
+    //   to: dto.email,
+    //   data: {
+    //     hash,
+    //   },
+    // });
   }
 
   async confirmEmail(hash: string): Promise<void> {
-    let userId: User['id'];
+    let userId: Users['id'];
 
     try {
       const jwtData = await this.jwtService.verifyAsync<{
-        confirmEmailUserId: User['id'];
+        confirmEmailUserId: Users['id'];
       }>(hash, {
         secret: this.configService.getOrThrow('auth.confirmEmailSecret', {
           infer: true,
@@ -276,7 +274,7 @@ export class AuthService {
       id: userId,
     });
 
-    if (!user || user?.status?.id !== StatusEnum.inactive) {
+    if (!user) {
       throw new HttpException(
         {
           status: HttpStatus.NOT_FOUND,
@@ -286,9 +284,9 @@ export class AuthService {
       );
     }
 
-    user.status = plainToClass(Status, {
-      id: StatusEnum.active,
-    });
+    // user.status = plainToClass(Status, {
+    //   id: StatusEnum.active,
+    // });
     await user.save();
   }
 
@@ -323,20 +321,20 @@ export class AuthService {
       },
     );
 
-    await this.mailService.forgotPassword({
-      to: email,
-      data: {
-        hash,
-      },
-    });
+    // await this.mailService.forgotPassword({
+    //   to: email,
+    //   data: {
+    //     hash,
+    //   },
+    // });
   }
 
   async resetPassword(hash: string, password: string): Promise<void> {
-    let userId: User['id'];
+    let userId: Users['id'];
 
     try {
       const jwtData = await this.jwtService.verifyAsync<{
-        forgotUserId: User['id'];
+        forgotUserId: Users['id'];
       }>(hash, {
         secret: this.configService.getOrThrow('auth.forgotSecret', {
           infer: true,
@@ -382,7 +380,7 @@ export class AuthService {
     await user.save();
   }
 
-  async me(userJwtPayload: JwtPayloadType): Promise<NullableType<User>> {
+  async me(userJwtPayload: JwtPayloadType): Promise<NullableType<Users>> {
     return this.usersService.findOne({
       id: userJwtPayload.id,
     });
@@ -391,7 +389,7 @@ export class AuthService {
   async update(
     userJwtPayload: JwtPayloadType,
     userDto: AuthUpdateDto,
-  ): Promise<NullableType<User>> {
+  ): Promise<NullableType<Users>> {
     if (userDto.password) {
       if (!userDto.oldPassword) {
         throw new HttpException(
@@ -468,8 +466,8 @@ export class AuthService {
 
     const { token, refreshToken, tokenExpires } = await this.getTokensData({
       id: session.user.id,
-      roleId: session.user.roleId,
-      sessionId: session.id,
+      role: session.user.role,
+      session_id: session.id,
     });
 
     return {
@@ -479,7 +477,7 @@ export class AuthService {
     };
   }
 
-  async softDelete(user: User): Promise<void> {
+  async softDelete(user: Users): Promise<void> {
     await this.usersService.softDelete(user.id);
   }
 
@@ -490,9 +488,9 @@ export class AuthService {
   }
 
   private async getTokensData(data: {
-    id: User['id'];
-    roleId: User['roleId'];
-    sessionId: Session['id'];
+    id: Users['id'];
+    role: Users['role'];
+    session_id: Session['id'];
   }) {
     const tokenExpiresIn = this.configService.getOrThrow('auth.expires', {
       infer: true,
@@ -504,8 +502,8 @@ export class AuthService {
       await this.jwtService.signAsync(
         {
           id: data.id,
-          roleId: data.roleId,
-          sessionId: data.sessionId,
+          roleId: data.role,
+          sessionId: data.session_id,
         },
         {
           secret: this.configService.getOrThrow('auth.secret', { infer: true }),
@@ -514,7 +512,7 @@ export class AuthService {
       ),
       await this.jwtService.signAsync(
         {
-          sessionId: data.sessionId,
+          sessionId: data.session_id,
         },
         {
           secret: this.configService.getOrThrow('auth.refreshSecret', {
