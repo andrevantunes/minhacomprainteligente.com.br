@@ -9,6 +9,7 @@ pnpm-lock.yaml
 
 # next.js
 .next/
+.vercel
 # next-pwa
 public/service-worker.js*
 public/workbox-*.js*
