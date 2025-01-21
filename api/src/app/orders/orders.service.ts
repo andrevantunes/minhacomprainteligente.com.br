@@ -44,6 +44,54 @@ export class OrdersService {
     return orders;
   }
 
+  async ordersByAuthorizedUserToken(token) {
+    return this.prisma.orders.findMany({
+      include: {
+        payments: true,
+        cart: {
+          include: {
+            property: {
+              include: {
+                properties_managers: {
+                  include: {
+                    user: {
+                      include: {
+                        sessions: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+            cart_products: {
+              include: {
+                product: true,
+              },
+            },
+          },
+        },
+      },
+      where: {
+        cart: {
+          property: {
+            properties_managers: {
+              some: {
+                user: {
+                  sessions: {
+                    some: {
+                      token: token,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      orderBy: [{ created_at: 'desc' }],
+    });
+  }
+
   async createOrder(data: any): Promise<any> {
     return this.prisma.orders.create({ data });
   }

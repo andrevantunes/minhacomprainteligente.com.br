@@ -26,7 +26,6 @@ export class PropertiesService {
       include,
     });
   }
-
   async propertyWithProducts(where) {
     const property = await this.prisma.properties.findFirst({
       where,
@@ -45,6 +44,32 @@ export class PropertiesService {
       property.name = `${property.address.country}, ${property.address.state}, ${property.address.city}, ${property.address.neighbourhood}, ${property.address.street_number}, ${property.address.complement} (${property.address.refference})`;
     }
     return property;
+  }
+
+  async userPropertiesFromSessionToken(userToken) {
+    const properties = await this.prisma.properties.findMany({
+      include: { address: true, properties_managers: true },
+      where: {
+        properties_managers: {
+          some: {
+            user: {
+              sessions: {
+                some: {
+                  token: userToken,
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    properties.forEach((property) => {
+      if (!property.name) {
+        property.name = `${property.address.country}, ${property.address.state}, ${property.address.city}, ${property.address.neighbourhood}, ${property.address.street_number}, ${property.address.complement} (${property.address.refference})`;
+      }
+    });
+    return properties;
   }
 
   async properties(params: {

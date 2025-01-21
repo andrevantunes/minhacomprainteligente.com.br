@@ -1,30 +1,18 @@
 import {
   Controller,
   Get,
-  // Post,
-  // Body,
-  // Put,
   Param,
-  // Delete,
-  // UseGuards,
-  // SerializeOptions,
   HttpCode,
   HttpStatus,
-  // Logger,
-  // Req,
+  UseGuards,
 } from '@nestjs/common';
 import { PropertiesService } from './properties.service';
-// import { CreateReplacementDto } from './dto/create-page.dto';
-// import { UpdatePageDto } from './dto/update-page.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-// import { Roles } from '../roles/roles.decorator';
-// import { RoleEnum } from '../roles/roles.enum';
-// import { AuthGuard } from '@nestjs/passport';
-// import { RolesGuard } from '../roles/roles.guard';
+import { AuthGuard } from '@nestjs/passport';
+import { AuthorizationToken } from '../../utils/AuthorizationToken';
 
 @ApiBearerAuth()
-// @Roles(RoleEnum.admin)
-// @UseGuards(AuthGuard('jwt'), RolesGuard)
+@UseGuards(AuthGuard('jwt'))
 @ApiTags('Properties')
 @Controller({
   path: 'properties',
@@ -45,16 +33,18 @@ export class PropertiesController {
   // })
   @Get()
   @HttpCode(HttpStatus.OK)
-  async findAll() {
-    const properties = await this.propertiesService.properties({
-      include: { address: true },
-    });
-    return { properties, test: 'Abc123' };
+  async findAll(@AuthorizationToken() token: string) {
+    const properties =
+      await this.propertiesService.userPropertiesFromSessionToken(
+        // this.getAuthorizationToken(request),
+        token,
+      );
+
+    return { properties };
   }
 
   @Get('/:hash(*)')
   async findOne(@Param('hash') hash: string) {
-    //TODO deve verificar se a pessoa tem acesso a página antes de devolver
     const property = await this.propertiesService.propertyWithProducts({
       hash: hash,
     });
@@ -85,4 +75,9 @@ export class PropertiesController {
   // remove(@Param('path') path: string) {
   //   return this.propertiesService.deletePage({ path });
   // }
+  private getAuthorizationToken(request): string {
+    const token = request.headers.authorization;
+    if (!token) return '';
+    return token.replace(/bearer /, '');
+  }
 }

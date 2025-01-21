@@ -56,8 +56,8 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
     } as TypeOrmModuleOptions;
   }
 
-  private get databaseUrl(): string{
-    return this.configService.get('database.url', { infer: true }) ?? ''
+  private get databaseUrl(): string {
+    return this.configService.get('database.url', { infer: true }) ?? '';
   }
 
   private getSchema(): string {

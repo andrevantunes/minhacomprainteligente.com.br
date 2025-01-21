@@ -10,15 +10,9 @@ import { Users } from '../users/entities/user.entity';
 import bcrypt from 'bcryptjs';
 import { AuthEmailLoginDto } from './dto/auth-email-login.dto';
 import { AuthUpdateDto } from './dto/auth-update.dto';
-import { RoleEnum } from '../roles/roles.enum';
-import { StatusEnum } from '../statuses/statuses.enum';
-import { plainToClass } from 'class-transformer';
-import { Status } from '../statuses/entities/status.entity';
-import { Role } from '../roles/entities/role.entity';
 import { SocialInterface } from '../social/interfaces/social.interface';
 import { AuthRegisterLoginDto } from './dto/auth-register-login.dto';
 import { UsersService } from '../users/users.service';
-import { MailService } from '../mail/mail.service';
 import { NullableType } from '../utils/types/nullable.type';
 import { LoginResponseType } from './types/login-response.type';
 import { ConfigService } from '@nestjs/config';
@@ -42,80 +36,71 @@ export class AuthService {
 
   async validateLogin(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    _loginDto: AuthEmailLoginDto,
+    loginDto: AuthEmailLoginDto,
   ): Promise<LoginResponseType> {
-    throw new HttpException(
-      {
-        status: HttpStatus.UNPROCESSABLE_ENTITY,
-        errors: {
-          email: 'notFound',
-        },
-      },
-      HttpStatus.UNPROCESSABLE_ENTITY,
-    );
-    return {} as any;
+    const user = await this.prisma.users.findFirst({
+      where: { email: loginDto.email },
+    });
 
-    // const user: any = await this.prisma.users.findUnique({
-    //   where: { email: loginDto.email },
-    // } as any);
-    //
-    // if (!user) {
-    //   throw new HttpException(
-    //     {
-    //       status: HttpStatus.UNPROCESSABLE_ENTITY,
-    //       errors: {
-    //         email: 'notFound',
-    //       },
-    //     },
-    //     HttpStatus.UNPROCESSABLE_ENTITY,
-    //   );
-    // }
-    //
-    // if (user.provider !== AuthProvidersEnum.email) {
-    //   throw new HttpException(
-    //     {
-    //       status: HttpStatus.UNPROCESSABLE_ENTITY,
-    //       errors: {
-    //         email: `needLoginViaProvider:${user.provider}`,
-    //       },
-    //     },
-    //     HttpStatus.UNPROCESSABLE_ENTITY,
-    //   );
-    // }
-    //
-    // const isValidPassword = await bcrypt.compare(
-    //   loginDto.password,
-    //   user.password,
-    // );
-    //
-    // if (!isValidPassword) {
-    //   throw new HttpException(
-    //     {
-    //       status: HttpStatus.UNPROCESSABLE_ENTITY,
-    //       errors: {
-    //         password: 'incorrectPassword',
-    //       },
-    //     },
-    //     HttpStatus.UNPROCESSABLE_ENTITY,
-    //   );
-    // }
-    //
-    // const session = await this.prisma.users.create({
-    //   data: user,
-    // });
-    //
-    // const { token, refreshToken, tokenExpires } = await this.getTokensData({
-    //   id: user.id,
-    //   roleId: user.roleId,
-    //   sessionId: session.id,
-    // });
-    //
-    // return {
-    //   refreshToken,
-    //   token,
-    //   tokenExpires,
-    //   user,
-    // };
+    if (!user || !user.password) {
+      throw new HttpException(
+        {
+          status: HttpStatus.UNPROCESSABLE_ENTITY,
+          errors: {
+            email: 'notFound',
+          },
+        },
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+
+    const isValidPassword = await bcrypt.compare(
+      loginDto.password,
+      user.password,
+    );
+
+    if (!isValidPassword) {
+      throw new HttpException(
+        {
+          status: HttpStatus.UNPROCESSABLE_ENTITY,
+          errors: {
+            password: 'incorrectPassword',
+          },
+        },
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+
+    const session = await this.prisma.sessions.create({
+      data: {
+        user_id: user.id,
+      },
+    });
+    //TODO: invalidar tokens antigos?
+
+    const { token, refreshToken, tokenExpires } = await this.getTokensData({
+      id: user.id,
+      session_id: session.id,
+    });
+    await this.prisma.sessions.update({
+      where: { id: session.id },
+      data: {
+        token: token,
+        refresh_token: refreshToken,
+        token_expires: new Date(tokenExpires),
+      },
+    });
+
+    return {
+      refreshToken,
+      token,
+      tokenExpires,
+      user: {
+        id: user.id,
+        role: user.role,
+        name: user.name,
+      },
+    };
   }
 
   async validateSocialLogin(
@@ -220,7 +205,7 @@ export class AuthService {
       password: dto.password,
       role: dto.role,
     });
-    console.log('created', user)
+    console.log('created', user);
     return user;
 
     // const hash = await this.jwtService.signAsync(
@@ -320,6 +305,7 @@ export class AuthService {
         }),
       },
     );
+    console.log(hash);
 
     // await this.mailService.forgotPassword({
     //   to: email,
@@ -466,7 +452,6 @@ export class AuthService {
 
     const { token, refreshToken, tokenExpires } = await this.getTokensData({
       id: session.user.id,
-      role: session.user.role,
       session_id: session.id,
     });
 
@@ -489,7 +474,6 @@ export class AuthService {
 
   private async getTokensData(data: {
     id: Users['id'];
-    role: Users['role'];
     session_id: Session['id'];
   }) {
     const tokenExpiresIn = this.configService.getOrThrow('auth.expires', {
@@ -502,7 +486,6 @@ export class AuthService {
       await this.jwtService.signAsync(
         {
           id: data.id,
-          roleId: data.role,
           sessionId: data.session_id,
         },
         {
@@ -512,7 +495,7 @@ export class AuthService {
       ),
       await this.jwtService.signAsync(
         {
-          sessionId: data.session_id,
+          session_id: data.session_id,
         },
         {
           secret: this.configService.getOrThrow('auth.refreshSecret', {

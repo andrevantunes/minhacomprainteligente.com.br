@@ -31,9 +31,7 @@ export class UsersService {
     paginationOptions: IPaginationOptions;
   }): Promise<Users[]> {
     const where: FindOptionsWhere<Users> = {};
-    // if (filterOptions?.roles?.length) {
-    //   where.role = filterOptions.roles;
-    // }
+    console.log(filterOptions);
 
     return this.usersRepository.find({
       skip: (paginationOptions.page - 1) * paginationOptions.limit,

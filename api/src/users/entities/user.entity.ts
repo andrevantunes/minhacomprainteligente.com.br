@@ -2,21 +2,15 @@ import {
   Column,
   AfterLoad,
   CreateDateColumn,
-  DeleteDateColumn,
   Entity,
   Index,
-  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
   BeforeInsert,
   BeforeUpdate,
 } from 'typeorm';
-import { Role } from '../../roles/entities/role.entity';
-import { Status } from '../../statuses/entities/status.entity';
-import { FileEntity } from '../../files/entities/file.entity';
 import bcrypt from 'bcryptjs';
 import { EntityHelper } from '../../utils/entity-helper';
-import { AuthProvidersEnum } from '../../auth/auth-providers.enum';
 import { Exclude, Expose } from 'class-transformer';
 
 @Entity()
@@ -24,8 +18,6 @@ export class Users extends EntityHelper {
   @PrimaryGeneratedColumn()
   id: number;
 
-  // For "string | null" we need to use String type.
-  // More info: https://github.com/typeorm/typeorm/issues/2567
   @Column({ type: String, unique: true, nullable: true })
   @Expose({ groups: ['me', 'admin'] })
   email: string | null;
@@ -51,41 +43,15 @@ export class Users extends EntityHelper {
     }
   }
 
-  // @Column({ default: AuthProvidersEnum.email })
-  // @Expose({ groups: ['me', 'admin'] })
-  // provider: string;
-
-  // @Index()
-  // @Column({ type: String, nullable: true })
-  // @Expose({ groups: ['me', 'admin'] })
-  // social_id: string | null;
-
   @Index()
   @Column({ type: String, nullable: true })
   name: string | null;
 
-  // @ManyToOne(() => FileEntity, {
-  //   eager: true,
-  // })
-  // photo?: FileEntity | null;
-
-  // @ManyToOne(() => Role, {
-  //   eager: true,
-  // })
   role?: string;
-  // roleId?: number | null;
-  //
-  // @ManyToOne(() => Status, {
-  //   eager: true,
-  // })
-  // status?: Status;
 
   @CreateDateColumn()
   created_at: Date;
 
   @UpdateDateColumn()
   updated_at: Date;
-
-  // @DeleteDateColumn()
-  // deleted_at: Date;
 }

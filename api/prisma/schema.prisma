@@ -26,6 +26,19 @@ model users {
   users_companies     users_companies[]
   carts               carts[]
   withdraws           withdraws[]
+  sessions            sessions[]
+}
+
+model sessions {
+  id            Int       @id @default(autoincrement())
+  user_id       Int
+  user          users     @relation(fields: [user_id], references: [id])
+  token         String?   @unique
+  refresh_token String?
+  token_expires DateTime?
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @default(now())
+  deleted_at    DateTime?
 }
 
 model pages {

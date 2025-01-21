@@ -23,7 +23,6 @@ import { AuthRegisterLoginDto } from './dto/auth-register-login.dto';
 import { LoginResponseType } from './types/login-response.type';
 import { Users } from '../users/entities/user.entity';
 import { NullableType } from '../utils/types/nullable.type';
-import {UsersService} from "../users/users.service";
 
 @ApiTags('Auth')
 @Controller({
