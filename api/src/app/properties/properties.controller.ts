@@ -4,15 +4,12 @@ import {
   Param,
   HttpCode,
   HttpStatus,
-  UseGuards,
 } from '@nestjs/common';
 import { PropertiesService } from './properties.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { AuthGuard } from '@nestjs/passport';
 import { AuthorizationToken } from '../../utils/AuthorizationToken';
 
 @ApiBearerAuth()
-@UseGuards(AuthGuard('jwt'))
 @ApiTags('Properties')
 @Controller({
   path: 'properties',
