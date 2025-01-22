@@ -1,19 +1,9 @@
-import {
-  Controller,
-  Get,
-  HttpCode,
-  HttpStatus,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Get, HttpCode, HttpStatus } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { AuthGuard } from '@nestjs/passport';
 import { AuthorizationToken } from '../../utils/AuthorizationToken';
 
 @ApiBearerAuth()
-// @Roles(RoleEnum.admin)
-// @UseGuards(AuthGuard('jwt'), RolesGuard)
-@UseGuards(AuthGuard('jwt'))
 @ApiTags('Orders')
 @Controller({
   path: 'orders',

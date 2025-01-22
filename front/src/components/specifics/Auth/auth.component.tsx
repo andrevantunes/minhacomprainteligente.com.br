@@ -1,6 +1,5 @@
 import { Brand } from "@/components";
 import config from "@/configs/app.config";
-import { authEnabled } from "@/configs/auth.config";
 import dictionary from "@/configs/dictionary";
 import {
   ensureStartWithSlash,
@@ -11,27 +10,20 @@ import {
   trimSlashes,
 } from "@/helpers/links.helpers";
 import { pushWithParameters } from "@/helpers/router.helpers";
-import { ActionName, StoreType, UserStore, useStore } from "@/store";
+import { StoreType, useStore } from "@/store";
 import { Caption, Heading } from "@andrevantunes/andrevds";
 import { useRouter } from "next/router";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { AuthProps } from "./auth.types";
 import AuthHeader from "./AuthHeader";
 import AuthSocials from "./AuthSocials";
-import EnemSubscriptionIdUpdateForm from "./EnemSubscriptionIdUpdateForm";
-import { hasSubscriptionIdCookie } from "./EnemSubscriptionIdUpdateForm/enem-subscription-id-update-form.component";
 import SignInForm from "./SignInForm";
 import SignUpForm from "./SignUpForm";
 import WhatsAppUpdateForm from "./AccountUpdateForm";
-import { putBffApi } from "@/requests";
-import { PlatformContext } from "@/contexts/PlatformContext";
 
 const Auth = ({ sign = "in", setSign, close, context = "modal" }: AuthProps) => {
-  const { fetchPlatform, setPlatformSlug } = useContext(PlatformContext);
   const [isRedirecting, setIsRedirecting] = useState(false);
   const [confirmAccountUpdate, setConfirmAccountUpdate] = useState(false);
-  const [confirmEnemSubscriptionId, setConfirmEnemSubscriptionId] = useState(false);
-
   const router = useRouter();
   const [user] = useStore(StoreType.User);
   const { path = "/", epath } = router.query;
@@ -39,14 +31,9 @@ const Auth = ({ sign = "in", setSign, close, context = "modal" }: AuthProps) => 
 
   const isAuth = !user.guest && user.fetched;
 
-  const showSubscriptionIdForm = () => {
-    return authEnabled.enemSubscriptionId && !user.enemSubscriptionId && !hasSubscriptionIdCookie();
-  };
-
   const goToInitialStep = () => {
     setConfirmAccountUpdate(false);
-    if (showSubscriptionIdForm()) setConfirmEnemSubscriptionId(true);
-    else goToFinishStep();
+    goToFinishStep();
   };
 
   const goToFinishStep = () => {
@@ -92,15 +79,6 @@ const Auth = ({ sign = "in", setSign, close, context = "modal" }: AuthProps) => 
       router.push(`${config.basePath}${trimSlashes(nextPath)}`);
       return close?.();
     }
-    if (platformSlug && (!user.platformSlug || user.platformSlug !== platformSlug)) {
-      setPlatformSlug?.(platformSlug);
-      return putBffApi("user/platforms/signin", { platform_slug: platformSlug }).then(() => {
-        UserStore.updatePlatformSlug(platformSlug, ActionName.Update);
-        fetchPlatform?.(platformSlug).then(() => router.push("/painel"));
-
-        return close?.();
-      });
-    }
 
     router.push("/painel");
     return close?.();
@@ -126,24 +104,6 @@ const Auth = ({ sign = "in", setSign, close, context = "modal" }: AuthProps) => 
         </Heading>
         <WhatsAppUpdateForm
           goToNext={goToInitialStep}
-          platformSlug={platformSlug}
-          isFetching={isFetching}
-        />
-        <Explanation html={accountDictionary.explanation.html} />
-      </>
-    );
-  }
-
-  if (confirmEnemSubscriptionId) {
-    const accountDictionary = dictionary.account;
-    return (
-      <>
-        <Brand className="auth__brand" height={40} />
-        <Heading className="text-center" size="sm">
-          {accountDictionary.header.title}
-        </Heading>
-        <EnemSubscriptionIdUpdateForm
-          goToNext={goToFinishStep}
           platformSlug={platformSlug}
           isFetching={isFetching}
         />

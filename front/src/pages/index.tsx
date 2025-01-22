@@ -5,8 +5,10 @@ import { AppTemplate, Seo } from "@/components";
 import RiboAdapter from "@/libs/ribo-adapter";
 import { getPage } from "@/requests";
 import { StoreType, useStore } from "@/store";
+import AuthenticationRequiredMessage from "../components/basics/AuthenticationRequiredMessage/authentication-required-message.component";
 
 export const getServerSideProps: GetServerSideProps = async ({ resolvedUrl }) => {
+  console.log("[...content]");
   if (resolvedUrl.match(/\.ico$/)) return { props: { resolvedUrl } };
   if (resolvedUrl == "/") resolvedUrl = "/home";
   const page = await getPage(resolvedUrl);
@@ -30,6 +32,7 @@ const Page = ({
   ...props
 }: SSWPagesProps) => {
   const [{ guest }] = useStore(StoreType.User);
+  console.log({ guest });
   const isBlockedPage = authenticated && guest;
   const seo = { title, description, image, canonical, robots, url };
 
@@ -37,12 +40,14 @@ const Page = ({
     <>
       <Seo {...seo} />
       <AppTemplate {...props}>
-        {isBlockedPage ? <BlockedMessage /> : children && <RiboAdapter>{children}</RiboAdapter>}
+        {isBlockedPage ? (
+          <AuthenticationRequiredMessage />
+        ) : (
+          children && <RiboAdapter>{children}</RiboAdapter>
+        )}
       </AppTemplate>
     </>
   );
 };
-
-const BlockedMessage = () => <div>Você precisar logar para acessar essa página</div>;
 
 export default Page;

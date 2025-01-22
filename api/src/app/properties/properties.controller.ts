@@ -1,10 +1,4 @@
-import {
-  Controller,
-  Get,
-  Param,
-  HttpCode,
-  HttpStatus,
-} from '@nestjs/common';
+import { Controller, Get, Param, HttpCode, HttpStatus } from '@nestjs/common';
 import { PropertiesService } from './properties.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthorizationToken } from '../../utils/AuthorizationToken';

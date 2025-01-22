@@ -1,7 +1,6 @@
 import type { User, UserProfile, UserState } from "@/types";
 
 import Dictionary from "@/configs/dictionary";
-import * as Login from "@/helpers/login.helper";
 import { notifyError, notifySuccess } from "@/helpers/notify.helper";
 import { logout } from "@/helpers/user.helper";
 import {
@@ -13,34 +12,12 @@ import { getStore, setStore } from "@/store/store.global";
 import { errorFetchState, fetchedState, fetchingState } from "@/store/store.helper";
 import { ActionName, StoreType } from "@/store/store.types";
 import { SocialNames } from "@/types";
-import Router from "next/router";
-import { get as getCookies, set as setCookie } from "@/helpers/cookie.helper";
-
-import * as AccessStore from "@/store/AccessesStore/accesses-store.action";
 import { userInitialState } from "./user-store.state";
 
-const { common, socialLogin, signin, signup, signout } = Dictionary;
+const { common, socialLogin, signin, signup } = Dictionary;
 
 export const update = (user: Partial<UserState>, actionName: ActionName) =>
   setStore(StoreType.User, (state) => ({ ...state, ...user }), actionName);
-
-export const updatePlatformSlug = (platformSlug: string, actionName: ActionName) => {
-  const cookies = getCookies(null) || {};
-  const cookie = JSON.parse(cookies["user-credentials"] || "");
-  cookie.platformSlug = platformSlug;
-  if (!platformSlug || platformSlug === "enem-e-vestibulares") cookie.platformSlug = "";
-
-  cookie.platformSlug = platformSlug;
-  setStore(
-    StoreType.User,
-    (state) => ({ ...state, platformSlug: cookie.platformSlug }),
-    actionName
-  );
-  setCookie(null, "user-credentials", JSON.stringify(cookie), {
-    domain: ".mesalva.com",
-    path: "/",
-  });
-};
 
 export const getUserStore = () => {
   const { fetching, error, fetched, ...user } = getStore(StoreType.User);
@@ -60,23 +37,12 @@ export const updateProfile = async (user: Partial<UserProfile>) => {
   }
 };
 
-export const loginByEmail = async (
-  // email: string,
-  // password: string,
-  // platformSlug = ""
-): Promise<void> => {
+export const loginByEmail = async (): Promise<void> => {
   const event = { loginBy: "email" };
   return handleLogin({ ...signin, event }, async () => null);
 };
 
-export const signUpByEmail = async (
-  // name: string,
-  // whatsapp: string,
-  // email: string,
-  // password: string,
-  // crmAllowed: boolean,
-  // platformSlug = ""
-): Promise<void> => {
+export const signUpByEmail = async (): Promise<void> => {
   const event = { loginBy: "signup" };
   return handleLogin({ ...signup, event }, async () =>
     null
@@ -93,10 +59,19 @@ export const loginBySocial = async (name: SocialNames): Promise<void> => {
 };
 
 export const validate = async () => {
-  const { guest, uid } = getStore(StoreType.User);
-  if (guest || typeof uid !== "string") {
+  const { guest } = getStore(StoreType.User);
+  if (guest) {
+    if (typeof localStorage != "undefined") {
+      const localToken = localStorage.getItem("authorization")
+      if (localToken) {
+        update(
+          { fetching: false, fetched: true, error: false, token: localToken, guest: false },
+          ActionName.Initialize
+        );
+        return;
+      }
+    }
     update(errorFetchState, ActionName.Error);
-    AccessStore.update(errorFetchState, ActionName.Error);
     return;
   }
   update(fetchingState, ActionName.Fetching);
@@ -138,22 +113,20 @@ const handleLogin = async (dictionary: LoginDictionary, login: LoginMethod) => {
 const updateUserFullStore = async () => {
   update(fetchingState, ActionName.Fetching);
   try {
-    const { user, accesses } = await getUserProfile();
+    const { user } = await getUserProfile();
     update(user, ActionName.Add);
-    AccessStore.addAccesses(accesses);
     update(fetchedState, ActionName.Fetched);
   } catch (error) {
     update(errorFetchState, ActionName.Error);
-    AccessStore.update(errorFetchState, ActionName.Error);
     throw new Error();
   }
 };
 
 const expireUser = async () => {
-  notifyError(`${signout.expired}. ${signout.redirect}`);
-  setTimeout(() => {
-    handleLogout();
-    update(errorFetchState, ActionName.Error);
-    Router.push(Login.getURLLogin());
-  }, 4000);
+  // notifyError(`${signout.expired}. ${signout.redirect}`);
+  // setTimeout(() => {
+  //   handleLogout();
+  //   update(errorFetchState, ActionName.Error);
+  //   Router.push(Login.getURLLogin());
+  // }, 4000);
 };
