@@ -1,9 +1,10 @@
 import type { Page } from "@/types/page.types";
 import type { GetServerSideProps } from "next";
 
-import { AppTemplate, Seo } from "@/components";
+import { AppTemplate, AuthenticationRequiredMessage, Seo } from "@/components";
 import RiboAdapter from "@/libs/ribo-adapter";
 import { getPage } from "@/requests";
+import { StoreType, useStore } from "@/store";
 
 export const getServerSideProps: GetServerSideProps = async ({ resolvedUrl }) => {
   const page = await getPage("dashboard/replacements/{id}");
@@ -29,18 +30,26 @@ const Page = ({
   url,
   ...props
 }: SSWPagesProps) => {
+  const [{ guest }] = useStore(StoreType.User);
+  const isBlockedPage = authenticated && guest;
   const seo = { title, description, image, canonical, robots, url };
   return (
     <>
       <Seo {...seo} />
       <AppTemplate {...props}>
-        <RiboAdapter>
-          {{
-            component: "DynamicContent",
-            path: `replacements/${hash}`,
-            status: { default: children },
-          }}
-        </RiboAdapter>
+        {isBlockedPage ? (
+          <AuthenticationRequiredMessage />
+        ) : (
+          children && (
+            <RiboAdapter>
+              {{
+                component: "DynamicContent",
+                path: `replacements/${hash}`,
+                status: { default: children },
+              }}
+            </RiboAdapter>
+          )
+        )}
       </AppTemplate>
     </>
   );

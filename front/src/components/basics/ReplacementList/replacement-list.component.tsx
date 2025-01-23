@@ -45,16 +45,12 @@ const ReplacementList = ({
                   <div className="flex flex-column justify-content-center">
                     <div>
                       <div className="flex gap-1x">
-                        <span>Nome do produto:</span>
+                        <span>Produto:</span>
                         <b>{propertyProduct.product.name}</b>
                       </div>
                       <div className="flex gap-1x">
                         <span>Quantidade a ser reposta:</span>
                         <b>{propertyProduct.quantity}</b>
-                      </div>
-                      <div className="flex gap-1x">
-                        <span>Propriedade:</span>
-                        <b>{propertyProduct.property?.name}</b>
                       </div>
                     </div>
                   </div>
