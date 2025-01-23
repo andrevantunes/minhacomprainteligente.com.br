@@ -43,6 +43,7 @@ export * from "./basics/ProductList";
 export * from "./basics/ProductManagementList";
 export * from "./basics/PropertySelection";
 export * from "./basics/RawScript";
+export * from "./basics/ReplacementList";
 export * from "./basics/RepositionFloatButton";
 export * from "./basics/SaleReportElement";
 export * from "./basics/Step";

@@ -1,6 +1,6 @@
 import type { SectionTitleProps } from "./section-title.types";
 
-import { Hr, Heading, Image, Skeleton } from "@andrevantunes/andrevds";
+import { Hr, Heading, Skeleton } from "@andrevantunes/andrevds";
 import { Breadcrumb } from "@/components";
 import { ToggleButton } from "@/components/adapters/ToggleButton";
 import { useRouter } from "next/router";
@@ -47,11 +47,6 @@ const SectionTitleBreadcrumb = ({ list }: { list: SectionTitleProps["breadcrumb"
         )}
         <div className="flex justify-content-between w-100">
           <Breadcrumb list={list} />
-          <Image
-            src="https://cdn.mesalva.com/uploads/image/MjAyMy0xMi0wNSAxODowOTo1MCArMDAwMDQ3ODU4Mg%3D%3D%0A.png"
-            width={65}
-            height={40}
-          />
         </div>
       </div>
       <Hr className="mb-lg" />
