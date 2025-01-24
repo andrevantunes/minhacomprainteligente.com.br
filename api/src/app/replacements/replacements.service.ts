@@ -5,6 +5,19 @@ import { PrismaService } from '../../database/prisma.service';
 export class ReplacementsService {
   constructor(private prisma: PrismaService) {}
 
+  async all(){
+    return await this.prisma.replacements.findMany({
+      include: {
+        replacement_property_products: {
+          include: {
+            product: true,
+            property: true,
+          },
+        },
+      },
+    });
+  }
+
   async findReplacementById(id: number) {
     return await this.prisma.replacements.findFirst({
       where: {
@@ -19,6 +32,10 @@ export class ReplacementsService {
         },
       },
     });
+  }
+
+  async update(prismaData){
+    return await this.prisma.replacements.update(prismaData);
   }
 
   async createReplacement(replacement_property_products: any[]): Promise<any> {
