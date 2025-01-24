@@ -5,7 +5,6 @@ import { PasswordField, TextField, Card, Image } from "@andrevantunes/andrevds";
 import { Button, Title } from "@/components";
 import { postBffApi } from "@/requests";
 import { notifySuccess } from "@/helpers/notify.helper";
-import Router from "next/router";
 
 const LoginForm = ({ children, className, ...props }: LoginFormProps) => {
   const cn = classNames("login-form flex flex-column align-items-stretch gap-1x", className);
@@ -17,7 +16,7 @@ const LoginForm = ({ children, className, ...props }: LoginFormProps) => {
     }).then((response: any) => {
       localStorage.setItem("authorization", response.token);
       notifySuccess("Login realizado com sucesso!");
-      Router.push("/dashboard");
+      location.href = "/dashboard";
     });
   };
   return (
