@@ -1,7 +1,7 @@
 import type { ReplacementListProps } from "./replacement-list.types";
 
 import classNames from "classnames";
-import { Card, Image, Label, LabelVariants } from "@andrevantunes/andrevds";
+import { Card, Image, ItemElement, Label, LabelVariants, Text } from "@andrevantunes/andrevds";
 import { Button, Title } from "@/components";
 import { useState } from "react";
 import { putBffApi } from "@/requests";
@@ -114,11 +114,11 @@ const ReplacementList = ({
           </section>
         )}
         {viewMode === "properties" && (
-          <div className="flex flex-column gap-1x">
+          <ItemElement className="flex flex-column gap-1x">
             {propertyProductsByPropertiesEntries?.map(([propertyName, propertyProducts]: any) => (
               <section className="flex flex-column gap-1x" key={propertyName}>
+                <Text>Produtos para serem repostos no imóvel:</Text>
                 <Title>{propertyName}</Title>
-                <p>Produtos para serem repostos no imóvel: {propertyName}</p>
                 {propertyProducts?.map((propertyProduct: any) => (
                   <Card
                     key={propertyProduct.product.name}
@@ -149,7 +149,7 @@ const ReplacementList = ({
                 ))}
               </section>
             ))}
-          </div>
+          </ItemElement>
         )}
 
         {status && replacementStatuses.pt[statusState] && (

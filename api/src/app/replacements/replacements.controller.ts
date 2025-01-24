@@ -1,7 +1,8 @@
-import {Controller, Get, Param, Post, Put, Req} from '@nestjs/common';
+import { Controller, Get, Param, Post, Put, Req } from '@nestjs/common';
 import { ReplacementsService } from './replacements.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CreateReplacementDto } from './dto/create-replacement.dto';
+import { AuthorizationToken } from '../../utils/AuthorizationToken';
 
 @ApiBearerAuth()
 // @Roles(RoleEnum.admin)
@@ -23,24 +24,38 @@ export class ReplacementsController {
   }
 
   @Get('/:id(*)')
-  async show(@Param('id') id: number) {
-    const replacement = await this.replacementsService.findReplacementById(id);
+  async show(@Param('id') id: number, @AuthorizationToken() token: string) {
+    const replacement = await this.replacementsService.findReplacementById(
+      id,
+      token,
+    );
     return { replacement };
   }
 
   @Get()
-  async index() {
-    const replacements = await this.replacementsService.all();
-    console.log(replacements)
+  async index(@AuthorizationToken() token: string) {
+    const replacements =
+      await this.replacementsService.replacementsFromAuthenticatedUserToken(
+        token,
+      );
     return { replacements };
   }
 
   @Put('/:id(*)')
-  update(@Param('id') id: number, @Req() request: any) {
+  async update(
+    @Param('id') id: number,
+    @Req() request: any,
+    @AuthorizationToken() token: string,
+  ) {
     const createReplacementDto: CreateReplacementDto = request.body;
+    const replacement = await this.replacementsService.findReplacementById(
+      id,
+      token,
+    );
+    if (!replacement) return new Error('not found/not access');
     return this.replacementsService.update({
       where: { id },
-      data: { status: createReplacementDto.status},
+      data: { status: createReplacementDto.status },
     });
   }
 }

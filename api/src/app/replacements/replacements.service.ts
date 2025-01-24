@@ -5,8 +5,27 @@ import { PrismaService } from '../../database/prisma.service';
 export class ReplacementsService {
   constructor(private prisma: PrismaService) {}
 
-  async all(){
+  async replacementsFromAuthenticatedUserToken(authenticatedUserToken: string) {
     return await this.prisma.replacements.findMany({
+      where: {
+        replacement_property_products: {
+          some: {
+            property: {
+              properties_managers: {
+                some: {
+                  user: {
+                    sessions: {
+                      some: {
+                        token: authenticatedUserToken,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
       include: {
         replacement_property_products: {
           include: {
@@ -18,10 +37,27 @@ export class ReplacementsService {
     });
   }
 
-  async findReplacementById(id: number) {
+  async findReplacementById(id: number, authenticatedUserToken: string) {
     return await this.prisma.replacements.findFirst({
       where: {
         id,
+        replacement_property_products: {
+          some: {
+            property: {
+              properties_managers: {
+                some: {
+                  user: {
+                    sessions: {
+                      some: {
+                        token: authenticatedUserToken,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
       },
       include: {
         replacement_property_products: {
@@ -34,7 +70,7 @@ export class ReplacementsService {
     });
   }
 
-  async update(prismaData){
+  async update(prismaData) {
     return await this.prisma.replacements.update(prismaData);
   }
 
