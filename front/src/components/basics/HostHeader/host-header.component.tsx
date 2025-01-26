@@ -1,10 +1,17 @@
 import type { HostHeaderProps } from "./host-header.types";
 import classNames from "classnames";
 import { Card, Image } from "@andrevantunes/andrevds";
-import {Button} from "@/components";
+import { Button } from "@/components";
 import React from "react";
 
-const HostHeader = ({ children, className, backButton = true, src, text, ...props }: HostHeaderProps) => {
+const HostHeader = ({
+  children,
+  className,
+  backButton = true,
+  src,
+  text,
+  ...props
+}: HostHeaderProps) => {
   const cn = classNames("host-header", className);
   const handleOnClick = (_event: any) => {
     history.back();

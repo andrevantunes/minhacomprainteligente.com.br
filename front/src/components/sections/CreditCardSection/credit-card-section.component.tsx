@@ -158,7 +158,12 @@ const CreditCardSection = ({
                   name="phone"
                 />
               </div>
-              <Button loading={fetching} onClick={() => setStep(2)} disabled={fetching || !stepOneValid} className="flex flex-row">
+              <Button
+                loading={fetching}
+                onClick={() => setStep(2)}
+                disabled={fetching || !stepOneValid}
+                className="flex flex-row"
+              >
                 Continuar
               </Button>
             </div>

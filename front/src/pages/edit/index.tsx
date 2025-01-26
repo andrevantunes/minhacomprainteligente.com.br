@@ -1,6 +1,6 @@
 import dynamic from "next/dynamic";
 
-import {AuthenticationRequiredMessage, ToggleButton} from "@/components";
+import { AuthenticationRequiredMessage, ToggleButton } from "@/components";
 import { notifyError, notifySuccess } from "@/helpers/notify.helper";
 import { useLocalStorage } from "@/hooks";
 import RiboAdapter from "@/libs/ribo-adapter";
@@ -10,7 +10,7 @@ import classNames from "classnames";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { getPageApi, savePageApi } from "@/requests";
-import {StoreType, useStore} from "@/store";
+import { StoreType, useStore } from "@/store";
 
 const preventRecognizedError = (obj: any) => {
   if (typeof obj !== "object") return obj;
@@ -129,8 +129,7 @@ const Playground = () => {
     setAutoSaveEnabled(true);
   };
 
-
-  if(guest){
+  if (guest) {
     return <AuthenticationRequiredMessage />;
   }
 
