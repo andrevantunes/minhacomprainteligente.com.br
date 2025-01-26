@@ -8,9 +8,9 @@ import { StoreType, useStore } from "@/store";
 import AuthenticationRequiredMessage from "../components/basics/AuthenticationRequiredMessage/authentication-required-message.component";
 
 export const getServerSideProps: GetServerSideProps = async ({ resolvedUrl }) => {
-  console.log("[...content]");
   if (resolvedUrl.match(/\.ico$/)) return { props: { resolvedUrl } };
   if (resolvedUrl == "/") resolvedUrl = "/home";
+  console.log("[...content]", resolvedUrl);
   const page = await getPage(resolvedUrl);
   return { props: { ...page, resolvedUrl } };
 };

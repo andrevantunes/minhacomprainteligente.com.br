@@ -48,6 +48,7 @@ export * from "./basics/ReplacementList";
 export * from "./basics/RepositionFloatButton";
 export * from "./basics/SaleReportElement";
 export * from "./basics/Step";
+export * from "./basics/WithdrawSection";
 export * from "./experimental/Conditional";
 export * from "./hocs/WithDateRange";
 export * from "./hocs/WithDelay";

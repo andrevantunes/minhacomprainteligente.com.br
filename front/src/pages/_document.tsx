@@ -9,11 +9,13 @@ export default class CustomDocument extends Document {
           <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
           <link rel="icon" href="/favicon.ico" type="image/x-icon" />
           <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-          <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer />
-          <script
-            id="one-signal"
-            dangerouslySetInnerHTML={{
-              __html: `window.OneSignalDeferred = window.OneSignalDeferred || [];
+          {process.env.NEXT_PUBLIC_ONESIGNAL_ID && (
+            <>
+              <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer />
+              <script
+                id="one-signal"
+                dangerouslySetInnerHTML={{
+                  __html: `window.OneSignalDeferred = window.OneSignalDeferred || [];
 OneSignalDeferred.push(async function (OneSignal) {
   await OneSignal.init({
     appId: "${process.env.NEXT_PUBLIC_ONESIGNAL_ID}",
@@ -26,8 +28,10 @@ OneSignalDeferred.push(async function (OneSignal) {
     },
   });
 });`,
-            }}
-          />
+                }}
+              />
+            </>
+          )}
         </Head>
         <body>
           <Main />
