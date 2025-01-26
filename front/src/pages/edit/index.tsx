@@ -1,6 +1,6 @@
 import dynamic from "next/dynamic";
 
-import { ToggleButton } from "@/components";
+import {AuthenticationRequiredMessage, ToggleButton} from "@/components";
 import { notifyError, notifySuccess } from "@/helpers/notify.helper";
 import { useLocalStorage } from "@/hooks";
 import RiboAdapter from "@/libs/ribo-adapter";
@@ -10,6 +10,7 @@ import classNames from "classnames";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { getPageApi, savePageApi } from "@/requests";
+import {StoreType, useStore} from "@/store";
 
 const preventRecognizedError = (obj: any) => {
   if (typeof obj !== "object") return obj;
@@ -63,6 +64,7 @@ const toString = (value?: Record<string, any>) => JSON.stringify(value, null, 2)
 const Editor = dynamic(() => import("@monaco-editor/react"), { ssr: false });
 
 const Playground = () => {
+  const [{ guest }] = useStore(StoreType.User);
   const [showCode, setShowCode] = useState(true);
   const [json, setJson] = useLocalStorage("playground-editor-content", toString(jsonDefault));
   const [autoSaveEnabled, setAutoSaveEnabled] = useState(false);
@@ -126,6 +128,11 @@ const Playground = () => {
     if (autoSaveEnabled) return;
     setAutoSaveEnabled(true);
   };
+
+
+  if(guest){
+    return <AuthenticationRequiredMessage />;
+  }
 
   return (
     <div className="playground">

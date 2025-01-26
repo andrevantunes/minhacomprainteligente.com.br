@@ -6,10 +6,8 @@ import RiboAdapter from "@/libs/ribo-adapter";
 import { getPage } from "@/requests";
 
 export const getServerSideProps: GetServerSideProps = async ({ resolvedUrl }) => {
-  console.log({ resolvedUrl });
   const page = await getPage("i/{hash}/qrcode");
   const hash = resolvedUrl.replace("/i/", "").replace("/qrcode", "");
-  console.log({ hash, resolvedUrl });
   return { props: { ...page, resolvedUrl, hash } };
 };
 

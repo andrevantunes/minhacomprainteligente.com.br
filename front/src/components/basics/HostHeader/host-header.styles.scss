@@ -1,2 +1,8 @@
 .host-header {
+  position: relative;
+  &__btn-back{
+    position: absolute;
+    left: 8px;
+    top: 8px;
+  }
 }

@@ -121,10 +121,11 @@ export class CartsService {
     return this.prisma.carts.create({ data, include: { cart_products: true } });
   }
 
-  async updateCart(params: { where: any; data: any }): Promise<any> {
-    const { data, where } = params;
+  async updateCart(hash: string, data: any): Promise<any> {
+    const where = { hash };
     if (data.products) {
       let total_price = 0;
+      const product_ids: number[] = [];
       const cart = await this.prisma.carts.findFirst({ where });
       if (cart) {
         const promises = data.products.map(
@@ -132,6 +133,7 @@ export class CartsService {
             // todo atualizar unity_price pelo product
             const subtotal_price = product.quantity * product.unity_price;
             total_price += subtotal_price;
+            product_ids.push(product.id);
             return this.prisma.cart_products.update({
               data: { subtotal_price, quantity: product.quantity },
               where: {
@@ -144,8 +146,16 @@ export class CartsService {
           },
         );
         await Promise.all(promises);
-
-        return this.prisma.carts.update({ data: { total_price }, where });
+        await this.prisma.cart_products.updateMany({
+          data: { subtotal_price: 0, quantity: 0 },
+          where: {
+            cart_id: cart.id,
+            product_id: {
+              notIn: product_ids,
+            },
+          },
+        });
+        return await this.prisma.carts.update({ data: { total_price }, where });
       }
     }
     return await true;

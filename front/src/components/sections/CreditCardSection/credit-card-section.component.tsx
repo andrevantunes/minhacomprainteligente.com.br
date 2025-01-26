@@ -22,6 +22,7 @@ const CreditCardSection = ({
   const [cardHolder, setCardHolder] = useState("");
   const [cardNumber, setCardNumber] = useState("");
   const [iconName, setIconName] = useState("");
+  const [fetching, setFetching] = useState(false);
 
   const [expireDate, setExpireDate] = useState("");
   const [cvv, setCvv] = useState("");
@@ -86,6 +87,7 @@ const CreditCardSection = ({
     const { visitorId } = await fp.get();
 
     try {
+      setFetching(true);
       validateRecaptcha("PAY").then(async (recaptchaToken) => {
         await postBffApi("payments", {
           cardHolder,
@@ -102,9 +104,9 @@ const CreditCardSection = ({
         Router.push("/payment/success?hash=" + hash);
       });
     } catch (error) {
+      setFetching(false);
       notifyError("Ocorreu um erro, confira seus dados e tente novamente");
     }
-
     setIsSubmitting(false);
   };
 
@@ -156,7 +158,7 @@ const CreditCardSection = ({
                   name="phone"
                 />
               </div>
-              <Button onClick={() => setStep(2)} disabled={!stepOneValid} className="flex flex-row">
+              <Button loading={fetching} onClick={() => setStep(2)} disabled={fetching || !stepOneValid} className="flex flex-row">
                 Continuar
               </Button>
             </div>

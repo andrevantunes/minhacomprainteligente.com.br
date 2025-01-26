@@ -23,6 +23,7 @@ const CartSummary = ({
   const [stateProducts, setStateProducts] = useState(
     typeof products === "object" ? products || [] : []
   );
+  const [fetching, setFetching] = useState(false);
   const [stateTotalPrice, setStateTotalPrice] = useState(totalPrice || 0);
   const [notified, setNotified] = useState(false);
 
@@ -30,7 +31,7 @@ const CartSummary = ({
   useEffect(() => {
     setCartByHash({ byHash: { [hash]: { products, totalPrice } } });
   }, []);
-  const handleIncreaseProduct = (productId: number | string) => {
+  const handleIncreaseProduct = async (productId: number | string) => {
     let totalPrice = 0;
     const stateProducts2 = stateProducts.map((product) => {
       let quantity = product.quantity;
@@ -40,7 +41,9 @@ const CartSummary = ({
     });
     setStateTotalPrice(totalPrice);
     setStateProducts(stateProducts2);
-    updateCartOnApi(hash, { products: stateProducts2 });
+    setFetching(true);
+    await updateCartOnApi(hash, { products: stateProducts2 });
+    setFetching(false);
   };
 
   const handlePaymentClick = (event: any) => {
@@ -60,7 +63,7 @@ const CartSummary = ({
       }, 8000);
     }
   };
-  const handleDecreaseProduct = (productId: number | string) => {
+  const handleDecreaseProduct = async (productId: number | string) => {
     let totalPrice = 0;
     const stateProducts2 = stateProducts
       .map((product) => {
@@ -72,7 +75,9 @@ const CartSummary = ({
       .filter((product) => product.quantity > 0);
     setStateProducts(stateProducts2);
     setStateTotalPrice(totalPrice);
-    updateCartOnApi(hash, { products: stateProducts2 });
+    setFetching(true);
+    await updateCartOnApi(hash, { products: stateProducts2 });
+    setFetching(false);
   };
   return (
     <div className={cn} {...props}>
@@ -120,17 +125,34 @@ const CartSummary = ({
             }}
           >
             {billingTypes?.creditCard && (
-              <Button onClick={handlePaymentClick} href={`/payment/${hash}/creditcard`}>
+              <Button
+                onClick={handlePaymentClick}
+                href={`/payment/${hash}/creditcard`}
+                iconName="credit-card"
+                loading={fetching}
+                disabled={fetching}
+              >
                 Pagar com cartão de crédito
               </Button>
             )}
             {billingTypes?.pix && (
-              <Button onClick={handlePaymentClick} href={`/payment/${hash}/pix`}>
+              <Button
+                onClick={handlePaymentClick}
+                href={`/payment/${hash}/pix`}
+                iconName="pix"
+                loading={fetching}
+                disabled={fetching}
+              >
                 Pagar com PIX
               </Button>
             )}
             {billingTypes?.paypal && (
-              <Button onClick={handlePaymentClick} href={`/payment/${hash}/paypal`}>
+              <Button
+                onClick={handlePaymentClick}
+                href={`/payment/${hash}/paypal`}
+                loading={fetching}
+                disabled={fetching}
+              >
                 Pagar com PayPal (internacional)
               </Button>
             )}

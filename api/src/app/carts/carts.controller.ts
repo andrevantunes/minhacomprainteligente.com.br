@@ -79,16 +79,10 @@ export class CartsController {
   @Put('/:hash(*)')
   update(@Param('hash') hash: string, @Req() request: any) {
     const updatePageDto: any = request.body;
-    return this.cartsService.updateCart({
-      where: { hash },
-      data: updatePageDto,
-    });
+    return this.cartsService.updateCart(hash, updatePageDto);
   }
   private async removeProductsFromByCart(cart) {
-    return this.productsService.removeProductsFromProperty(
-      cart.products,
-      cart.property_id,
-    );
+    return this.productsService.removeProductsFromCart(cart);
   }
 
   private isPaid(aquirerOrder: any): boolean {
