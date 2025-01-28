@@ -375,8 +375,8 @@ model wallets {
   updated_at         DateTime             @default(now())
   deleted_at         DateTime?
   withdraws          withdraws[]
-  users              users?               @relation(fields: [usersId], references: [id])
-  usersId            Int?
+  user               users?               @relation(fields: [user_id], references: [id])
+  user_id            Int?
   account_statements account_statements[]
 }
 

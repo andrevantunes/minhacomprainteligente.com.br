@@ -33,8 +33,8 @@ import { CartsModule } from './app/carts/carts.module';
 import { PaymentsModule } from './app/payments/payments.module';
 import { OrdersModule } from './app/orders/orders.module';
 import { WithdrawsModule } from './app/withdraws/withdraws.module';
-import { BalancesModule } from './app/balances/balances.module';
 import { ReplacementsModule } from './app/replacements/replacements.module';
+import { WalletsModule } from "./app/wallets/wallets.module";
 
 @Module({
   imports: [
@@ -96,7 +96,7 @@ import { ReplacementsModule } from './app/replacements/replacements.module';
     PagesModule,
     PropertiesModule,
     WithdrawsModule,
-    BalancesModule,
+    WalletsModule,
     CartsModule,
     PaymentsModule,
     OrdersModule,

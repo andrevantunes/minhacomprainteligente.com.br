@@ -9,6 +9,7 @@ import { getBffApi } from "@/requests";
 const WithdrawSection = ({ children, className, path, ...props }: WithdrawSectionProps) => {
   const cn = classNames("withdraw-section", className);
   useEffect(() => {
+    console.log("Withdraws request", path);
     getBffApi(path).then((x: any) => {
       console.log("Withdraws response", x);
     });
