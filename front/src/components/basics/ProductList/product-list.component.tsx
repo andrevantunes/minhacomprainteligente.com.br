@@ -3,7 +3,7 @@ import type { ProductListProps } from "./product-list.types";
 import classNames from "classnames";
 import { Label, TextField } from "@andrevantunes/andrevds";
 import { Product, Grid } from "@/components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const ProductList = ({
   children,
@@ -20,8 +20,19 @@ const ProductList = ({
   const [selectedCategory, setSelectedCategory] = useState("");
   const [searchKeyState, setSearchKeyState] = useState("");
 
-  const handleChangeFilter = (event: any) => {
-    const searchKey = event.target.value.toLowerCase();
+  useEffect(() => {
+    const filteredCategory = new URLSearchParams(location.search).get("category");
+    if (filteredCategory) {
+      setSelectedCategory(filteredCategory.toLowerCase());
+      setPropertyProductsState(
+        propertyProducts.filter((propertyProduct) =>
+          propertyProductFilter(propertyProduct, "", filteredCategory.toLowerCase())
+        )
+      );
+    }
+  }, []);
+
+  const updateFilter = (searchKey: string) => {
     setSearchKeyState(searchKey);
     setPropertyProductsState(
       propertyProducts.filter((propertyProduct) =>
@@ -30,14 +41,19 @@ const ProductList = ({
     );
   };
 
+  const handleChangeFilter = (event: any) => {
+    const searchKey = event.target.value.toLowerCase();
+    updateFilter(searchKey);
+  };
+
   const handleCategoryClick = (event: any) => {
-    const category = event.target.innerHTML;
-    if (selectedCategory === category) setSelectedCategory("");
+    const category = event.target.innerHTML.toLowerCase();
+    if (selectedCategory.toLowerCase() === category) setSelectedCategory("");
     else setSelectedCategory(category);
 
     setPropertyProductsState(
       propertyProducts.filter((propertyProduct) =>
-        propertyProductFilter(propertyProduct, searchKeyState, category)
+        propertyProductFilter(propertyProduct, searchKeyState.toLowerCase(), category)
       )
     );
   };
@@ -58,7 +74,11 @@ const ProductList = ({
               <Label
                 onClick={handleCategoryClick}
                 key={category}
-                variant={(selectedCategory === category ? "primary" : "warning") as any}
+                variant={
+                  (selectedCategory.toLowerCase() === category.toLowerCase()
+                    ? "primary"
+                    : "warning") as any
+                }
               >
                 {category}
               </Label>
@@ -92,7 +112,7 @@ const ProductList = ({
 };
 
 function propertyProductFilter(propertyProduct: any, searchKey: string, category?: string) {
-  if (category && propertyProduct.category !== category) return false;
+  if (category && propertyProduct.category.toLowerCase() !== category) return false;
 
   if (searchKey.length < 2) return true;
   const propertySearcher =
