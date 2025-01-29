@@ -378,6 +378,7 @@ model wallets {
   user               users?               @relation(fields: [user_id], references: [id])
   user_id            Int?
   account_statements account_statements[]
+  receivables        receivables[]
 }
 
 model account_statements {
@@ -392,4 +393,15 @@ model account_statements {
   created_at  DateTime  @default(now())
   updated_at  DateTime  @default(now())
   deleted_at  DateTime?
+}
+
+model receivables {
+  id         Int       @id @default(autoincrement())
+  amount     Int
+  currency   Currency  @default(BRL)
+  wallet_id  Int
+  wallet     wallets   @relation(fields: [wallet_id], references: [id])
+  created_at DateTime  @default(now())
+  updated_at DateTime  @default(now())
+  deleted_at DateTime?
 }

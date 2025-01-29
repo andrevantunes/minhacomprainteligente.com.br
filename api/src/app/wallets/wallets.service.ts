@@ -16,6 +16,9 @@ export class WalletsService {
           },
         },
       },
+      include: {
+        receivables: true,
+      },
     });
   }
 }
