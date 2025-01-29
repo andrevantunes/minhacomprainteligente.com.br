@@ -3,19 +3,22 @@ import type { WithdrawSectionProps } from "./withdraw-section.types";
 import classNames from "classnames";
 import { Grid, Text, Title } from "@/components";
 import { Card } from "@andrevantunes/andrevds";
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import { getBffApi } from "@/requests";
-import {toBrCurrency} from "@/helpers/currency.helper";
+import { toBrCurrency } from "@/helpers/currency.helper";
 
 const WithdrawSection = ({ children, className, path, ...props }: WithdrawSectionProps) => {
   const cn = classNames("withdraw-section", className);
   const [wallets, setWallets] = useState([]);
   useEffect(() => {
     getBffApi(path).then((response: any) => {
-      const resWallets = response.wallets.map((wallet) => {
+      const resWallets = response.wallets.map((wallet: any) => {
         return {
           ...wallet,
-          receivableAmount: wallet.receivables.reduce((acc, receivable) => acc + receivable.amount, 0),
+          receivableAmount: wallet.receivables.reduce(
+            (acc: number, receivable: any) => acc + receivable.amount,
+            0
+          ),
         };
       });
       setWallets(resWallets);
