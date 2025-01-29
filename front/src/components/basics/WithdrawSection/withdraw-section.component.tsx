@@ -27,7 +27,7 @@ const WithdrawSection = ({ children, className, path, ...props }: WithdrawSectio
   return (
     <div className={cn} {...props}>
       {children}
-      {wallets.map((wallet) => (
+      {wallets.map((wallet: any) => (
         <div key={wallet.id}>
           <Grid columns={{ md: [1, 1], sm: [1, 1], xs: [1] }}>
             <Card
