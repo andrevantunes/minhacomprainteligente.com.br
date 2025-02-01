@@ -1,8 +1,8 @@
 import type { ProductListProps } from "./product-list.types";
 
 import classNames from "classnames";
-import { Label, TextField } from "@andrevantunes/andrevds";
-import { Product, Grid } from "@/components";
+import { Label, TextField, Hr, Text } from "@andrevantunes/andrevds";
+import { Product, Grid, Title } from "@/components";
 import { useEffect, useState } from "react";
 
 const ProductList = ({
@@ -19,26 +19,33 @@ const ProductList = ({
   const categories = categoriesFromPropertyProducts(propertyProducts);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [searchKeyState, setSearchKeyState] = useState("");
+  const [showOtherProducts, setShowOtherProducts] = useState(false);
+  const [showEmptyMessage, setEmptyMessage] = useState(false);
 
   useEffect(() => {
     const filteredCategory = new URLSearchParams(location.search).get("category");
     if (filteredCategory) {
       setSelectedCategory(filteredCategory.toLowerCase());
-      setPropertyProductsState(
-        propertyProducts.filter((propertyProduct) =>
-          propertyProductFilter(propertyProduct, "", filteredCategory.toLowerCase())
-        )
+      const newProductList = propertyProducts.map(
+        propertyProductFilter("", filteredCategory.toLowerCase())
       );
+      setPropertyProductsState(newProductList);
+      setShowOtherProducts(!newProductList.every(({ filtered }: any) => filtered));
+      setEmptyMessage(!newProductList.some(({ filtered }: any) => filtered));
+    } else {
+      setSelectedCategory("");
+      setPropertyProductsState(propertyProducts.map(propertyProductFilter("", "")));
+      setShowOtherProducts(false);
+      setEmptyMessage(false);
     }
   }, []);
 
   const updateFilter = (searchKey: string) => {
     setSearchKeyState(searchKey);
-    setPropertyProductsState(
-      propertyProducts.filter((propertyProduct) =>
-        propertyProductFilter(propertyProduct, searchKey, selectedCategory)
-      )
-    );
+    const newProductList = propertyProducts.map(propertyProductFilter(searchKey, selectedCategory));
+    setPropertyProductsState(newProductList);
+    setShowOtherProducts(!newProductList.every(({ filtered }: any) => filtered));
+    setEmptyMessage(!newProductList.some(({ filtered }: any) => filtered));
   };
 
   const handleChangeFilter = (event: any) => {
@@ -48,14 +55,25 @@ const ProductList = ({
 
   const handleCategoryClick = (event: any) => {
     const category = event.target.innerHTML.toLowerCase();
-    if (selectedCategory.toLowerCase() === category) setSelectedCategory("");
-    else setSelectedCategory(category);
+    if (selectedCategory.toLowerCase() === category) {
+      setSelectedCategory("");
+      const newProductList = propertyProducts.map(
+        propertyProductFilter(searchKeyState.toLowerCase(), "")
+      );
 
-    setPropertyProductsState(
-      propertyProducts.filter((propertyProduct) =>
-        propertyProductFilter(propertyProduct, searchKeyState.toLowerCase(), category)
-      )
-    );
+      setPropertyProductsState(newProductList);
+      setShowOtherProducts(false);
+      setEmptyMessage(false);
+    } else {
+      setSelectedCategory(category);
+      const newProductList = propertyProducts.map(
+        propertyProductFilter(searchKeyState.toLowerCase(), category)
+      );
+
+      setPropertyProductsState(newProductList);
+      setShowOtherProducts(!newProductList.every(({ filtered }: any) => filtered));
+      setEmptyMessage(!newProductList.some(({ filtered }: any) => filtered));
+    }
   };
   return (
     <div className={cn} {...props}>
@@ -86,7 +104,8 @@ const ProductList = ({
           })}
         </div>
       </div>
-
+      <Title>Produtos</Title>
+      {showEmptyMessage && <Text>Nenhum produto encontrado para os filtros selecionados</Text>}
       <Grid
         style={{ marginBottom: 60 }}
         columns={{
@@ -95,32 +114,69 @@ const ProductList = ({
           xs: [1],
         }}
       >
-        {propertyProductsState.map((propertiesProduct) => (
-          <Product
-            buttonLabel={buttonLabel}
-            src={propertiesProduct.product.image}
-            category={propertiesProduct.category}
-            price={propertiesProduct.price}
-            title={propertiesProduct.product.name}
-            productId={propertiesProduct.product.id}
-            key={propertiesProduct.product.id}
-          />
-        ))}
+        {propertyProductsState
+          .filter(({ filtered }) => filtered)
+          .map((propertiesProduct) => (
+            <Product
+              buttonLabel={buttonLabel}
+              src={propertiesProduct.product.image}
+              category={propertiesProduct.category}
+              price={propertiesProduct.price}
+              title={propertiesProduct.product.name}
+              productId={propertiesProduct.product.id}
+              key={propertiesProduct.product.id}
+            />
+          ))}
       </Grid>
+
+      {showOtherProducts && (
+        <>
+          <Hr />
+          <Title>Outros produtos</Title>
+          <Grid
+            style={{ marginBottom: 60 }}
+            columns={{
+              md: [1, 1, 1],
+              sm: [1, 1],
+              xs: [1],
+            }}
+          >
+            {propertyProductsState
+              .filter(({ filtered }) => filtered === false)
+              .map((propertiesProduct) => (
+                <Product
+                  buttonLabel={buttonLabel}
+                  src={propertiesProduct.product.image}
+                  category={propertiesProduct.category}
+                  price={propertiesProduct.price}
+                  title={propertiesProduct.product.name}
+                  productId={propertiesProduct.product.id}
+                  key={propertiesProduct.product.id}
+                />
+              ))}
+          </Grid>
+        </>
+      )}
     </div>
   );
 };
 
-function propertyProductFilter(propertyProduct: any, searchKey: string, category?: string) {
-  if (category && propertyProduct.category.toLowerCase() !== category) return false;
+function propertyProductFilter(searchKey: string, category?: string): any {
+  return (propertyProduct: any) => {
+    if (category && propertyProduct.category.toLowerCase() !== category)
+      return { ...propertyProduct, filtered: false };
 
-  if (searchKey.length < 2) return true;
-  const propertySearcher =
-    `${propertyProduct.category} ${propertyProduct.product.name}`.toLowerCase();
+    if (searchKey.length < 2) return { ...propertyProduct, filtered: true };
+    const propertySearcher =
+      `${propertyProduct.category} ${propertyProduct.product.name}`.toLowerCase();
 
-  const words = searchKey.split(" ").map((word: string) => word.trim());
+    const words = searchKey.split(" ").map((word: string) => word.trim());
 
-  return words.every((word: string) => propertySearcher.includes(word));
+    return {
+      ...propertyProduct,
+      filtered: words.every((word: string) => propertySearcher.includes(word)),
+    };
+  };
 }
 
 function categoriesFromPropertyProducts(propertyProducts: any[]) {
