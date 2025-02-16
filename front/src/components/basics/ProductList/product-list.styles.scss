@@ -3,12 +3,16 @@
     cursor: pointer;
   }
   &__product-list-filters{
+    background-color: var(--color-background-primary);
+    padding: 8px;
+    border-radius: 8px;
     @media (max-width: 768px){
       position: sticky;
       top: 0;
       margin: 24px -16px;
-      padding: 8px 16px;
+      padding: 16px 16px 8px 16px;
       box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+      border-radius: 0;
     }
     &__categories{
       justify-content: center;

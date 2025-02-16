@@ -272,20 +272,21 @@ enum Currency {
 }
 
 model payments {
-  id                 Int                  @id @default(autoincrement())
-  amount             Int
-  method             String
-  status             PaymentStatus
-  currency           Currency             @default(BRL)
-  acquirer           String
-  acquirer_id        String
-  fingerprint        String?
-  acquirer_metadata  Json
-  order_id           Int
-  order              orders               @relation(fields: [order_id], references: [id])
-  created_at         DateTime             @default(now())
-  updated_at         DateTime             @default(now())
-  deleted_at         DateTime?
+  id                Int           @id @default(autoincrement())
+  amount            Int
+  method            String
+  status            PaymentStatus
+  currency          Currency      @default(BRL)
+  acquirer          String
+  acquirer_id       String
+  fingerprint       String?
+  acquirer_metadata Json
+  order_id          Int
+  order             orders        @relation(fields: [order_id], references: [id])
+  created_at        DateTime      @default(now())
+  updated_at        DateTime      @default(now())
+  deleted_at        DateTime?
+
   account_statements account_statements[]
 
   @@index([acquirer_id])
@@ -396,12 +397,14 @@ model account_statements {
 }
 
 model receivables {
-  id         Int       @id @default(autoincrement())
-  amount     Int
-  currency   Currency  @default(BRL)
-  wallet_id  Int
-  wallet     wallets   @relation(fields: [wallet_id], references: [id])
-  created_at DateTime  @default(now())
-  updated_at DateTime  @default(now())
-  deleted_at DateTime?
+  id              Int       @id @default(autoincrement())
+  amount          Int
+  currency        Currency  @default(BRL)
+  wallet_id       Int
+  wallet          wallets   @relation(fields: [wallet_id], references: [id])
+  settlement_date DateTime
+  settled_at      DateTime
+  created_at      DateTime  @default(now())
+  updated_at      DateTime  @default(now())
+  deleted_at      DateTime?
 }

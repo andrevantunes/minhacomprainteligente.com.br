@@ -104,6 +104,7 @@ export class PaymentsController {
         if (this.isPaid(acquiredResponse)) {
           await this.sendPaymentConfirmationNotifications(cart, payment_method);
           await this.removeProductsFromByCart(cart);
+          await this.updateWallets(acquiredResponse, cart, payment_method);
         }
         if (acquiredResponse.status === 'failed') {
           return Promise.reject(acquiredResponse);
@@ -208,6 +209,22 @@ export class PaymentsController {
       cart.property_id,
     );
   }
+
+  private async updateWallets(acquiredResponse, cart, payment_method){
+    const tax = 0.1; //TODO pegar a partir das configurações do parceiro/empresa
+    const wallet_id = 3; //TODO pegar wallet_id deste parceiro/empresa a partir do apartamento
+    const amount = acquiredResponse.value * (1 - tax);
+    const currency = 'BRL';
+    if(payment_method === 'pix'){
+
+    }
+    else if(payment_method === 'credit_card'){
+
+    }
+    console.log({
+      acquiredResponse, cart, payment_method
+    })
+  }
   private async sendPaymentConfirmationNotifications(cart, billingType) {
     const property = await this.propertiesService.property(
       { id: cart.property_id },
@@ -228,7 +245,7 @@ export class PaymentsController {
       propertyName: property.name,
       billingType,
       value: toBrCurrency(cart.value),
-      product: products.join(', '),
+      product: products.join(' + '),
     };
     const emails = property.properties_managers.map(({ user }) => user.email);
     return this.paymentMailer.sendPaymentConfirmation(emails, context);

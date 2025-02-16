@@ -54,26 +54,18 @@ const ProductList = ({
   };
 
   const handleCategoryClick = (event: any) => {
-    const category = event.target.innerHTML.toLowerCase();
+    let category = event.target.innerHTML.toLowerCase();
+    let newProductList = [];
     if (selectedCategory.toLowerCase() === category) {
-      setSelectedCategory("");
-      const newProductList = propertyProducts.map(
-        propertyProductFilter(searchKeyState.toLowerCase(), "")
-      );
-
-      setPropertyProductsState(newProductList);
-      setShowOtherProducts(false);
-      setEmptyMessage(false);
-    } else {
-      setSelectedCategory(category);
-      const newProductList = propertyProducts.map(
-        propertyProductFilter(searchKeyState.toLowerCase(), category)
-      );
-
-      setPropertyProductsState(newProductList);
-      setShowOtherProducts(!newProductList.every(({ filtered }: any) => filtered));
-      setEmptyMessage(!newProductList.some(({ filtered }: any) => filtered));
+      category = "";
     }
+    setSelectedCategory(category);
+    newProductList = propertyProducts.map(
+      propertyProductFilter(searchKeyState.toLowerCase(), category)
+    );
+    setPropertyProductsState(newProductList);
+    setShowOtherProducts(!newProductList.every(({ filtered }: any) => filtered));
+    setEmptyMessage(!newProductList.some(({ filtered }: any) => filtered));
   };
   return (
     <div className={cn} {...props}>
