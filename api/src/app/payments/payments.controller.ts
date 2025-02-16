@@ -210,20 +210,16 @@ export class PaymentsController {
     );
   }
 
-  private async updateWallets(acquiredResponse, cart, payment_method){
+  private async updateWallets(acquiredResponse, cart, payment_method) {
     const tax = 0.1; //TODO pegar a partir das configurações do parceiro/empresa
     const wallet_id = 3; //TODO pegar wallet_id deste parceiro/empresa a partir do apartamento
     const amount = acquiredResponse.value * (1 - tax);
     const currency = 'BRL';
-    if(payment_method === 'pix'){
-
+    console.log({ wallet_id, amount, currency });
+    if (payment_method === 'pix') {
+    } else if (payment_method === 'credit_card') {
     }
-    else if(payment_method === 'credit_card'){
-
-    }
-    console.log({
-      acquiredResponse, cart, payment_method
-    })
+    console.log({ acquiredResponse, cart, payment_method });
   }
   private async sendPaymentConfirmationNotifications(cart, billingType) {
     const property = await this.propertiesService.property(

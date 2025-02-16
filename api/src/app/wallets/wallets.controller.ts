@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post, Put, Req } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { WalletsService } from './wallets.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthorizationToken } from '../../utils/AuthorizationToken';

@@ -11,9 +11,7 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
   version: '1',
 })
 export class WithdrawsController {
-  constructor(
-    private readonly withdrawsService: WithdrawsService,
-  ) {}
+  constructor(private readonly withdrawsService: WithdrawsService) {}
   @Get()
   @HttpCode(HttpStatus.OK)
   async findAll() {

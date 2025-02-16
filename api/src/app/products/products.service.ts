@@ -90,7 +90,7 @@ export class ProductsService {
             },
           },
         });
-      })
+      }),
     );
   }
   async removeProductsFromCart(cart) {
@@ -98,7 +98,10 @@ export class ProductsService {
       cart.cart_products?.map(async (cart_product: any) => {
         const dbPropertyProduct =
           await this.prisma.properties_products.findFirst({
-            where: { product_id: cart_product.product_id, property_id: cart.property_id },
+            where: {
+              product_id: cart_product.product_id,
+              property_id: cart.property_id,
+            },
           });
         console.log(dbPropertyProduct);
         console.log({
@@ -118,7 +121,7 @@ export class ProductsService {
             },
           },
         });
-      })
+      }),
     );
   }
 
