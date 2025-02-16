@@ -1,8 +1,8 @@
 export const ptBr = {
   seo: {
     url: "https://www.mesalva.com",
-    title: "Minha Compra Inteligente",
-    description: "Minha Compra Inteligente",
+    title: "Digital Flux Store",
+    description: "Digital Flux Store",
     image: "/banners-site-nota-mil-sisu-desktop-1-scaled.jpg",
   },
   common: {
