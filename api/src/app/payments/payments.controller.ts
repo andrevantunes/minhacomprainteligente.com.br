@@ -17,8 +17,8 @@ import { PaymentMailer } from './payment.mailer';
 import { PropertiesService } from '../properties/properties.service';
 import { toBrCurrency } from '../../utils/currency-helper';
 import { I18nContext } from 'nestjs-i18n';
-import {WalletsService} from "../wallets/wallets.service";
-import {ReceivablesService} from "../receivables/receivables.service";
+import { WalletsService } from '../wallets/wallets.service';
+import { ReceivablesService } from '../receivables/receivables.service';
 
 @ApiBearerAuth()
 @ApiTags('Payments')
