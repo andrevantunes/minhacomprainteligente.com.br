@@ -33,6 +33,7 @@ export class PaymentsController {
     private readonly paymentMailer: PaymentMailer,
     private readonly propertiesService: PropertiesService,
     private readonly receivablesService: ReceivablesService,
+    private readonly walletsService: WalletsService,
   ) {}
 
   @Post()
@@ -216,11 +217,16 @@ export class PaymentsController {
 
   private async updateWallets(acquiredResponse, cart, payment_method) {
     const tax = 0.1; //TODO pegar a partir das configurações do parceiro/empresa
-    const walletId = 3; //TODO pegar wallet_id deste parceiro/empresa a partir do apartamento
-    const amount = Math.round(acquiredResponse.value * 100 * (1 - tax));
     const currency = 'BRL';
+    const wallet: any = await this.walletsService.findByPropertyId(
+      cart.property_id,
+      currency,
+    ); //TODO resolver tipo
+    const walletId = wallet.id;
+    const amount = Math.round(acquiredResponse.value * 100 * (1 - tax));
     const settlementForecastAt = new Date(acquiredResponse.creditDate);
     if (payment_method === 'pix') {
+      await this.walletsService.addAmount(walletId, amount);
     } else if (payment_method === 'credit_card') {
       await this.receivablesService.createReceivable(
         walletId,

@@ -22,18 +22,35 @@ export class WalletsService {
     });
   }
 
+  async findByPropertyId(property_id, currency) {
+    return this.prisma.wallets.findFirst({
+      include: {
+        properties_wallets: {
+          include: {
+            wallet: true,
+          },
+        },
+      },
+      where: {
+        currency,
+        properties_wallets: {
+          some: {
+            property_id,
+          },
+        },
+      },
+    });
+  }
+
   async addAmount(id, amount) {
     const wallet = await this.prisma.wallets.findFirst({
       where: { id },
-      include: {
-        receivables: true,
-      },
     });
     if (!wallet) return null;
 
-    // return this.prisma.wallets.update({
-    //   where: { id },
-    //   data: { amount: wallet.amount + amount },
-    // });
+    return this.prisma.wallets.update({
+      where: { id },
+      data: { amount: wallet.amount + amount },
+    });
   }
 }

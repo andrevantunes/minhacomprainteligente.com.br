@@ -113,6 +113,7 @@ model properties {
   properties_products           properties_products[]
   carts                         carts[]
   replacement_property_products replacement_property_products[]
+  properties_wallets            properties_wallets[]
 }
 
 model properties_managers {
@@ -372,14 +373,16 @@ model wallets {
   currency           Currency             @default(BRL)
   company_id         Int
   company            companies            @relation(fields: [company_id], references: [id])
-  created_at         DateTime             @default(now())
-  updated_at         DateTime             @default(now())
-  deleted_at         DateTime?
   withdraws          withdraws[]
   user               users?               @relation(fields: [user_id], references: [id])
   user_id            Int?
   account_statements account_statements[]
   receivables        receivables[]
+  properties_wallets properties_wallets[]
+  processing_fee     Float                @default(0.15)
+  created_at         DateTime             @default(now())
+  updated_at         DateTime             @default(now())
+  deleted_at         DateTime?
 }
 
 model account_statements {
@@ -407,4 +410,15 @@ model receivables {
   created_at             DateTime  @default(now())
   updated_at             DateTime  @default(now())
   deleted_at             DateTime?
+}
+
+model properties_wallets {
+  id          Int        @id @default(autoincrement())
+  wallet_id   Int
+  wallet      wallets    @relation(fields: [wallet_id], references: [id])
+  property_id Int
+  property    properties @relation(fields: [property_id], references: [id])
+  created_at  DateTime   @default(now())
+  updated_at  DateTime   @default(now())
+  deleted_at  DateTime?
 }

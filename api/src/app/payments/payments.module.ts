@@ -9,6 +9,7 @@ import { PaymentTransactionAsaasService } from './paymentTransactionAsaas.servic
 import { PaymentMailer } from './payment.mailer';
 import { PropertiesService } from '../properties/properties.service';
 import { ReceivablesService } from '../receivables/receivables.service';
+import { WalletsService } from '../wallets/wallets.service';
 
 @Module({
   controllers: [PaymentsController],
@@ -22,6 +23,7 @@ import { ReceivablesService } from '../receivables/receivables.service';
     PaymentMailer,
     PropertiesService,
     ReceivablesService,
+    WalletsService,
   ],
 })
 export class PaymentsModule {}
