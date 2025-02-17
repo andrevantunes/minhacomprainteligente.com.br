@@ -2,7 +2,7 @@
   "name": "digitalflux.store",
   "version": "1.0.0",
   "main": "index.js",
-  "repository": "git@github.com:andrevantunes/minhacomprainteligente.com.br.git",
+  "repository": "git@github.com:andrevantunes/digitalflux.store.git",
   "author": "Andrev Antunes <andreantunesv@gmail.com>",
   "license": "MIT",
   "scripts": {

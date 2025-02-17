@@ -22,7 +22,7 @@ export class PaymentMailer {
       to,
       body,
       subject,
-      from: 'notificacoes@minhacomprainteligente.com.br',
+      from: 'Digital Flux Store<notificacoes@digitalflux.store>',
     });
   }
 }

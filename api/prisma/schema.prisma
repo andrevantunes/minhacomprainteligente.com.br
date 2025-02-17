@@ -397,14 +397,14 @@ model account_statements {
 }
 
 model receivables {
-  id              Int       @id @default(autoincrement())
-  amount          Int
-  currency        Currency  @default(BRL)
-  wallet_id       Int
-  wallet          wallets   @relation(fields: [wallet_id], references: [id])
-  settlement_date DateTime
-  settled_at      DateTime
-  created_at      DateTime  @default(now())
-  updated_at      DateTime  @default(now())
-  deleted_at      DateTime?
+  id                     Int       @id @default(autoincrement())
+  amount                 Int
+  currency               Currency  @default(BRL)
+  wallet_id              Int
+  wallet                 wallets   @relation(fields: [wallet_id], references: [id])
+  settlement_forecast_at DateTime  @default(now())
+  settled_at             DateTime?
+  created_at             DateTime  @default(now())
+  updated_at             DateTime  @default(now())
+  deleted_at             DateTime?
 }

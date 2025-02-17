@@ -16,6 +16,9 @@ import { PaymentTransactionAsaasService } from './paymentTransactionAsaas.servic
 import { PaymentMailer } from './payment.mailer';
 import { PropertiesService } from '../properties/properties.service';
 import { toBrCurrency } from '../../utils/currency-helper';
+import { I18nContext } from 'nestjs-i18n';
+import {WalletsService} from "../wallets/wallets.service";
+import {ReceivablesService} from "../receivables/receivables.service";
 
 @ApiBearerAuth()
 @ApiTags('Payments')
@@ -29,6 +32,7 @@ export class PaymentsController {
     private readonly paymentTransaction: PaymentTransactionAsaasService,
     private readonly paymentMailer: PaymentMailer,
     private readonly propertiesService: PropertiesService,
+    private readonly receivablesService: ReceivablesService,
   ) {}
 
   @Post()
@@ -212,14 +216,19 @@ export class PaymentsController {
 
   private async updateWallets(acquiredResponse, cart, payment_method) {
     const tax = 0.1; //TODO pegar a partir das configurações do parceiro/empresa
-    const wallet_id = 3; //TODO pegar wallet_id deste parceiro/empresa a partir do apartamento
-    const amount = acquiredResponse.value * (1 - tax);
+    const walletId = 3; //TODO pegar wallet_id deste parceiro/empresa a partir do apartamento
+    const amount = Math.round(acquiredResponse.value * 100 * (1 - tax));
     const currency = 'BRL';
-    console.log({ wallet_id, amount, currency });
+    const settlementForecastAt = new Date(acquiredResponse.creditDate);
     if (payment_method === 'pix') {
     } else if (payment_method === 'credit_card') {
+      await this.receivablesService.createReceivable(
+        walletId,
+        amount,
+        currency,
+        settlementForecastAt,
+      );
     }
-    console.log({ acquiredResponse, cart, payment_method });
   }
   private async sendPaymentConfirmationNotifications(cart, billingType) {
     const property = await this.propertiesService.property(
@@ -237,13 +246,20 @@ export class PaymentsController {
     const products = cart.products.map(
       (product: any) => `${product.quantity}x ${product.name}`,
     );
+    const i18n = I18nContext.current();
+    const translatedBillingType = i18n
+      ? await i18n.t(`billing-type.${billingType}`)
+      : billingType;
     const context = {
       propertyName: property.name,
-      billingType,
-      value: toBrCurrency(cart.value),
+      billingType: translatedBillingType,
+      value: toBrCurrency(cart.total_price),
       product: products.join(' + '),
+      products,
     };
-    const emails = property.properties_managers.map(({ user }) => user.email);
+    const emails = property.properties_managers
+      .map(({ user }) => user.email)
+      .filter((email) => email); // TODO filtrar unique também
     return this.paymentMailer.sendPaymentConfirmation(emails, context);
   }
 }

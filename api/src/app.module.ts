@@ -35,6 +35,7 @@ import { OrdersModule } from './app/orders/orders.module';
 import { WithdrawsModule } from './app/withdraws/withdraws.module';
 import { ReplacementsModule } from './app/replacements/replacements.module';
 import { WalletsModule } from './app/wallets/wallets.module';
+import {ReceivablesModule} from "./app/receivables/receivables.module";
 
 @Module({
   imports: [
@@ -101,6 +102,7 @@ import { WalletsModule } from './app/wallets/wallets.module';
     PaymentsModule,
     OrdersModule,
     ReplacementsModule,
+    ReceivablesModule,
   ],
 })
 export class AppModule {}

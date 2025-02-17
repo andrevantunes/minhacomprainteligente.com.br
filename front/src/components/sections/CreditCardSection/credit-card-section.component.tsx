@@ -88,7 +88,7 @@ const CreditCardSection = ({
 
     try {
       setFetching(true);
-      validateRecaptcha("PAY").then(async (recaptchaToken) => {
+      await validateRecaptcha("PAY").then(async (recaptchaToken) => {
         await postBffApi("payments", {
           cardHolder,
           cardNumber,
