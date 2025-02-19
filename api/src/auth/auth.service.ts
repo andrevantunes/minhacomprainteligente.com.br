@@ -205,7 +205,6 @@ export class AuthService {
       password: dto.password,
       role: dto.role,
     });
-    console.log('created', user);
     return user;
 
     // const hash = await this.jwtService.signAsync(

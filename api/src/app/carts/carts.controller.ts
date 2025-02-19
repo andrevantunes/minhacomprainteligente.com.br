@@ -15,6 +15,8 @@ import { PaymentMailer } from '../payments/payment.mailer';
 import { PropertiesService } from '../properties/properties.service';
 import { toBrCurrency } from '../../utils/currency-helper';
 import { ProductsService } from '../products/products.service';
+import { WalletsService } from '../wallets/wallets.service';
+import { PaymentsService } from '../payments/payments.service';
 
 @ApiBearerAuth()
 @ApiTags('Carts')
@@ -26,6 +28,8 @@ export class CartsController {
     private readonly productsService: ProductsService,
     private readonly paymentMailer: PaymentMailer,
     private readonly propertiesService: PropertiesService,
+    private readonly walletsService: WalletsService,
+    private readonly paymentsService: PaymentsService,
   ) {}
 
   @Post()
@@ -58,8 +62,10 @@ export class CartsController {
             { id: order.id },
             { updated_at: new Date(), status: 'paid' },
           );
+          const payment = await this.paymentsService.findByOrderId(order.id);
           await this.sendPaymentConfirmationNotifications(cart, order);
           await this.removeProductsFromByCart(cart);
+          await this.updateWallets(aquirerOrder, cart, payment);
         }
       }
     }
@@ -83,6 +89,21 @@ export class CartsController {
   }
   private async removeProductsFromByCart(cart) {
     return this.productsService.removeProductsFromCart(cart);
+  }
+
+  private async updateWallets(acquiredResponse, cart, payment) {
+    const currency = 'BRL';
+    const wallet: any = await this.walletsService.findByPropertyId(
+      cart.property_id,
+      currency,
+    ); //TODO resolver tipo
+    const walletId = wallet.id;
+    const amount = Math.round(
+      acquiredResponse.value * 100 * (1 - wallet.processing_fee),
+    );
+    if (payment.method === 'pix') {
+      await this.walletsService.addAmount(walletId, amount, payment.id);
+    }
   }
 
   private isPaid(aquirerOrder: any): boolean {

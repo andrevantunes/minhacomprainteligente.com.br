@@ -42,11 +42,15 @@ export class WalletsService {
     });
   }
 
-  async addAmount(id, amount) {
-    const wallet = await this.prisma.wallets.findFirst({
+  async addAmount(id: number, amount: number, payment_id: number) {
+    const wallet: any = await this.prisma.wallets.findFirst({
       where: { id },
-    });
+    }); // TODO resolver tipo
     if (!wallet) return null;
+
+    await this.prisma.wallet_moviments.create({
+      data: { amount, payment_id, wallet_id: wallet.id },
+    });
 
     return this.prisma.wallets.update({
       where: { id },

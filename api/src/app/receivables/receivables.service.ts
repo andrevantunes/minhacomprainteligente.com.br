@@ -5,13 +5,20 @@ import { PrismaService } from '../../database/prisma.service';
 export class ReceivablesService {
   constructor(private prisma: PrismaService) {}
 
-  async createReceivable(wallet_id, amount, currency, settlement_forecast_at) {
+  async createReceivable(
+    wallet_id,
+    amount,
+    currency,
+    settlement_forecast_at,
+    payment_id,
+  ) {
     return this.prisma.receivables.create({
       data: {
         wallet_id,
         amount,
         currency,
         settlement_forecast_at,
+        payment_id,
       },
     });
   }

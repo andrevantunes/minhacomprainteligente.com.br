@@ -100,7 +100,6 @@ export class PaymentTransactionAsaasService {
   }
 
   get paymentResult() {
-    // console.log('A1', this._paymentResult);
     return {
       acquirer: this.ACQUIRED,
       acquirer_id: this._paymentResult.id,

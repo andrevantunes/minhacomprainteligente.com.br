@@ -6,6 +6,8 @@ import { OrdersService } from '../orders/orders.service';
 import { PaymentMailer } from '../payments/payment.mailer';
 import { PropertiesService } from '../properties/properties.service';
 import { ProductsService } from '../products/products.service';
+import { WalletsService } from '../wallets/wallets.service';
+import { PaymentsService } from '../payments/payments.service';
 
 @Module({
   controllers: [CartsController],
@@ -16,6 +18,8 @@ import { ProductsService } from '../products/products.service';
     PaymentMailer,
     PropertiesService,
     PrismaService,
+    WalletsService,
+    PaymentsService,
   ],
 })
 export class CartsModule {}

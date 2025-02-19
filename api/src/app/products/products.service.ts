@@ -74,10 +74,6 @@ export class ProductsService {
           await this.prisma.properties_products.findFirst({
             where: { product_id: product.id, property_id: propertyId },
           });
-        console.log({
-          current_quantity:
-            (dbPropertyProduct?.current_quantity ?? 1) - product.quantity,
-        });
         await this.prisma.properties_products.update({
           data: {
             current_quantity:
@@ -103,11 +99,6 @@ export class ProductsService {
               property_id: cart.property_id,
             },
           });
-        console.log(dbPropertyProduct);
-        console.log({
-          current_quantity:
-            (dbPropertyProduct?.current_quantity ?? 1) - cart_product.quantity,
-        });
         await this.prisma.properties_products.update({
           data: {
             current_quantity:

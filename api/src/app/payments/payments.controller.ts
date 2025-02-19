@@ -109,7 +109,6 @@ export class PaymentsController {
         if (this.isPaid(acquiredResponse)) {
           await this.sendPaymentConfirmationNotifications(cart, payment_method);
           await this.removeProductsFromByCart(cart);
-          await this.updateWallets(acquiredResponse, cart, payment_method);
         }
         if (acquiredResponse.status === 'failed') {
           return Promise.reject(acquiredResponse);
@@ -138,13 +137,14 @@ export class PaymentsController {
     });
     const acquirerPayment = this.paymentTransaction.paymentResult;
     if (acquirerPayment) {
-      await this.paymentsService.createPayment({
+      const payment = await this.paymentsService.createPayment({
         ...acquirerPayment,
         fingerprint,
         order: {
           connect: { id: order.id },
         },
       });
+      await this.updateWallets(acquiredOrder, cart, payment);
     } else {
       response.status(403);
     }
@@ -215,24 +215,24 @@ export class PaymentsController {
     );
   }
 
-  private async updateWallets(acquiredResponse, cart, payment_method) {
-    const tax = 0.1; //TODO pegar a partir das configurações do parceiro/empresa
+  private async updateWallets(acquiredResponse, cart, payment) {
     const currency = 'BRL';
     const wallet: any = await this.walletsService.findByPropertyId(
       cart.property_id,
       currency,
     ); //TODO resolver tipo
     const walletId = wallet.id;
-    const amount = Math.round(acquiredResponse.value * 100 * (1 - tax));
+    const amount = Math.round(
+      acquiredResponse.value * 100 * (1 - wallet.processing_fee),
+    );
     const settlementForecastAt = new Date(acquiredResponse.creditDate);
-    if (payment_method === 'pix') {
-      await this.walletsService.addAmount(walletId, amount);
-    } else if (payment_method === 'credit_card') {
+    if (payment.method === 'credit_card') {
       await this.receivablesService.createReceivable(
         walletId,
         amount,
         currency,
         settlementForecastAt,
+        payment.id,
       );
     }
   }

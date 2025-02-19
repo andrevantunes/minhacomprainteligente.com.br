@@ -47,6 +47,10 @@ export class PaymentsService {
     return properties;
   }
 
+  async findByOrderId(order_id): Promise<any> {
+    return this.prisma.payments.findFirst({ where: { order_id } });
+  }
+
   async createPayment(data: any): Promise<any> {
     return this.prisma.payments.create({ data });
   }
