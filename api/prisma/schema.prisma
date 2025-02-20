@@ -359,6 +359,7 @@ model withdraws {
   created_at        DateTime       @default(now())
   updated_at        DateTime       @default(now())
   deleted_at        DateTime?
+  paid_at           DateTime?
   companies         companies?     @relation(fields: [companiesId], references: [id])
   companiesId       Int?
 }

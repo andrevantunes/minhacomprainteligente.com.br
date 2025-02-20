@@ -65,4 +65,14 @@ export class WithdrawsService {
       where,
     });
   }
+
+  async pendingWithdrawsFromWallet(wallet) {
+    return this.prisma.withdraws.findMany({
+      where: {
+        wallet: {
+          id: wallet.id,
+        },
+      },
+    });
+  }
 }

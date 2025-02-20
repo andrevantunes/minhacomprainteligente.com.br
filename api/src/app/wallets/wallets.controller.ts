@@ -24,7 +24,10 @@ export class WalletsController {
   async index(@AuthorizationToken() token: string) {
     const wallets =
       await this.walletsService.allFromAuthenticatedUserToken(token);
-    return { wallets };
+    const withdraws = await this.withdrawsService.pendingWithdrawsFromWallet(
+      wallets[0],
+    );
+    return { wallets, withdraws };
   }
 
   @Post('/:id/withdraw')

@@ -26,7 +26,6 @@ const WithdrawRequestSection = ({ children, className, ...props }: WithdrawReque
     setLoading(true);
     const textInput = event.target.querySelector("#withdraw-amount");
     if (/^(\d+),(\d{2})$/.test(textInput.value) || /^(\d+)$/.test(textInput.value)) {
-      console.log("Pode enviar");
       setError("");
       const amount = Number(textInput.value.replace(/^(\d+)$/, "$1,00").replace(/\D/, ""));
 
