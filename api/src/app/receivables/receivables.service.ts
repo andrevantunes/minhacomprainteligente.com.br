@@ -22,4 +22,27 @@ export class ReceivablesService {
       },
     });
   }
+
+  async listReceivablesByAuthorizationToken(token) {
+    return this.prisma.receivables.findMany({
+      where: {
+        wallet: {
+          user: {
+            sessions: {
+              some: {
+                token,
+              },
+            },
+          },
+        },
+      },
+      include: {
+        payment: {
+          include: {
+            order: true,
+          },
+        },
+      },
+    });
+  }
 }

@@ -11,6 +11,18 @@ export class UserService {
     });
   }
 
+  async findByAuthenticatedToken(token: string) {
+    return this.prisma.users.findFirst({
+      where: {
+        sessions: {
+          some: {
+            token,
+          },
+        },
+      },
+    });
+  }
+
   async users(params: {
     skip?: number;
     take?: number;

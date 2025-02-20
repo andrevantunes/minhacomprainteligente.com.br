@@ -8,6 +8,7 @@ interface SaleReportElementProps extends PropsWithChildren<HTMLProps<HTMLDivElem
   createdAt?: string;
   name?: string;
   paymentMethod?: string;
+  hash?: string;
   products?: any[];
 }
 

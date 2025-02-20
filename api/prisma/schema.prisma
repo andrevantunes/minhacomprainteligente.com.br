@@ -221,6 +221,7 @@ model cart_products {
 
 model orders {
   id                Int          @id @default(autoincrement())
+  hash              String?
   name              String?
   document_number   String?
   discount          Int?

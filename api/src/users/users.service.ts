@@ -32,7 +32,6 @@ export class UsersService {
   }): Promise<Users[]> {
     const where: FindOptionsWhere<Users> = {};
     console.log(filterOptions);
-
     return this.usersRepository.find({
       skip: (paginationOptions.page - 1) * paginationOptions.limit,
       take: paginationOptions.limit,

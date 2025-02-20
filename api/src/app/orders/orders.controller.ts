@@ -31,6 +31,7 @@ export class OrdersController {
         };
       });
       return {
+        hash: order.hash,
         name: order.name,
         amount: order.amount,
         status: order.status,

@@ -22,6 +22,27 @@ export class WalletsService {
     });
   }
 
+  async findByIdAndAuthenticatedUserToken(
+    id: number,
+    authenticatedUserToken: string,
+  ) {
+    return await this.prisma.wallets.findFirst({
+      where: {
+        id,
+        user: {
+          sessions: {
+            some: {
+              token: authenticatedUserToken,
+            },
+          },
+        },
+      },
+      include: {
+        receivables: true,
+      },
+    });
+  }
+
   async findByPropertyId(property_id, currency) {
     return this.prisma.wallets.findFirst({
       include: {
@@ -55,6 +76,36 @@ export class WalletsService {
     return this.prisma.wallets.update({
       where: { id },
       data: { amount: wallet.amount + amount },
+    });
+  }
+
+  async requestWithdrawAmount(
+    wallet: any,
+    { amount, user_id, fingerprint, ip }: any,
+  ) {
+    await this.prisma.withdraws.create({
+      data: {
+        amount,
+        status: 'pending',
+        tax: 0,
+        currency: 'BRL',
+        user_requester: {
+          connect: {
+            id: user_id,
+          },
+        },
+        wallet: {
+          connect: {
+            id: wallet.id,
+          },
+        },
+        fingerprint: fingerprint,
+        ip: ip ?? 'no-ip-found',
+      },
+    });
+    return this.prisma.wallets.update({
+      where: { id: wallet.id },
+      data: { amount: wallet.amount - amount, updated_at: new Date() },
     });
   }
 }

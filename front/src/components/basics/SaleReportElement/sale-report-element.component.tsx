@@ -16,6 +16,7 @@ const SaleReportElement = ({
   status,
   createdAt,
   products,
+  hash,
   name,
   ...props
 }: SaleReportElementProps) => {
@@ -39,6 +40,10 @@ const SaleReportElement = ({
 
       <div className="flex-grow">
         <Title>{propertyName}</Title>
+        <div className="flex-grow">
+          <span>Identificador da venda:</span>
+          <b> {hash}</b>
+        </div>
         <div>
           <small>
             {toBrDateTime(createdAt as string)} - {name}
