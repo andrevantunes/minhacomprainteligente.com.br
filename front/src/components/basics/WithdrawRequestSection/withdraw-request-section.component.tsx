@@ -31,7 +31,7 @@ const WithdrawRequestSection = ({ children, className, ...props }: WithdrawReque
       const amount = Number(textInput.value.replace(/^(\d+)$/, "$1,00").replace(/\D/, ""));
 
       const fp = await FingerprintJS.load();
-      const { visitorId
+      const { visitorId } = await fp.get();
       postBffApi(`wallets/${wallet.id}/withdraw`, { amount, fingerprint: visitorId }).then(
         (response: any) => {
           console.log(response);
