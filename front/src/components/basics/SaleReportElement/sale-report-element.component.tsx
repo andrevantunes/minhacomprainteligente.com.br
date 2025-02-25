@@ -13,7 +13,7 @@ const SaleReportElement = ({
   iconName,
   propertyName,
   amount,
-  status,
+  status = "",
   createdAt,
   products,
   hash,
@@ -21,7 +21,7 @@ const SaleReportElement = ({
   ...props
 }: SaleReportElementProps) => {
   const cn = classNames("sale-report-element", className);
-  const paid = status === "paid";
+  const paid = ["paid", "confirmed"].includes(status);
   // @ts-ignore
   return (
     <ItemElement size={"md" as any} className={cn} {...props}>
@@ -38,25 +38,28 @@ const SaleReportElement = ({
         </div>
       )}
 
-      <div className="flex-grow">
-        <Title>{propertyName}</Title>
+      {hash && (
         <div className="flex-grow">
-          <span>Identificador da venda:</span>
-          <b> {hash}</b>
-        </div>
-        <div>
-          <small>
-            {toBrDateTime(createdAt as string)} - {name}
-          </small>
-          <div className="flex flex-column">
-            {products?.map((product) => (
-              <small key={product.name}>
-                {product.quantity}x {product.name}
-              </small>
-            ))}
+          <Title>{propertyName}</Title>
+          <div className="flex-grow">
+            <span>Identificador da venda:</span>
+            <b> {hash}</b>
+          </div>
+          <div>
+            <small>
+              {toBrDateTime(createdAt as string)} - {name}
+            </small>
+            <div className="flex flex-column">
+              {products?.map((product) => (
+                <small key={product.name}>
+                  {product.quantity}x {product.name}
+                </small>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
+      )}
+
       <div className="sale-report-element__amount flex flex-column justify-content-center align-items-center">
         <Title
           className={classNames({

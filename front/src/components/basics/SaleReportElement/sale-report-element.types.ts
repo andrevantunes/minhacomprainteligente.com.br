@@ -1,10 +1,10 @@
 import type { HTMLProps, PropsWithChildren } from "react";
 
 interface SaleReportElementProps extends PropsWithChildren<HTMLProps<HTMLDivElement>> {
+  status: string;
   iconName?: string;
   propertyName?: string;
   amount?: string;
-  status?: string;
   createdAt?: string;
   name?: string;
   paymentMethod?: string;

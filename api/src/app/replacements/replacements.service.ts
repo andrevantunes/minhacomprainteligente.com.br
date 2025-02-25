@@ -70,7 +70,35 @@ export class ReplacementsService {
     });
   }
 
-  async update(prismaData) {
+  async update(replacement, prismaData) {
+    await Promise.all(
+      replacement.replacement_property_products?.map(
+        async (replacement_property_product) => {
+          const property_products: any =
+            await this.prisma.properties_products.findUnique({
+              where: {
+                product_id_property_id: {
+                  product_id: replacement_property_product.product_id,
+                  property_id: replacement_property_product.property_id,
+                },
+              },
+            });
+          return this.prisma.properties_products.update({
+            where: {
+              product_id_property_id: {
+                product_id: replacement_property_product.product_id,
+                property_id: replacement_property_product.property_id,
+              },
+            },
+            data: {
+              current_quantity:
+                property_products.current_quantity +
+                replacement_property_product.quantity,
+            },
+          });
+        },
+      ),
+    );
     return await this.prisma.replacements.update(prismaData);
   }
 

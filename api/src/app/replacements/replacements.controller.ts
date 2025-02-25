@@ -53,7 +53,7 @@ export class ReplacementsController {
       token,
     );
     if (!replacement) return new Error('not found/not access');
-    return this.replacementsService.update({
+    return this.replacementsService.update(replacement, {
       where: { id },
       data: { status: createReplacementDto.status },
     });
