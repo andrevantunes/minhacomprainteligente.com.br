@@ -52,7 +52,7 @@ const ProductManagementList = ({
 
               <div className={classNames("product-management-list__summary")}>
                 <div className="flex flex-column gap-1x">
-                  {propertyProductsMissing.map((product) => (
+                  {propertyProductsMissing.map((product: any) => (
                     <Card
                       key={product.name}
                       elevation="md"
@@ -77,11 +77,11 @@ const ProductManagementList = ({
                           </div>
                           <div className="flex gap-1x">
                             <span>Quantidade padrão no imóvel:</span>
-                            <b>{product.expected_quantity}</b>
+                            <b>{product?.expected_quantity}</b>
                           </div>
                           <div className="flex gap-1x">
                             <span>Quantidade atual no imóvel:</span>
-                            <b>{product.current_quantity}</b>
+                            <b>{product?.current_quantity}</b>
                           </div>
                         </div>
                       </div>
