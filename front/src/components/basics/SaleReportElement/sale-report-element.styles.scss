@@ -12,4 +12,8 @@
       color: var(--color-success-500);
     }
   }
+  &__highlight{
+    border-color: green;
+    border-width: 2px;
+  }
 }

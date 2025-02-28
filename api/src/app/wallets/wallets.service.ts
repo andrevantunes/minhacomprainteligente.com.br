@@ -17,7 +17,16 @@ export class WalletsService {
         },
       },
       include: {
-        receivables: true,
+        receivables: {
+          where: {
+            settlement_forecast_at: {
+              gt: new Date(),
+            },
+            settled_at: {
+              equals: null,
+            },
+          },
+        },
       },
     });
   }

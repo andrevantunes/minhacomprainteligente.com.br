@@ -16,7 +16,9 @@ const ProductList = ({
   const [propertyProductsState, setPropertyProductsState] = useState(
     Array.isArray(propertyProducts) ? propertyProducts : []
   );
-  const categories = categoriesFromPropertyProducts(propertyProducts);
+  const categories = categoriesFromPropertyProducts(
+    Array.isArray(propertyProducts) ? propertyProducts : []
+  );
   const [selectedCategory, setSelectedCategory] = useState("");
   const [searchKeyState, setSearchKeyState] = useState("");
   const [showOtherProducts, setShowOtherProducts] = useState(false);
@@ -34,7 +36,7 @@ const ProductList = ({
       setEmptyMessage(!newProductList.some(({ filtered }: any) => filtered));
     } else {
       setSelectedCategory("");
-      setPropertyProductsState(propertyProducts.map(propertyProductFilter("", "")));
+      setPropertyProductsState(propertyProducts?.map(propertyProductFilter("", "")));
       setShowOtherProducts(false);
       setEmptyMessage(false);
     }

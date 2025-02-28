@@ -26,11 +26,9 @@ const CartCloser = ({
     const fp = await FingerprintJS.load();
     const { visitorId } = await fp.get();
     const hash = String(new Date().getTime());
-    postBffApi("carts", { products, fingerprint: visitorId, propertyId, hash })
-      .then((cart) => {
-        Router.push(`/payment/${cart.hash}`);
-      })
-      .catch((e) => console.log(e));
+    postBffApi("carts", { products, fingerprint: visitorId, propertyId, hash }).then((cart) => {
+      Router.push(`/payment/${cart.hash}`);
+    });
   };
 
   return (

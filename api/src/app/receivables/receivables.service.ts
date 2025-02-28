@@ -26,6 +26,12 @@ export class ReceivablesService {
   async listReceivablesByAuthorizationToken(token) {
     return this.prisma.receivables.findMany({
       where: {
+        settlement_forecast_at: {
+          gt: new Date(),
+        },
+        settled_at: {
+          equals: null,
+        },
         wallet: {
           user: {
             sessions: {

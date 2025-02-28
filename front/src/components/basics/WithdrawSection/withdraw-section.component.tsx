@@ -39,74 +39,78 @@ const WithdrawSection = ({
   return (
     <div className={cn} {...props}>
       {children}
-      {wallets.map((wallet: any) => (
-        <div key={wallet.id}>
-          <Grid columns={{ md: [1, 1], sm: [1, 1], xs: [1] }} className="mb-2x">
-            <Card
-              elevation="md"
-              style={{ display: "flex", textAlign: "center", flexDirection: "column" }}
-            >
-              <div className="mb-1x">
-                <Text>Valores disponíveis para saque:</Text>
-                <Title>{toBrCurrency(wallet.amount)}</Title>
-              </div>
-              <div className="withdraw-section__buttons flex align-items-center justify-content-center gap-1x">
-                <Button href={withdrawBalanceUrl} variant="secondary">
-                  Ver extrato
-                </Button>
-                <Button href={withdrawRequestUrl}>Solicitar saque</Button>
-              </div>
-            </Card>
-            {wallet.receivableAmount && (
+      {wallets.map((wallet: any) => {
+        const hasReceivables = !!wallet.receivableAmount;
+        const columns = hasReceivables ? { md: [1, 1], sm: [1, 1], xs: [1] } : "1";
+        return (
+          <div key={wallet.id}>
+            <Grid columns={columns} className="mb-2x">
               <Card
                 elevation="md"
                 style={{ display: "flex", textAlign: "center", flexDirection: "column" }}
               >
                 <div className="mb-1x">
-                  <Text>Valores a receber em breve:</Text>
-                  <Title>{toBrCurrency(wallet.receivableAmount)}</Title>
+                  <Text>Valores disponíveis para saque:</Text>
+                  <Title>{toBrCurrency(wallet.amount)}</Title>
                 </div>
                 <div className="withdraw-section__buttons flex align-items-center justify-content-center gap-1x">
-                  <Button href={receivableBalanceUrl} variant="secondary">
-                    Ver recebimentos futuros
+                  <Button href={withdrawBalanceUrl} variant="secondary">
+                    Ver extrato
                   </Button>
-                  <Button href={receivableRequestUrl}>Solicitar antecipação</Button>
+                  <Button href={withdrawRequestUrl}>Solicitar saque</Button>
                 </div>
               </Card>
-            )}
-          </Grid>
+              {hasReceivables ? (
+                <Card
+                  elevation="md"
+                  style={{ display: "flex", textAlign: "center", flexDirection: "column" }}
+                >
+                  <div className="mb-1x">
+                    <Text>Valores a receber em breve:</Text>
+                    <Title>{toBrCurrency(wallet.receivableAmount)}</Title>
+                  </div>
+                  <div className="withdraw-section__buttons flex align-items-center justify-content-center gap-1x">
+                    <Button href={receivableBalanceUrl} variant="secondary">
+                      Ver recebimentos futuros
+                    </Button>
+                    <Button href={receivableRequestUrl}>Solicitar antecipação</Button>
+                  </div>
+                </Card>
+              ) : null}
+            </Grid>
 
-          {withdraws?.length > 0 && (
-            <Card className={cn} {...props}>
-              <Title>Solicitações de saque</Title>
-              <p>
-                As solicitações em aberto tem o prazo de até 24h para serem analisadas e
-                transferidas para você.
-              </p>
-              {withdraws.map((withdraw: any) => (
-                <ItemElement key={withdraw.created_at} className="flex justify-content-between">
-                  <div>
+            {withdraws?.length > 0 && (
+              <Card className={cn} {...props}>
+                <Title>Solicitações de saque</Title>
+                <p>
+                  As solicitações em aberto tem o prazo de até 24h para serem analisadas e
+                  transferidas para você.
+                </p>
+                {withdraws.map((withdraw: any) => (
+                  <ItemElement key={withdraw.created_at} className="flex justify-content-between">
                     <div>
-                      <span>Solicitação de saque realiazada em: </span>
-                      <b>{toBrDateTime(withdraw.created_at)}</b>
-                    </div>
-                    {withdraw.paid_at && (
                       <div>
-                        <span>Solicitação de saque paga em: </span>
-                        <b>{toBrDateTime(withdraw.paid_at)}</b>
+                        <span>Solicitação de saque realiazada em: </span>
+                        <b>{toBrDateTime(withdraw.created_at)}</b>
                       </div>
-                    )}
-                  </div>
-                  <div className="flex flex-column text-center">
-                    <Title>{toBrCurrency(withdraw.amount)}</Title>
-                    <WithdrawStatus status={withdraw.status} />
-                  </div>
-                </ItemElement>
-              ))}
-            </Card>
-          )}
-        </div>
-      ))}
+                      {withdraw.paid_at && (
+                        <div>
+                          <span>Solicitação de saque paga em: </span>
+                          <b>{toBrDateTime(withdraw.paid_at)}</b>
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex flex-column text-center">
+                      <Title>{toBrCurrency(withdraw.amount)}</Title>
+                      <WithdrawStatus status={withdraw.status} />
+                    </div>
+                  </ItemElement>
+                ))}
+              </Card>
+            )}
+          </div>
+        );
+      })}
     </div>
   );
 };

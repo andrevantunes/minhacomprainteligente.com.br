@@ -71,6 +71,7 @@ export class ReplacementsService {
   }
 
   async update(replacement, prismaData) {
+    console.log('update');
     await Promise.all(
       replacement.replacement_property_products?.map(
         async (replacement_property_product) => {
@@ -83,6 +84,14 @@ export class ReplacementsService {
                 },
               },
             });
+          if (property_products.current_quantity < 0) {
+            property_products.current_quantity = 0;
+          }
+          console.log(
+            property_products,
+            property_products.current_quantity +
+              replacement_property_product.quantity,
+          );
           return this.prisma.properties_products.update({
             where: {
               product_id_property_id: {

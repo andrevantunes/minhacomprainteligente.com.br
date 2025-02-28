@@ -10,7 +10,6 @@ import AuthenticationRequiredMessage from "../components/basics/AuthenticationRe
 export const getServerSideProps: GetServerSideProps = async ({ resolvedUrl }) => {
   if (resolvedUrl.match(/\.ico$/)) return { props: { resolvedUrl } };
   if (resolvedUrl == "/") resolvedUrl = "/home";
-  console.log("[...content]", resolvedUrl);
   const page = await getPage(resolvedUrl);
   return { props: { ...page, resolvedUrl } };
 };
@@ -32,7 +31,6 @@ const Page = ({
   ...props
 }: SSWPagesProps) => {
   const [{ guest }] = useStore(StoreType.User);
-  console.log({ guest });
   const isBlockedPage = authenticated && guest;
   const seo = { title, description, image, canonical, robots, url };
 

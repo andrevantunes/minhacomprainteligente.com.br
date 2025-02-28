@@ -345,23 +345,24 @@ model replacement_property_products {
 }
 
 model withdraws {
-  id                Int            @id @default(autoincrement())
+  id                Int                @id @default(autoincrement())
   amount            Int
   tax               Int
   status            WithdrawStatus
-  currency          Currency       @default(BRL)
+  currency          Currency           @default(BRL)
   user_requester_id Int
-  user_requester    users          @relation(fields: [user_requester_id], references: [id])
+  user_requester    users              @relation(fields: [user_requester_id], references: [id])
   wallet_id         Int
-  wallet            wallets        @relation(fields: [wallet_id], references: [id])
+  wallet            wallets            @relation(fields: [wallet_id], references: [id])
   ip                String
   fingerprint       String
-  created_at        DateTime       @default(now())
-  updated_at        DateTime       @default(now())
+  created_at        DateTime           @default(now())
+  updated_at        DateTime           @default(now())
   deleted_at        DateTime?
   paid_at           DateTime?
-  companies         companies?     @relation(fields: [companiesId], references: [id])
+  companies         companies?         @relation(fields: [companiesId], references: [id])
   companiesId       Int?
+  wallet_moviments  wallet_moviments[]
 }
 
 enum WithdrawStatus {
@@ -380,6 +381,7 @@ model wallets {
   withdraws          withdraws[]
   user               users?               @relation(fields: [user_id], references: [id])
   user_id            Int?
+  advance_fee        Float                @default(2.5)
   account_statements account_statements[]
   receivables        receivables[]
   properties_wallets properties_wallets[]
@@ -393,12 +395,15 @@ model wallets {
 model wallet_moviments {
   id            Int          @id @default(autoincrement())
   amount        Int
+  fee           Int?
   wallet_id     Int
   wallet        wallets      @relation(fields: [wallet_id], references: [id])
   payment_id    Int?
   payment       payments?    @relation(fields: [payment_id], references: [id])
   receivable_id Int?
   receivable    receivables? @relation(fields: [receivable_id], references: [id])
+  withdraw_id   Int?
+  withdraw      withdraws?   @relation(fields: [withdraw_id], references: [id])
   created_at    DateTime     @default(now())
   updated_at    DateTime     @default(now())
   deleted_at    DateTime?

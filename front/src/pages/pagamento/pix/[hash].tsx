@@ -6,10 +6,7 @@ import RiboAdapter from "@/libs/ribo-adapter";
 import { getPage } from "@/requests";
 
 export const getServerSideProps: GetServerSideProps = async ({ resolvedUrl }) => {
-  const page = await getPage("pagamento/pix/{hash}").catch((e) => {
-    console.log(e);
-    return Promise.reject(e);
-  });
+  const page = await getPage("pagamento/pix/{hash}");
   const hash = resolvedUrl.replace("/pagamento/pix/", "");
   return { props: { ...page, resolvedUrl, hash } };
 };

@@ -5,6 +5,7 @@ import { Icon, ItemElement, Label, LabelVariants } from "@andrevantunes/andrevds
 import { Title } from "@/components";
 import { toBrCurrency } from "@/helpers/currency.helper";
 import { toBrDateTime } from "@/helpers/datetime.helper";
+import { useRouter } from "next/router";
 
 const SaleReportElement = ({
   children,
@@ -20,7 +21,10 @@ const SaleReportElement = ({
   name,
   ...props
 }: SaleReportElementProps) => {
-  const cn = classNames("sale-report-element", className);
+  const router = useRouter();
+  const cn = classNames("sale-report-element", className, {
+    "sale-report-element__highlight": hash === router?.query?.hash,
+  });
   const paid = ["paid", "confirmed"].includes(status);
   // @ts-ignore
   return (
@@ -43,7 +47,7 @@ const SaleReportElement = ({
           <Title>{propertyName}</Title>
           <div className="flex-grow">
             <span>Identificador da venda:</span>
-            <b> {hash}</b>
+            <b> #{hash}</b>
           </div>
           <div>
             <small>

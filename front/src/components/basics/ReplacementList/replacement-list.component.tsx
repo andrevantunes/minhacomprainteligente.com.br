@@ -1,7 +1,7 @@
 import type { ReplacementListProps } from "./replacement-list.types";
 
 import classNames from "classnames";
-import { Card, Image, ItemElement, Label, LabelVariants, Text } from "@andrevantunes/andrevds";
+import { Card, Hr, Image, ItemElement, Label, LabelVariants, Text } from "@andrevantunes/andrevds";
 import { Button, Title } from "@/components";
 import { useState } from "react";
 import { putBffApi } from "@/requests";
@@ -89,16 +89,31 @@ const ReplacementList = ({
                 <div className="product-management-list__image-container">
                   <Image src={propertyProduct.image} width={150} height={150} alt="product image" />
                 </div>
-                <div className="flex flex-column justify-content-center">
+                <div className="flex flex-column justify-content-center flex-grow">
                   <div>
                     <div className="flex gap-1x">
                       <span>Produto:</span>
                       <b>{propertyProduct.name}</b>
                     </div>
+                    <Hr />
+                    <div className="flex gap-1x">
+                      <span>Quantidade padrão no imóvel:</span>
+                      <b>{propertyProduct.expected_quantity}</b>
+                    </div>
+                    <div className="flex gap-1x">
+                      <span>Quantidade atual no imóvel:</span>
+                      <b style={{ color: "var(--color-error-500)" }}>
+                        {propertyProduct.current_quantity}
+                      </b>
+                    </div>
+                    <Hr />
                     <div className="flex gap-1x">
                       <span>Quantidade a ser reposta:</span>
-                      <b>{propertyProduct.quantity}</b>
+                      <b style={{ color: "var(--color-success-500)" }}>
+                        {propertyProduct.quantity}
+                      </b>
                     </div>
+                    <Hr />
                     <div className="flex gap-1x flex-column">
                       <span>Propriedades:</span>
                       <ul style={{ margin: 0 }}>
@@ -133,15 +148,31 @@ const ReplacementList = ({
                         alt="product image"
                       />
                     </div>
-                    <div className="flex flex-column justify-content-center">
-                      <div>
-                        <div className="flex gap-1x">
-                          <span>Produto:</span>
-                          <b>{propertyProduct.product.name}</b>
-                        </div>
-                        <div className="flex gap-1x">
-                          <span>Quantidade a ser reposta:</span>
-                          <b>{propertyProduct.quantity}</b>
+                    <div className="flex flex-column justify-content-center flex-grow">
+                      <div className="flex flex-column justify-content-center flex-grow">
+                        <div>
+                          <div className="flex gap-1x">
+                            <span>Produto:</span>
+                            <b>{propertyProduct.product.name}</b>
+                          </div>
+                          <Hr />
+                          <div className="flex gap-1x">
+                            <span>Quantidade padrão no imóvel:</span>
+                            <b>{propertyProduct.expected_quantity}</b>
+                          </div>
+                          <div className="flex gap-1x">
+                            <span>Quantidade atual no imóvel:</span>
+                            <b style={{ color: "var(--color-error-500)" }}>
+                              {propertyProduct.current_quantity}
+                            </b>
+                          </div>
+                          <Hr />
+                          <div className="flex gap-1x">
+                            <span>Quantidade a ser reposta:</span>
+                            <b style={{ color: "var(--color-success-500)" }}>
+                              {propertyProduct.quantity}
+                            </b>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -185,6 +216,8 @@ function splitPropertyProductsByProducts(propertyProducts?: any[]) {
         name: propertyProduct.product.name,
         image: propertyProduct.product.image,
         quantity: propertyProduct.quantity,
+        expected_quantity: propertyProduct.expected_quantity,
+        current_quantity: propertyProduct.current_quantity,
         properties: [propertyProduct.property.name],
       };
     else {

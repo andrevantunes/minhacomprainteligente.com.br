@@ -113,6 +113,12 @@ export class PropertiesService {
     });
   }
 
+  async findPropertyProduct(property_id, product_id) {
+    return this.prisma.properties_products.findFirst({
+      where: { property_id, product_id },
+    });
+  }
+
   async deleteProperty(where: any): Promise<any> {
     return this.prisma.properties.delete({
       where,

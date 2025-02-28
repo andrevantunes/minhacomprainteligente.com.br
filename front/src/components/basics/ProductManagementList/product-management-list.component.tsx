@@ -28,11 +28,9 @@ const ProductManagementList = ({
       quantity: property.quantity,
       propertyId: propertyId,
     }));
-    postBffApi("replacements", { fingerprint: visitorId, propertyProducts })
-      .then((replacement) => {
-        Router.push(`/dashboard/replacements/${replacement.id}`);
-      })
-      .catch((e) => console.log(e));
+    postBffApi("replacements", { fingerprint: visitorId, propertyProducts }).then((replacement) => {
+      Router.push(`/dashboard/replacements/${replacement.id}`);
+    });
   };
 
   const needReplacement = propertyProductsMissing.length > 0;
@@ -76,6 +74,14 @@ const ProductManagementList = ({
                           <div className="flex gap-1x">
                             <span>Quantidade a ser reposta:</span>
                             <b>{product.quantity}</b>
+                          </div>
+                          <div className="flex gap-1x">
+                            <span>Quantidade padrão no imóvel:</span>
+                            <b>{product.expected_quantity}</b>
+                          </div>
+                          <div className="flex gap-1x">
+                            <span>Quantidade atual no imóvel:</span>
+                            <b>{product.current_quantity}</b>
                           </div>
                         </div>
                       </div>
@@ -175,10 +181,7 @@ function sortPropertyProductsByDisponibility(propertyProducts: any[]) {
 }
 
 function filterPropertyProductsMissing(propertyProducts: any[] = []) {
-  if (!Array.isArray(propertyProducts)) {
-    console.log({ propertyProducts });
-    return [];
-  }
+  if (!Array.isArray(propertyProducts)) return [];
   return propertyProducts
     .filter(
       (propertyProduct) => propertyProduct.current_quantity < propertyProduct.expected_quantity
