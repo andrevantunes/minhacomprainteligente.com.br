@@ -13,12 +13,9 @@ const ProductList = ({
   ...props
 }: ProductListProps) => {
   const cn = classNames("product-list", className);
-  const [propertyProductsState, setPropertyProductsState] = useState(
-    Array.isArray(propertyProducts) ? propertyProducts : []
-  );
-  const categories = categoriesFromPropertyProducts(
-    Array.isArray(propertyProducts) ? propertyProducts : []
-  );
+  const parsePropertyProducts = Array.isArray(propertyProducts) ? propertyProducts : [];
+  const [propertyProductsState, setPropertyProductsState] = useState(parsePropertyProducts);
+  const categories = categoriesFromPropertyProducts(parsePropertyProducts);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [searchKeyState, setSearchKeyState] = useState("");
   const [showOtherProducts, setShowOtherProducts] = useState(false);
@@ -36,7 +33,7 @@ const ProductList = ({
       setEmptyMessage(!newProductList.some(({ filtered }: any) => filtered));
     } else {
       setSelectedCategory("");
-      setPropertyProductsState(propertyProducts?.map(propertyProductFilter("", "")));
+      setPropertyProductsState(parsePropertyProducts.map(propertyProductFilter("", "")));
       setShowOtherProducts(false);
       setEmptyMessage(false);
     }
@@ -44,7 +41,9 @@ const ProductList = ({
 
   const updateFilter = (searchKey: string) => {
     setSearchKeyState(searchKey);
-    const newProductList = propertyProducts.map(propertyProductFilter(searchKey, selectedCategory));
+    const newProductList = parsePropertyProducts.map(
+      propertyProductFilter(searchKey, selectedCategory)
+    );
     setPropertyProductsState(newProductList);
     setShowOtherProducts(!newProductList.every(({ filtered }: any) => filtered));
     setEmptyMessage(!newProductList.some(({ filtered }: any) => filtered));
