@@ -36,6 +36,7 @@ import { WithdrawsModule } from './app/withdraws/withdraws.module';
 import { ReplacementsModule } from './app/replacements/replacements.module';
 import { WalletsModule } from './app/wallets/wallets.module';
 import { ReceivablesModule } from './app/receivables/receivables.module';
+import { EmailsModule } from './app/emails/emails.module';
 
 @Module({
   imports: [
@@ -101,6 +102,7 @@ import { ReceivablesModule } from './app/receivables/receivables.module';
     CartsModule,
     PaymentsModule,
     OrdersModule,
+    EmailsModule,
     ReplacementsModule,
     ReceivablesModule,
   ],

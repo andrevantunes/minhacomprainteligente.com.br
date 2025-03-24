@@ -94,6 +94,7 @@ export class PaymentsController {
     const acquiredOrder = await this.paymentTransaction
       .executeTransaction()
       .then(async (acquiredResponse: any) => {
+        console.log('acquiredResponse 1', acquiredResponse);
         if (acquiredResponse.encodedImage) {
           // TODO mudar para ficar livre para trodos os brokers
           acquiredResponse.qrImage = `data:image/png;base64, ${acquiredResponse.encodedImage}`;
@@ -107,8 +108,16 @@ export class PaymentsController {
             response?.charges?.[0].last_transaction?.qr_code;
         }
         if (this.isPaid(acquiredResponse)) {
-          await this.sendPaymentConfirmationNotifications(cart, payment_method);
+          const property = await this.propertyByCart(cart);
+          await this.sendPaymentConfirmationNotifications(
+            cart,
+            property,
+            payment_method,
+          );
           await this.removeProductsFromByCart(cart);
+          if (this.isWelcomeAnSale(cart)) {
+            await this.sendWelcomeNotifications(customer);
+          }
         }
         if (acquiredResponse.status === 'failed') {
           return Promise.reject(acquiredResponse);
@@ -137,6 +146,7 @@ export class PaymentsController {
     });
     const acquirerPayment = this.paymentTransaction.paymentResult;
     if (acquirerPayment) {
+      console.log('acquirerPayment', acquirerPayment);
       const payment = await this.paymentsService.createPayment({
         ...acquirerPayment,
         fingerprint,
@@ -222,6 +232,7 @@ export class PaymentsController {
       currency,
     ); //TODO resolver tipo
     const walletId = wallet.id;
+    console.log('acquiredResponse', acquiredResponse);
     const amount = Math.round(
       acquiredResponse.value * 100 * (1 - wallet.processing_fee),
     );
@@ -236,8 +247,9 @@ export class PaymentsController {
       );
     }
   }
-  private async sendPaymentConfirmationNotifications(cart, billingType) {
-    const property = await this.propertiesService.property(
+
+  private async propertyByCart(cart) {
+    return this.propertiesService.property(
       { id: cart.property_id },
       {
         include: {
@@ -249,6 +261,12 @@ export class PaymentsController {
         },
       },
     );
+  }
+  private async sendPaymentConfirmationNotifications(
+    cart,
+    property,
+    billingType,
+  ) {
     const products = cart.products.map(
       (product: any) => `${product.quantity}x ${product.name}`,
     );
@@ -267,5 +285,12 @@ export class PaymentsController {
       .map(({ user }) => user.email)
       .filter((email) => email); // TODO filtrar unique também
     return this.paymentMailer.sendPaymentConfirmation(emails, context);
+  }
+  isWelcomeAnSale(cart) {
+    // TODO adicionar uma forma de tratar isso sem ser pelos IDs
+    return cart.products.some((product: any) => [33, 36].includes(product.id));
+  }
+  async sendWelcomeNotifications(customer) {
+    return this.paymentMailer.sendPlatformWelcome([customer.email], customer);
   }
 }
