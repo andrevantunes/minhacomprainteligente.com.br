@@ -5,7 +5,7 @@ const nextConfig = {
   swcMinify: true,
   reactStrictMode: true,
   images: {
-    domains: ["cdn.mesalva.com", "cdnqa.mesalva.com"],
+    domains: ["digitalflux.store", "d21gq13m1q7xhx.cloudfront.net"],
   },
   pwa: {
     // TODO: Configurar melhor o PWA quando tivermos decidido mais sobre arquitetura

@@ -14,6 +14,7 @@
 @import "./basics/ComponentList/component-list.styles.scss";
 @import "./basics/Counters/counters.styles.scss";
 @import "./basics/DismissedWrapper/dismissed-wrapper.styles.scss";
+@import "./basics/FileInput/file-input.styles.scss";
 @import "./basics/Grid/grid.styles.scss";
 @import "./basics/GroupNavigation/group-navigation.styles.scss";
 @import "./basics/HostHeader/host-header.styles.scss";
@@ -23,8 +24,10 @@
 @import "./basics/PixSection/pix-section.styles.scss";
 @import "./basics/PopUpButton/pop-up-button.styles.scss";
 @import "./basics/Product/product.styles.scss";
+@import "./basics/ProductEdit/product-edit.styles.scss";
 @import "./basics/ProductList/product-list.styles.scss";
 @import "./basics/ProductManagementList/product-management-list.styles.scss";
+@import "./basics/PropertyProduct/property-product.styles.scss";
 @import "./basics/PropertySelection/property-selection.styles.scss";
 @import "./basics/ReceivableBalanceSection/receivable-balance-section.styles.scss";
 @import "./basics/ReceivableRequestSection/receivable-request-section.styles.scss";
@@ -33,6 +36,7 @@
 @import "./basics/RepositionFloatButton/reposition-float-button.styles.scss";
 @import "./basics/SaleReportElement/sale-report-element.styles.scss";
 @import "./basics/Step/step.styles.scss";
+@import "./basics/UserProductManagementList/user-product-management-list.styles.scss";
 @import "./basics/WithdrawBalanceSection/withdraw-balance-section.styles.scss";
 @import "./basics/WithdrawRequestSection/withdraw-request-section.styles.scss";
 @import "./basics/WithdrawSection/withdraw-section.styles.scss";

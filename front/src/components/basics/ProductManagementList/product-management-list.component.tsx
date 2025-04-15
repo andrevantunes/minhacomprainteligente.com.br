@@ -7,6 +7,7 @@ import { Title } from "@/components";
 import { postBffApi } from "@/requests";
 import Router from "next/router";
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
+import PropertyProduct from "../PropertyProduct/property-product.component";
 
 const ProductManagementList = ({
   children,
@@ -53,39 +54,7 @@ const ProductManagementList = ({
               <div className={classNames("product-management-list__summary")}>
                 <div className="flex flex-column gap-1x">
                   {propertyProductsMissing.map((product: any) => (
-                    <Card
-                      key={product.name}
-                      elevation="md"
-                      className={classNames("flex gap-1x missing-product")}
-                    >
-                      <div className="product-management-list__image-container">
-                        <Image src={product.image} width={150} height={150} />
-                      </div>
-                      <div className="flex flex-column justify-content-center">
-                        <div>
-                          <div className="flex gap-1x">
-                            <span>Nome do produto:</span>
-                            <b>{product.name}</b>
-                          </div>
-                          <div className="flex gap-1x">
-                            <span>Preço de venda neste imóvel:</span>
-                            <b>{toBrCurrency(product.price)}</b>
-                          </div>
-                          <div className="flex gap-1x">
-                            <span>Quantidade a ser reposta:</span>
-                            <b>{product.quantity}</b>
-                          </div>
-                          <div className="flex gap-1x">
-                            <span>Quantidade padrão no imóvel:</span>
-                            <b>{product?.expected_quantity}</b>
-                          </div>
-                          <div className="flex gap-1x">
-                            <span>Quantidade atual no imóvel:</span>
-                            <b>{product?.current_quantity}</b>
-                          </div>
-                        </div>
-                      </div>
-                    </Card>
+                    <PropertyProduct key={product.name} {...product} />
                   ))}
                 </div>
               </div>

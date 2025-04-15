@@ -46,6 +46,24 @@ export class ProductsService {
     });
     return properties;
   }
+  async productWithProperties(where) {
+    const product = await this.prisma.products.findFirst({
+      where,
+      include: {
+        properties_products: {
+          include: {
+            property: true,
+          },
+        },
+      },
+    });
+    // // @ts-expect-error error
+    // if (!property.name) {
+    //   // @ts-expect-error error
+    //   property.name = `${property.address.country}, ${property.address.state}, ${property.address.city}, ${property.address.neighbourhood}, ${property.address.street_number}, ${property.address.complement} (${property.address.refference})`;
+    // }
+    return product;
+  }
 
   async createProduct(data: any): Promise<any> {
     return this.prisma.products.create({

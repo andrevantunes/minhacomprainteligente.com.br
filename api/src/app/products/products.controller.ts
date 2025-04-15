@@ -1,52 +1,33 @@
-import {
-  Controller,
-  Get,
-  // Post,
-  // Body,
-  // Put,
-  Param,
-  // Delete,
-  // UseGuards,
-  // SerializeOptions,
-  HttpCode,
-  HttpStatus,
-  // Logger,
-  // Req,
-} from '@nestjs/common';
-// import { CreateReplacementDto } from './dto/create-page.dto';
-// import { UpdatePageDto } from './dto/update-page.dto';
+import { Controller, Get, Param, HttpCode, HttpStatus } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { PropertiesService } from '../properties/properties.service';
-// import { Roles } from '../roles/roles.decorator';
-// import { RoleEnum } from '../roles/roles.enum';
-// import { AuthGuard } from '@nestjs/passport';
-// import { RolesGuard } from '../roles/roles.guard';
+import { ProductsService } from './products.service';
 
 @ApiBearerAuth()
-// @Roles(RoleEnum.admin)
-// @UseGuards(AuthGuard('jwt'), RolesGuard)
-@ApiTags('Properties')
+@ApiTags('Products')
 @Controller({
-  path: 'properties',
+  path: 'products',
   version: '1',
 })
 export class ProductsController {
-  constructor(private readonly propertiesService: PropertiesService) {}
+  constructor(private readonly productsService: ProductsService) {}
   @Get()
   @HttpCode(HttpStatus.OK)
-  async findAll() {
-    const properties = await this.propertiesService.properties({
-      include: { address: true },
+  async index() {
+    const products = await this.productsService.products({
+      // TODO apenas produtos da propriedade da pessoa ou que a pessoa tenha criado
     });
-    return { properties, test: 'Abc123' };
+    return { products };
   }
-
-  @Get('/:hash(*)')
-  async findOne(@Param('hash') hash: string) {
-    //TODO deve verificar se a pessoa tem acesso a página antes de devolver
-    const property = await this.propertiesService.propertyWithProducts({
-      hash: hash,
-    });
-    return { property };
+  @HttpCode(HttpStatus.OK)
+  @Get('/:id')
+  async findOne(@Param('id') id: number) {
+    const product = await this.productsService.product({ id }, {});
+    return { product };
+  }
+  @HttpCode(HttpStatus.OK)
+  @Get('/:id/properties')
+  async indexProperties(@Param('id') id: number) {
+    const product = await this.productsService.productWithProperties({ id });
+    return { product };
   }
 }

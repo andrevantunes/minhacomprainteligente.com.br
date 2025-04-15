@@ -28,6 +28,7 @@ model users {
   withdraws           withdraws[]
   sessions            sessions[]
   wallets             wallets[]
+  products            products[]
 }
 
 model sessions {
@@ -77,6 +78,8 @@ model products {
   companies_products            companies_products[]
   properties_products           properties_products[]
   cart_products                 cart_products[]
+  created_by                    Int?
+  user                          users?                          @relation(fields: [created_by], references: [id])
   replacement_property_products replacement_property_products[]
 
   @@index([name])

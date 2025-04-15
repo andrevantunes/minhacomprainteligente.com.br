@@ -37,6 +37,7 @@ import { ReplacementsModule } from './app/replacements/replacements.module';
 import { WalletsModule } from './app/wallets/wallets.module';
 import { ReceivablesModule } from './app/receivables/receivables.module';
 import { EmailsModule } from './app/emails/emails.module';
+import { ProductsModule } from './app/products/products.module';
 
 @Module({
   imports: [
@@ -97,6 +98,7 @@ import { EmailsModule } from './app/emails/emails.module';
     HomeModule,
     PagesModule,
     PropertiesModule,
+    ProductsModule,
     WithdrawsModule,
     WalletsModule,
     CartsModule,
